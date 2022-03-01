@@ -117,7 +117,12 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             OBSTACLE *temp = fireball.first;
             while (temp != NULL)
             {
-                updateSprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                if (temp->warning > 0) {
+                    displaySprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
+                }
+                else {
+                    updateSprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                }
                 temp = temp->next;
             }
         }
@@ -143,7 +148,12 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             OBSTACLE *temp = fireball.first;
             while (temp != NULL)
             {
-                displaySprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                if (temp->warning > 0) {
+                    displaySprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
+                }
+                else {
+                    displaySprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                }
                 temp = temp->next;
             }
         }

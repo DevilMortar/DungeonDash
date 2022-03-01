@@ -41,6 +41,7 @@ int main()
     // Initialisation des boules de feu
     LIST_OBSTACLE fireball;
     fireball.sprite=newSprite(renderer, "texture/fireball.png",3,32,SPRITE_SIZE);
+    fireball.warning=newSprite(renderer,"texture/warning.png",1,512,SPRITE_SIZE);
     fireball = setListObstacle(fireball);
 
     // Initialisation des laser
@@ -129,7 +130,13 @@ int main()
 
         //Collision
         if (fireball.last != NULL) {
-            detectColision(player->position, fireball.last->position);
+            OBSTACLE * temp = fireball.first;
+            while (temp!=NULL){
+                if (temp->warning==0) {
+                    detectColision(player->position, temp->position);
+                }
+                temp = temp->next;
+            }
         }
         if(detectColision(player->position, coin->position)) {
             coin->position = randomTeleport(coin->position, Hole);

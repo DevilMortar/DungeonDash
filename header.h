@@ -8,14 +8,15 @@
 #include <SDL2/SDL_image.h>
 
 #define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 500
-#define FPS_DELAY 16
+#define WINDOW_HEIGHT 800
+#define FPS_DELAY 10
 #define ANIMATION_LOOP 4
 #define CASE_SIZE 71
 #define CASE_OFFSET_X 263
-#define CASE_OFFSET_Y 11
+#define CASE_OFFSET_Y 161
 #define SPRITE_SIZE 50
 #define FIREBALL_SPEED 20
+#define OBSTACLE_WARNING 20
 
 typedef struct TEXTURE TEXTURE;
 struct TEXTURE

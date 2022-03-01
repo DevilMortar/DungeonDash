@@ -34,7 +34,7 @@ void movePlayer(PLAYER *player, int direction, int Hole[7][7])
         }
         break;
     case 3:
-        if (player->position.y < 6 * CASE_SIZE && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE + 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
+        if (player->position.y < 6 * CASE_SIZE + CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE + 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
         {
             player->position.y += CASE_SIZE;
         }
@@ -61,22 +61,23 @@ LIST_OBSTACLE newObstacle(LIST_OBSTACLE list)
     int direction = rand() % 4 + 1;
     new->frame = 0;
     new->position.direction = direction;
+    new->warning = OBSTACLE_WARNING;
     switch (direction)
     {
     case 1:
-        new->position.y = 6 * CASE_SIZE + CASE_OFFSET_Y;
+        new->position.y = 7 * CASE_SIZE + CASE_OFFSET_Y;
         new->position.x = rand() % 7 * CASE_SIZE + CASE_OFFSET_X;
         break;
     case 2:
-        new->position.x = CASE_OFFSET_X;
+        new->position.x = CASE_OFFSET_X-CASE_SIZE;
         new->position.y = rand() % 7 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     case 3:
-        new->position.y = 0 + CASE_OFFSET_Y;
+        new->position.y = CASE_OFFSET_Y - CASE_SIZE;
         new->position.x = rand() % 7 * CASE_SIZE + CASE_OFFSET_X;
         break;
     case 4:
-        new->position.x = 6 * CASE_SIZE + CASE_OFFSET_X;
+        new->position.x = 7 * CASE_SIZE + CASE_OFFSET_X;
         new->position.y = rand() % 7 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     }
@@ -127,48 +128,55 @@ LIST_OBSTACLE updateFireball(LIST_OBSTACLE fireball)
         OBSTACLE *obstacle = fireball.first;
         while (obstacle != NULL)
         {
-            switch (obstacle->position.direction)
+            if (obstacle->warning > 0)
             {
-            case 1:
-                if (obstacle->position.y < CASE_OFFSET_Y-CASE_SIZE)
+                obstacle->warning -= 1;
+            }
+            else
+            {
+                switch (obstacle->position.direction)
                 {
-                    fireball = deleteFromQueue(fireball);
+                case 1:
+                    if (obstacle->position.y < CASE_OFFSET_Y - CASE_SIZE)
+                    {
+                        fireball = deleteFromQueue(fireball);
+                    }
+                    else
+                    {
+                        obstacle->position.y -= FIREBALL_SPEED;
+                    }
+                    break;
+                case 2:
+                    if (obstacle->position.x > CASE_OFFSET_X + 7 * CASE_SIZE)
+                    {
+                        fireball = deleteFromQueue(fireball);
+                    }
+                    else
+                    {
+                        obstacle->position.x += FIREBALL_SPEED;
+                    }
+                    break;
+                case 3:
+                    if (obstacle->position.y > CASE_OFFSET_Y + 7 * CASE_SIZE)
+                    {
+                        fireball = deleteFromQueue(fireball);
+                    }
+                    else
+                    {
+                        obstacle->position.y += FIREBALL_SPEED;
+                    }
+                    break;
+                case 4:
+                    if (obstacle->position.x < CASE_OFFSET_X - CASE_SIZE)
+                    {
+                        fireball = deleteFromQueue(fireball);
+                    }
+                    else
+                    {
+                        obstacle->position.x -= FIREBALL_SPEED;
+                    }
+                    break;
                 }
-                else
-                {
-                    obstacle->position.y -= FIREBALL_SPEED;
-                }
-                break;
-            case 2:
-                if (obstacle->position.x > CASE_OFFSET_X + 7 * CASE_SIZE)
-                {
-                    fireball = deleteFromQueue(fireball);
-                }
-                else
-                {
-                    obstacle->position.x += FIREBALL_SPEED;
-                }
-                break;
-            case 3:
-                if (obstacle->position.y > CASE_OFFSET_Y + 7 * CASE_SIZE)
-                {
-                    fireball = deleteFromQueue(fireball);
-                }
-                else
-                {
-                    obstacle->position.y += FIREBALL_SPEED;
-                }
-                break;
-            case 4:
-                if (obstacle->position.x < CASE_OFFSET_X - CASE_SIZE)
-                {
-                    fireball = deleteFromQueue(fireball);
-                }
-                else
-                {
-                    obstacle->position.x -= FIREBALL_SPEED;
-                }
-                break;
             }
 
             obstacle = obstacle->next;
@@ -201,9 +209,9 @@ POSITION randomTeleport(POSITION position, int Hole[7][7])
     {
         x = CASE_OFFSET_X + rand() % 7 * CASE_SIZE;
         y = CASE_OFFSET_Y + rand() % 7 * CASE_SIZE;
-    } while ((position.x == x && position.y == y) || (Hole[(y- CASE_OFFSET_Y)/CASE_SIZE][(x - CASE_OFFSET_X) / CASE_SIZE]));
+    } while ((position.x == x && position.y == y) || (Hole[(y - CASE_OFFSET_Y) / CASE_SIZE][(x - CASE_OFFSET_X) / CASE_SIZE]));
     position.x = x;
     position.y = y;
-    printf("%d | %d\n",x,y);
+    printf("%d | %d\n", x, y);
     return position;
 }
