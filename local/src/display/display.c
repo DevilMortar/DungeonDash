@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "display.h"
 
 SPRITE newSprite(SDL_Renderer *renderer, char lien[255], int frame, int srcsize, int dstsize)
 {
@@ -83,7 +83,7 @@ TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position
 
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player)
 {
-    char lien[255] = "texture/player/";
+    char lien[255] = "asset/texture/player/";
     char skin[3];
     sprintf(skin, "%d", player->skin);
     strcat(lien, skin);
