@@ -3,7 +3,6 @@
 SPRITE newSprite(SDL_Renderer *renderer, char lien[255], int frame, int srcsize, int dstsize)
 {
     SPRITE new;
-    int nul;
     new.srcsize = srcsize;
     new.frame = 0;
     new.max = frame;
