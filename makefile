@@ -8,10 +8,10 @@ main.o : main.c engine.o display.o
 	gcc -g -Wall -c main.c $(flags)
 
 display.o : header.h
-	gcc -g -Wall -c display.c $(flags)
+	gcc -g -Wall -c display/display.c $(flags)
 
 engine.o : header.h
-	gcc -g -Wall -c engine.c $(flags)
+	gcc -g -Wall -c engine/engine.c $(flags)
 	
 deepclean :
 	rm -f *.o
