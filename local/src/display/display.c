@@ -13,7 +13,9 @@ SPRITE newSprite(SDL_Renderer *renderer, char lien[255], int frame, int srcsize,
     {
         SDL_ExitWithError("NewSprite | Failed to create texture");
     }
-    // SDL_QueryTexture(new.texture, NULL, NULL, &new.dstrect.w, &new.dstrect.h);
+    else {
+        printf("NewSprite | Sprite from %s sucessfully loaded !\n",lien);
+    }
     new.dstrect.w = dstsize;
     new.dstrect.h = dstsize;
     new.dstrect.x = (WINDOW_WIDTH - new.dstrect.w) / 2;
@@ -30,6 +32,9 @@ TEXTURE newTexture(SDL_Renderer *renderer, char lien[255])
     if (new.texture == NULL)
     {
         SDL_ExitWithError("newTexture | Failed to create texture");
+    }
+    else {
+        printf("NewSprite | Texture from %s sucessfully loaded !\n",lien);
     }
 
     new.dstrect.w = 490;

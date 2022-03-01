@@ -16,7 +16,7 @@ int main()
         printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        SDL_ExitWithError("INITIALISATION SDL");
+        SDL_ExitWithError("SDL | Failed to initialize");
     }
 
     window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -24,13 +24,15 @@ int main()
 
     if (window == NULL)
     {
-        SDL_ExitWithError("CREATION DE FENETRE ECHOUEE");
+        SDL_ExitWithError("SDL | Failed to create a window");
     }
 
     if (renderer == NULL)
     {
-        SDL_ExitWithError("CREATION RENDU ECHOUEE");
+        SDL_ExitWithError("SDL | Failed to create a renderer");
     }
+
+    printf("SDL | Initialized with sucess !\n");
 
     /* --------------------------------------- */
 
@@ -66,6 +68,8 @@ int main()
     TEXTURE map = newTexture(renderer, "asset/texture/map1.png");
     TEXTURE hole = newTexture(renderer, "asset/texture/hole.png");
 
+    printf("\nGame statut | Game started !\n");
+
     /* --------------------------------------- */
 
     // Set
@@ -87,7 +91,7 @@ int main()
             switch (event.type)
             {
             case SDL_MOUSEBUTTONDOWN:
-                printf("Clic en %d / %d\n", event.motion.x, event.motion.y);
+                printf("Event listener | Click detected in %d / %d\n",event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
@@ -105,6 +109,7 @@ int main()
                     movePlayer(player, 2, Hole);
                     continue;
                 case SDLK_f:
+                    printf("Admin | You spawned a fireball\n");
                     fireball = newObstacle(fireball);
                     continue;
                 default:
@@ -119,10 +124,10 @@ int main()
         }
 
         // Obstacle
-        if (loop % 5 == 0 && loop != 0)
+        if (loop % FIREBALL_MOVELOOP == 0 && loop != 0)
         {
             fireball = updateFireball(fireball);
-            if (loop == -1)
+            if (loop == 20)
             {
                 fireball = newObstacle(fireball);
                 loop = 0;
@@ -150,7 +155,7 @@ int main()
         {
             coin->position = randomTeleport(coin->position, Hole);
             score += 1;
-            printf("%d\n", score);
+            printf("Game statut | Score : %d\n",score);
         }
 
         // Affichage
@@ -158,7 +163,7 @@ int main()
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {
-            SDL_ExitWithError("EFFACEMENT RENDU ECHOUE");
+            SDL_ExitWithError("SDL | Failed to clear renderer");
         }
 
         // FPS

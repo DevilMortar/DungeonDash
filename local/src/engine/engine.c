@@ -192,7 +192,7 @@ bool detectColision(POSITION posplayer, POSITION posobject)
     int distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
     if (distance < SPRITE_SIZE / 2)
     {
-        printf("COLLISION\n");
+        printf("Game statut | Colision detected\n");
         return true;
     }
     else
@@ -212,6 +212,5 @@ POSITION randomTeleport(POSITION position, int Hole[7][7])
     } while ((position.x == x && position.y == y) || (Hole[(y - CASE_OFFSET_Y) / CASE_SIZE][(x - CASE_OFFSET_X) / CASE_SIZE]));
     position.x = x;
     position.y = y;
-    printf("%d | %d\n", x, y);
     return position;
 }
