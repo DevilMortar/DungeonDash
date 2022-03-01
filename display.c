@@ -88,7 +88,7 @@ void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player)
     sprintf(skin, "%d", player->skin);
     strcat(lien, skin);
     strcat(lien, ".png");
-    player->sprite = newSprite(renderer, lien, 3, 48, SPRITE_SIZE);
+    player->sprite = newSprite(renderer, lien, 3, 32, SPRITE_SIZE);
 }
 
 int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, LIST_OBSTACLE laser, COIN *coin, int Hole[7][7], TEXTURE hole, int loop)

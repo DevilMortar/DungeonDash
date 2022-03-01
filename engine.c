@@ -12,7 +12,7 @@ PLAYER *setPlayer()
     PLAYER *player = malloc(sizeof(PLAYER));
     player->position.x = CASE_OFFSET_X;
     player->position.y = CASE_OFFSET_Y;
-    player->skin = 1;
+    player->skin = 2;
     return player;
 }
 
