@@ -44,7 +44,7 @@ int main()
     // Initialisation des boules de feu
     LIST_OBSTACLE fireball;
     fireball.sprite = newSprite(renderer, "asset/texture/fireball.png", 3, 32, SPRITE_SIZE);
-    fireball.warning = newSprite(renderer, "asset/texture/warning.png", 1, 512, SPRITE_SIZE);
+    fireball.warning = newSprite(renderer, "asset/texture/warning.png", 3, 32, SPRITE_SIZE);
     fireball = setListObstacle(fireball);
 
     // Initialisation des laser
@@ -84,6 +84,9 @@ int main()
     // Game Loop
     while (program_launched)
     {
+        //FPS check
+        frame_limit = SDL_GetTicks() + FPS_DELAY;
+
         // Contrôle
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -167,8 +170,7 @@ int main()
         }
 
         // FPS
-        frame_limit = SDL_GetTicks() + FPS_DELAY;
-        SDL_LimitFPS(frame_limit);
+        //SDL_LimitFPS(frame_limit);
     }
 
     SDL_DestroyRenderer(renderer);

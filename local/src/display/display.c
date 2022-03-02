@@ -36,9 +36,8 @@ TEXTURE newTexture(SDL_Renderer *renderer, char lien[255])
     else {
         printf("NewSprite | Texture from %s sucessfully loaded !\n",lien);
     }
-
-    new.dstrect.w = 490;
-    new.dstrect.h = 490;
+    new.dstrect.w = 600;
+    new.dstrect.h = 600;
     new.dstrect.x = (WINDOW_WIDTH - new.dstrect.w) / 2;
     new.dstrect.y = (WINDOW_HEIGHT - new.dstrect.h) / 2;
     return new;
@@ -123,7 +122,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             while (temp != NULL)
             {
                 if (temp->warning > 0) {
-                    displaySprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
+                    updateSprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
                 }
                 else {
                     updateSprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
