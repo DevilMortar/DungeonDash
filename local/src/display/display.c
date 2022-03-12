@@ -214,7 +214,6 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
 
 void SDL_LimitFPS(unsigned int limit)
 {
-    printf("%d\n",limit);
     if (FPS_DELAY > limit) {
         SDL_Delay(FPS_DELAY - limit);
     }
