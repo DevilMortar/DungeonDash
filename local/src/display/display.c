@@ -95,11 +95,36 @@ void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player)
     player->sprite = newSprite(renderer, lien, 3, 32, SPRITE_SIZE);
 }
 
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, LIST_OBSTACLE laser, COIN *coin, int Hole[7][7], TEXTURE hole, int loop)
+SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer)
+{
+    //Open the font
+    TTF_Font *font = TTF_OpenFont("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", fontSize);
+    if (font == NULL) {
+        SDL_ExitWithError("SDL || TTF_OpenFont");
+        return NULL;
+    }
+
+    SDL_Surface *surf = TTF_RenderText_Solid(font, message, color);
+    if (surf == NULL) {
+        TTF_CloseFont(font);
+        SDL_ExitWithError("SDL || TTF_RenderText");
+        return NULL;
+    }
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
+    if (texture == NULL) {
+        SDL_ExitWithError("SDL || CreateTexture");
+    }
+    //Clean up the surface and font
+    SDL_FreeSurface(surf);
+    TTF_CloseFont(font);
+    return texture;
+}
+
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, LIST_OBSTACLE laser, COIN *coin, int Hole[7][7], TEXTURE hole, int loop, END *end)
 {
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
 
-    if (loop % ANIMATION_LOOP == 0)
+    if (loop % ANIMATION_LOOP == 0 && end->status == 0)
     {
         updateSprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
         for (int y = 0; y < 7; y++)
@@ -162,6 +187,29 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             }
         }
     }
+
+    if (end->status == 1) {
+        SDL_Color c;
+        SDL_Texture *text, *option;
+        char name[WIDGET_LENGTH], start[WIDGET_LENGTH];
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_RenderFillRect(renderer, &end->rect3);
+
+        memset(name, 0x00, WIDGET_LENGTH);
+        memset(start, 0x00, WIDGET_LENGTH);
+        strcpy(name, "YOU DIED");
+        strcpy(start, "Restart");
+        c.r = 255;
+        c.b = c.g = 0;
+        text = renderWidgetText(name, c, 72, renderer);
+        option = renderWidgetText(start, c, 40, renderer);
+
+        SDL_RenderCopy(renderer, text, NULL, &end->rect);
+        SDL_RenderCopy(renderer, option, NULL, &end->rect2);
+    }
+    return 0;
 }
 
 void SDL_LimitFPS(unsigned int limit)

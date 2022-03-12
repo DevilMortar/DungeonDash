@@ -92,9 +92,7 @@ LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new)
         list.last = new;
         new->previous = NULL;
         new->next = NULL;
-    }
-    else
-    {
+    } else {
         list.first->previous = new;
         new->next = list.first;
         new->previous = NULL;
@@ -110,9 +108,7 @@ LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list)
         free(list.first);
         list.first = NULL;
         list.last = NULL;
-    }
-    else
-    {
+    } else {
         OBSTACLE *temp = list.last->previous;
         free(list.last);
         list.last = temp;

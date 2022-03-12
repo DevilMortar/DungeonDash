@@ -6,6 +6,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "config.h"
 
 typedef struct TEXTURE TEXTURE;
@@ -69,8 +70,16 @@ struct COIN
     SPRITE sprite;  
 };
 
+typedef struct END END;
+struct END
+{
+    int status;
+    SDL_Rect rect, rect2, rect3;
+};
+
 // SDL
-void SDL_ExitWithError(const char * message); // Quitter 
+void SDL_ExitWithError(const char * message); // Quitter
+int init(PLAYER *player, LIST_OBSTACLE *fireball, LIST_OBSTACLE *laser, int *Hole, COIN *coin, SDL_Renderer *renderer); // Initialisation des différents objets
 
 
 
