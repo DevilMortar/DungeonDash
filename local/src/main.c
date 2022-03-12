@@ -20,12 +20,13 @@ int main()
     }
 
     window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 
     if (window == NULL)
     {
         SDL_ExitWithError("SDL | Failed to create a window");
     }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
     if (renderer == NULL)
     {
@@ -43,7 +44,7 @@ int main()
 
     // Initialisation des boules de feu
     LIST_OBSTACLE fireball;
-    fireball.sprite = newSprite(renderer, "asset/texture/fireball.png", 3, 32, SPRITE_SIZE);
+    fireball.sprite = newSprite(renderer, "asset/texture/fireball.png", 3, 74, SPRITE_SIZE);
     fireball.warning = newSprite(renderer, "asset/texture/warning.png", 3, 32, SPRITE_SIZE);
     fireball = setListObstacle(fireball);
 
@@ -58,7 +59,7 @@ int main()
 
     // Initialisation de la pièce
     COIN *coin = malloc(sizeof(COIN));
-    coin->sprite = newSprite(renderer, "asset/texture/coin.png", 6, 84, SPRITE_SIZE);
+    coin->sprite = newSprite(renderer, "asset/texture/coin.png", 16, 32, SPRITE_SIZE);
     coin->position.direction = 0;
     coin->position.x = 0;
     coin->position.y = 0;
@@ -77,15 +78,14 @@ int main()
     unsigned int loop = 0;
 
     // FrameLimiter
-    unsigned int frame_limit = SDL_GetTicks() + FPS_DELAY;
-    SDL_LimitFPS(frame_limit);
-    frame_limit = SDL_GetTicks() + FPS_DELAY;
+    Uint32 frameStart;
+    unsigned int frameTime;
 
     // Game Loop
     while (program_launched)
     {
-        //FPS check
-        frame_limit = SDL_GetTicks() + FPS_DELAY;
+        // FPS check
+        frameStart = SDL_GetTicks();
 
         // Contrôle
         SDL_Event event;
@@ -94,7 +94,7 @@ int main()
             switch (event.type)
             {
             case SDL_MOUSEBUTTONDOWN:
-                printf("Event listener | Click detected in %d / %d\n",event.motion.x, event.motion.y);
+                printf("Event listener | Click detected in %d / %d\n", event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
@@ -158,7 +158,7 @@ int main()
         {
             coin->position = randomTeleport(coin->position, Hole);
             score += 1;
-            printf("Game statut | Score : %d\n",score);
+            printf("Game statut | Score : %d\n", score);
         }
 
         // Affichage
@@ -170,7 +170,8 @@ int main()
         }
 
         // FPS
-        //SDL_LimitFPS(frame_limit);
+        frameTime = SDL_GetTicks() - frameStart;
+        SDL_LimitFPS(frameTime);
     }
 
     SDL_DestroyRenderer(renderer);
