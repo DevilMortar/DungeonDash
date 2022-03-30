@@ -7,12 +7,36 @@ void SDL_ExitWithError(const char *message)
     exit(EXIT_FAILURE);
 }
 
-PLAYER *setPlayer()
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer)
+{
+    // Initialisation du joueur
+    setPlayer(2);
+    setPlayerSprite(renderer, player);
+
+    // Initialisation des boules de feu
+    while (fireball->first != NULL) {
+        *fireball = deleteFromQueue(*fireball);
+    }
+    *fireball = setListObstacle(*fireball);
+    *(Hole + (1 * 7) + 1) = 1;
+    *(Hole + (5 * 7) + 1) = 1;
+    *(Hole + (1 * 7) + 5) = 1;
+    *(Hole + (5 * 7) + 5) = 1;
+    *(Hole + (3 * 7) + 3) = 1;
+
+    // Initialisation de la pièce
+    coin->position = randomTeleport(coin->position, Hole);
+
+    printf("\nGame statut | Game started !\n");
+    return 0;
+}
+
+PLAYER *setPlayer(int skin)
 {
     PLAYER *player = malloc(sizeof(PLAYER));
     player->position.x = CASE_OFFSET_X;
     player->position.y = CASE_OFFSET_Y;
-    player->skin = 2;
+    player->skin = skin;
     return player;
 }
 
@@ -69,7 +93,7 @@ LIST_OBSTACLE newObstacle(LIST_OBSTACLE list)
         new->position.x = rand() % 7 * CASE_SIZE + CASE_OFFSET_X;
         break;
     case 2:
-        new->position.x = CASE_OFFSET_X-CASE_SIZE;
+        new->position.x = CASE_OFFSET_X - CASE_SIZE;
         new->position.y = rand() % 7 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     case 3:
@@ -92,7 +116,9 @@ LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new)
         list.last = new;
         new->previous = NULL;
         new->next = NULL;
-    } else {
+    }
+    else
+    {
         list.first->previous = new;
         new->next = list.first;
         new->previous = NULL;
@@ -108,7 +134,9 @@ LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list)
         free(list.first);
         list.first = NULL;
         list.last = NULL;
-    } else {
+    }
+    else
+    {
         OBSTACLE *temp = list.last->previous;
         free(list.last);
         list.last = temp;
@@ -117,68 +145,60 @@ LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list)
     return list;
 }
 
-LIST_OBSTACLE updateFireball(LIST_OBSTACLE fireball)
+bool updateFireball(OBSTACLE *obstacle)
 {
-    if (fireball.first != NULL)
+    if (obstacle->warning > 0)
     {
-        OBSTACLE *obstacle = fireball.first;
-        while (obstacle != NULL)
+        obstacle->warning -= 1;
+        return false;
+    }
+    else
+    {
+        switch (obstacle->position.direction)
         {
-            if (obstacle->warning > 0)
+        case 1:
+            if (obstacle->position.y < CASE_OFFSET_Y - CASE_SIZE)
             {
-                obstacle->warning -= 1;
+                return true;
             }
             else
             {
-                switch (obstacle->position.direction)
-                {
-                case 1:
-                    if (obstacle->position.y < CASE_OFFSET_Y - CASE_SIZE)
-                    {
-                        fireball = deleteFromQueue(fireball);
-                    }
-                    else
-                    {
-                        obstacle->position.y -= FIREBALL_SPEED;
-                    }
-                    break;
-                case 2:
-                    if (obstacle->position.x > CASE_OFFSET_X + 7 * CASE_SIZE)
-                    {
-                        fireball = deleteFromQueue(fireball);
-                    }
-                    else
-                    {
-                        obstacle->position.x += FIREBALL_SPEED;
-                    }
-                    break;
-                case 3:
-                    if (obstacle->position.y > CASE_OFFSET_Y + 7 * CASE_SIZE)
-                    {
-                        fireball = deleteFromQueue(fireball);
-                    }
-                    else
-                    {
-                        obstacle->position.y += FIREBALL_SPEED;
-                    }
-                    break;
-                case 4:
-                    if (obstacle->position.x < CASE_OFFSET_X - CASE_SIZE)
-                    {
-                        fireball = deleteFromQueue(fireball);
-                    }
-                    else
-                    {
-                        obstacle->position.x -= FIREBALL_SPEED;
-                    }
-                    break;
-                }
+                obstacle->position.y -= FIREBALL_SPEED;
             }
-
-            obstacle = obstacle->next;
+            break;
+        case 2:
+            if (obstacle->position.x > CASE_OFFSET_X + 7 * CASE_SIZE)
+            {
+                return true;
+            }
+            else
+            {
+                obstacle->position.x += FIREBALL_SPEED;
+            }
+            break;
+        case 3:
+            if (obstacle->position.y > CASE_OFFSET_Y + 7 * CASE_SIZE)
+            {
+                return true;
+            }
+            else
+            {
+                obstacle->position.y += FIREBALL_SPEED;
+            }
+            break;
+        case 4:
+            if (obstacle->position.x < CASE_OFFSET_X - CASE_SIZE)
+            {
+                return true;
+            }
+            else
+            {
+                obstacle->position.x -= FIREBALL_SPEED;
+            }
+            break;
         }
     }
-    return fireball;
+    return false;
 }
 
 bool detectColision(POSITION posplayer, POSITION posobject)

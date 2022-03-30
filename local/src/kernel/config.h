@@ -1,6 +1,6 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 800
-#define FPS_DELAY 16
+#define FPS_DELAY 17
 #define ANIMATION_LOOP 5
 #define CASE_SIZE 87
 #define CASE_OFFSET_X 205

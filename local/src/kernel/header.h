@@ -24,7 +24,8 @@ struct SPRITE
     SDL_Rect srcrect;
     int frame;
     int max;
-    int srcsize;
+    int srcsizew;
+    int srcsizeh;
 };
 
 typedef struct POSITION POSITION;

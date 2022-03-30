@@ -1,8 +1,8 @@
 #include "../kernel/header.h"
 
 // Display
-SPRITE newSprite(SDL_Renderer *renderer, char lien[255], int max, int srcsize, int dstsize); // Renvoie un sprite initialisée
-TEXTURE newTexture (SDL_Renderer *renderer, char lien[255], int w, int h); // Renvoie une texture initialisée
+SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize);
+TEXTURE newTexture (SDL_Renderer *renderer, char link[255], int w, int h); // Renvoie une texture initialisée
 void updateSprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int * frame); // Affiche un sprite et modifie sa frame
 void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame); // Affiche un sprite
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
