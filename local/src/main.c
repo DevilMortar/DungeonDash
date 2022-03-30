@@ -40,33 +40,40 @@ int main()
     printf("SDL | Initialized with success !\n");
 
     /* --------------------------------------- */
+
+    //  Initialisation End et Score
     END *end = malloc(sizeof(END));
+    end->texture = newTexture(renderer, "asset/texture/end.png", 400, 200);
+    end->skull = newSprite(renderer, "asset/texture/skull.png", 18, 196, SPRITE_SIZE);
     int score;
+
+    // Initialisation Player
     PLAYER *player;
     player = setPlayer();
+
+    // Initialisation Fireball
     LIST_OBSTACLE fireball;
     fireball.sprite = newSprite(renderer, "asset/texture/fireball.png", 3, 74, SPRITE_SIZE);
     fireball.warning = newSprite(renderer, "asset/texture/warning.png", 3, 32, SPRITE_SIZE);
     fireball = setListObstacle(fireball);
 
-    // Initialisation des laser
-    LIST_OBSTACLE laser;
+    // Initialisation Hole
     int Hole[7][7] = {{0}};
+
+    // Initialisation Coin
     COIN *coin = malloc(sizeof(COIN));
-    score = init(player, &fireball, &laser, Hole, coin, renderer);
-    printf("End of time \n");
-    printf("Valeur de la pos 2,2: %d \n", Hole[2][2]);
     coin->sprite = newSprite(renderer, "asset/texture/coin.png", 16, 32, SPRITE_SIZE);
     coin->position.direction = 0;
-    coin->position.x = 0;
-    coin->position.y = 0;
-    coin->position = randomTeleport(coin->position, Hole);
+
+    // Initialisation Global
+    score = init(player, &fireball, Hole, coin, renderer);
 
     // Création de la texture de la grille et des trous
-    TEXTURE map = newTexture(renderer, "asset/texture/map1.png");
-    TEXTURE hole = newTexture(renderer, "asset/texture/hole.png");
+    TEXTURE map = newTexture(renderer, "asset/texture/map1.png", 600, 600);
+    TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", 600, 600);
 
-    printf("\nGame statut | Game started !\n");
+
+    printf("\nGame statut | Game Initialized !\n");
 
     /* --------------------------------------- */
 
@@ -87,7 +94,6 @@ int main()
 
         // Contrôle
         SDL_Event event;
-        printf("%d\n", end->status);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -99,23 +105,27 @@ int main()
                     if (event.motion.x > (end->rect2.x - 1) && event.motion.x < (end->rect2.x + end->rect2.w + 1) && event.motion.y > (end->rect2.y - 1) && event.motion.y < (end->rect2.y + end->rect2.h + 1))
                     {
                         end->status = 0;
-                        score = init(player, &fireball, &laser, Hole, coin, renderer);
+                        score = init(player, &fireball, Hole, coin, renderer);
                     }
                 }
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_z:
-                    if (end->status == 0) movePlayer(player, 1, Hole);
+                    if (end->status == 0)
+                        movePlayer(player, 1, Hole);
                     continue;
                 case SDLK_s:
-                    if (end->status == 0) movePlayer(player, 3, Hole);
+                    if (end->status == 0)
+                        movePlayer(player, 3, Hole);
                     continue;
                 case SDLK_q:
-                    if (end->status == 0) movePlayer(player, 4, Hole);
+                    if (end->status == 0)
+                        movePlayer(player, 4, Hole);
                     continue;
                 case SDLK_d:
-                    if (end->status == 0) movePlayer(player, 2, Hole);
+                    if (end->status == 0)
+                        movePlayer(player, 2, Hole);
                     continue;
                 case SDLK_f:
                     printf("Admin | You spawned a fireball\n");
@@ -133,23 +143,21 @@ int main()
         }
 
         // Obstacle
-        if (loop % FIREBALL_MOVELOOP == 0 && loop != 0 && end->status == 0)
-        {
-            fireball = updateFireball(fireball);
-            if (loop == 20)
+        if (fireball.first != NULL || end->status == 0) {
+            if (loop % FIREBALL_MOVELOOP == 0 && loop != 0 && score > 0)
             {
-                fireball = newObstacle(fireball);
-                loop = 0;
-            }
-            else if (loop > 20)
-            {
-                loop = 0;
+                fireball = updateFireball(fireball);
+                if ((double)loop >= 50 * exp((-(float)score) / 30) && end->status == 0)
+                {
+                    fireball = newObstacle(fireball);
+                    loop = 0;
+                }
+                else
+                    loop += 1;
             }
             else
                 loop += 1;
         }
-        else
-            loop += 1;
 
         // Collision
         if (fireball.last != NULL)
@@ -157,20 +165,11 @@ int main()
             OBSTACLE *temp = fireball.first;
             while (temp != NULL && end->status == 0)
             {
-                if (temp->warning == 0 && detectColision(player->position, temp->position))
+                if (temp->warning == 0 && detectColision(player->position, temp->position) && end->status == 0)
                 {
                     end->status = 1;
-                    end->rect.x = 30;
-                    end->rect3.x = 30;
-                    end->rect2.x = ((7 / 2) * WINDOW_WIDTH / 8) - 32;
-                    end->rect.y = (WINDOW_HEIGHT / 4);
-                    end->rect3.y = (WINDOW_HEIGHT / 4);
-                    end->rect2.y = (WINDOW_HEIGHT / 2) + 128;
-                    end->rect.w = end->rect3.w = WINDOW_WIDTH - 60;
-                    end->rect2.w = (WINDOW_WIDTH / 4);
-                    end->rect.h = 128;
-                    end->rect2.h = 64;
-                    end->rect3.h = (end->rect2.y + end->rect2.h) - end->rect.y;
+                    end->scorerect.x = 6 * WINDOW_WIDTH / 16 + 20;
+                    end->scorerect.y = (WINDOW_HEIGHT / 2) - END_SCORE_SIZE / 2;
                 }
                 temp = temp->next;
             }
@@ -183,7 +182,7 @@ int main()
         }
 
         // Affichage
-        displayGame(renderer, player, map, fireball, laser, coin, Hole, hole, loop, end);
+        displayGame(renderer, player, map, fireball, coin, Hole, hole, loop, end, score);
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {
@@ -200,25 +199,20 @@ int main()
     SDL_Quit();
 }
 
-int init(PLAYER *player, LIST_OBSTACLE *fireball, LIST_OBSTACLE *laser, int *Hole, COIN *coin, SDL_Renderer *renderer)
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer)
 {
     // Initialisation du joueur
     setPlayerSprite(renderer, player);
 
     // Initialisation des boules de feu
-    fireball->sprite = newSprite(renderer, "asset/texture/fireball.png", 3, 74, SPRITE_SIZE);
-    fireball->warning = newSprite(renderer, "asset/texture/warning.png", 3, 32, SPRITE_SIZE);
     *fireball = setListObstacle(*fireball);
-    *(Hole + (2 * 7) + 2) = 1;
-
-    // Initialisation des lasers
-    *laser = setListObstacle(*laser);
+    *(Hole + (1 * 7) + 1) = 1;
+    *(Hole + (5 * 7) + 1) = 1;
+    *(Hole + (1 * 7) + 5) = 1;
+    *(Hole + (5 * 7) + 5) = 1;
+    *(Hole + (3 * 7) + 3) = 1;
 
     // Initialisation de la pièce
-    coin->sprite = newSprite(renderer, "asset/texture/coin.png", 6, 32, SPRITE_SIZE);
-    coin->position.direction = 0;
-    coin->position.x = 0;
-    coin->position.y = 0;
     coin->position = randomTeleport(coin->position, Hole);
 
     printf("\nGame statut | Game started !\n");

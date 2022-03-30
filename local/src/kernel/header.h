@@ -72,13 +72,15 @@ struct COIN
 typedef struct END END;
 struct END
 {
+    TEXTURE texture;
+    SPRITE skull;
     int status;
-    SDL_Rect rect, rect2, rect3;
+    SDL_Rect rect, rect2, rect3, scorerect;
 };
 
 // SDL
 void SDL_ExitWithError(const char * message); // Quitter
-int init(PLAYER *player, LIST_OBSTACLE *fireball, LIST_OBSTACLE *laser, int *Hole, COIN *coin, SDL_Renderer *renderer); // Initialisation des différents objets
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer); // Initialisation des différents objets
 
 
 
