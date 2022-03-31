@@ -71,8 +71,8 @@ int main()
     score = init(player, &fireball, Hole, coin, renderer);
 
     // Création de la texture de la grille et des trous
-    TEXTURE map = newTexture(renderer, "asset/texture/map1.png", 600, 600);
-    TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", 600, 600);
+    TEXTURE map = newTexture(renderer, "asset/texture/map1.png", MAP_SIZE, MAP_SIZE);
+    TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
 
     printf("\nGame statut | Game Initialized !\n");
 
