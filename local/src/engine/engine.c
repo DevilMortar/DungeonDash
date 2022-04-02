@@ -18,11 +18,18 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
         *fireball = deleteFromQueue(*fireball);
     }
     *fireball = setListObstacle(*fireball);
-    *(Hole + (1 * 7) + 1) = 1;
-    *(Hole + (5 * 7) + 1) = 1;
-    *(Hole + (1 * 7) + 5) = 1;
-    *(Hole + (5 * 7) + 5) = 1;
-    *(Hole + (3 * 7) + 3) = 1;
+    for (int i=0; i<25; i++) {
+        *(Hole + i) = 0;
+    }
+
+    // Initialisation des trous
+    int ran = 0;
+    for (int i=0; i<2; i++) {
+    do {
+        ran = rand()%25;
+    } while (*(Hole + ran) == 1 || ran==0 || ran==4 || ran==20 || ran==24);
+    *(Hole + ran) = 1;
+    }
 
     // Initialisation de la pièce
     coin->position = randomTeleport(coin->position, Hole);
@@ -36,40 +43,63 @@ PLAYER *setPlayer(int skin)
     PLAYER *player = malloc(sizeof(PLAYER));
     player->position.x = CASE_OFFSET_X;
     player->position.y = CASE_OFFSET_Y;
+    player->move = 0;
     player->skin = skin;
     return player;
 }
 
-void movePlayer(PLAYER *player, int direction, int Hole[7][7])
-{
+void checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]) {
     player->position.direction = direction;
     switch (direction)
     {
     case 1:
         if (player->position.y > CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE - 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
         {
-            player->position.y -= CASE_SIZE;
+            player->move = PLAYER_MOVE;
         }
         break;
     case 2:
-        if (player->position.x < 6 * CASE_SIZE + CASE_OFFSET_X && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE][(player->position.x - CASE_OFFSET_X) / CASE_SIZE + 1] != 1)
+        if (player->position.x < 4 * CASE_SIZE + CASE_OFFSET_X && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE][(player->position.x - CASE_OFFSET_X) / CASE_SIZE + 1] != 1)
         {
-            player->position.x += CASE_SIZE;
+            player->move = PLAYER_MOVE;
         }
         break;
     case 3:
-        if (player->position.y < 6 * CASE_SIZE + CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE + 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
+        if (player->position.y < 4 * CASE_SIZE + CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE + 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
         {
-            player->position.y += CASE_SIZE;
+            player->move = PLAYER_MOVE;
         }
         break;
     case 4:
         if (player->position.x > CASE_OFFSET_X && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE][(player->position.x - CASE_OFFSET_X) / CASE_SIZE - 1] != 1)
         {
-            player->position.x -= CASE_SIZE;
+            player->move = PLAYER_MOVE;
         }
         break;
     }
+}
+
+void movePlayer(PLAYER *player, int direction, int Hole[5][5])
+{
+    switch (direction)
+    {
+    case 1:
+        player->position.y -= CASE_SIZE/PLAYER_MOVE;
+        break;
+    case 2:
+        player->position.x += CASE_SIZE/PLAYER_MOVE;
+        break;
+    case 3:
+        player->position.y += CASE_SIZE/PLAYER_MOVE;
+        break;
+    case 4:
+        player->position.x -= CASE_SIZE/PLAYER_MOVE;
+        break;
+    }
+    if (player->move > 0) {
+        player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE + player->move;
+    } 
+    player->move -= 1; 
 }
 
 LIST_OBSTACLE setListObstacle(LIST_OBSTACLE list)
@@ -89,20 +119,20 @@ LIST_OBSTACLE newObstacle(LIST_OBSTACLE list)
     switch (direction)
     {
     case 1:
-        new->position.y = 7 * CASE_SIZE + CASE_OFFSET_Y;
-        new->position.x = rand() % 7 * CASE_SIZE + CASE_OFFSET_X;
+        new->position.y = 5 * CASE_SIZE + CASE_OFFSET_Y;
+        new->position.x = rand() % 5 * CASE_SIZE + CASE_OFFSET_X;
         break;
     case 2:
         new->position.x = CASE_OFFSET_X - CASE_SIZE;
-        new->position.y = rand() % 7 * CASE_SIZE + CASE_OFFSET_Y;
+        new->position.y = rand() % 5 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     case 3:
         new->position.y = CASE_OFFSET_Y - CASE_SIZE;
-        new->position.x = rand() % 7 * CASE_SIZE + CASE_OFFSET_X;
+        new->position.x = rand() % 5 * CASE_SIZE + CASE_OFFSET_X;
         break;
     case 4:
-        new->position.x = 7 * CASE_SIZE + CASE_OFFSET_X;
-        new->position.y = rand() % 7 * CASE_SIZE + CASE_OFFSET_Y;
+        new->position.x = 5 * CASE_SIZE + CASE_OFFSET_X;
+        new->position.y = rand() % 5 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     }
     return addToQueue(list, new);
@@ -167,7 +197,7 @@ bool updateFireball(OBSTACLE *obstacle)
             }
             break;
         case 2:
-            if (obstacle->position.x > CASE_OFFSET_X + 7 * CASE_SIZE)
+            if (obstacle->position.x > CASE_OFFSET_X + 5 * CASE_SIZE)
             {
                 return true;
             }
@@ -177,7 +207,7 @@ bool updateFireball(OBSTACLE *obstacle)
             }
             break;
         case 3:
-            if (obstacle->position.y > CASE_OFFSET_Y + 7 * CASE_SIZE)
+            if (obstacle->position.y > CASE_OFFSET_Y + 5 * CASE_SIZE)
             {
                 return true;
             }
@@ -217,14 +247,14 @@ bool detectColision(POSITION posplayer, POSITION posobject)
     }
 }
 
-POSITION randomTeleport(POSITION position, int Hole[7][7])
+POSITION randomTeleport(POSITION position, int Hole[5][5])
 {
     int x = 0;
     int y = 0;
     do
     {
-        x = CASE_OFFSET_X + rand() % 7 * CASE_SIZE;
-        y = CASE_OFFSET_Y + rand() % 7 * CASE_SIZE;
+        x = CASE_OFFSET_X + rand() % 5 * CASE_SIZE;
+        y = CASE_OFFSET_Y + rand() % 5 * CASE_SIZE;
     } while ((position.x == x && position.y == y) || (Hole[(y - CASE_OFFSET_Y) / CASE_SIZE][(x - CASE_OFFSET_X) / CASE_SIZE]));
     position.x = x;
     position.y = y;

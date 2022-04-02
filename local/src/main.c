@@ -60,7 +60,7 @@ int main()
     fireball = setListObstacle(fireball);
 
     // Initialisation Hole
-    int Hole[7][7] = {{0}};
+    int Hole[5][5] = {{0}};
 
     // Initialisation Coin
     COIN *coin = malloc(sizeof(COIN));
@@ -71,7 +71,7 @@ int main()
     score = init(player, &fireball, Hole, coin, renderer);
 
     // Création de la texture de la grille et des trous
-    TEXTURE map = newTexture(renderer, "asset/texture/map1.png", MAP_SIZE, MAP_SIZE);
+    TEXTURE map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
     TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
 
     printf("\nGame statut | Game Initialized !\n");
@@ -105,20 +105,20 @@ int main()
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_z:
-                    if (end->status == 0)
-                        movePlayer(player, 1, Hole);
+                    if (end->status == 0 && player->move == 0)
+                        checkMovePlayer(player, 1, Hole);
                     continue;
                 case SDLK_s:
-                    if (end->status == 0)
-                        movePlayer(player, 3, Hole);
+                    if (end->status == 0 && player->move == 0)
+                        checkMovePlayer(player, 3, Hole);
                     continue;
                 case SDLK_q:
-                    if (end->status == 0)
-                        movePlayer(player, 4, Hole);
+                    if (end->status == 0 && player->move == 0)
+                        checkMovePlayer(player, 4, Hole);
                     continue;
                 case SDLK_d:
-                    if (end->status == 0)
-                        movePlayer(player, 2, Hole);
+                    if (end->status == 0 && player->move == 0)
+                        checkMovePlayer(player, 2, Hole);
                     continue;
                 case SDLK_f:
                     printf("Admin | You spawned a fireball\n");
@@ -127,6 +127,7 @@ int main()
                 case SDLK_r:
                     printf("Admin | Restart completed ! \n");
                     end->status = 0;
+                    end->skull.frame = 0;
                     score = init(player, &fireball, Hole, coin, renderer);
                     continue;
                 default:
@@ -138,6 +139,11 @@ int main()
             default:
                 break;
             }
+        }
+
+        //Player Movement
+        if (player->move > 0) {
+            movePlayer(player,player->position.direction, Hole);
         }
 
         // Fireball

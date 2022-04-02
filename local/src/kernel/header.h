@@ -60,7 +60,8 @@ struct PLAYER
 {
     POSITION position;
     SPRITE sprite;
-    int skin; 
+    int skin;
+    int move; 
 };
 
 typedef struct COIN COIN;

@@ -129,12 +129,13 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     return texture;
 }
 
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[7][7], TEXTURE hole, int loop, END *end, int score)
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, int loop, END *end, int score)
 {
+    SDL_SetRenderDrawColor(renderer, 21, 33, 44, 255);
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
-    for (int y = 0; y < 7; y++)
+    for (int y = 0; y < 5; y++)
     {
-        for (int x = 0; x < 7; x++)
+        for (int x = 0; x < 5; x++)
         {
             if (Hole[y][x] == 1)
             {
@@ -208,6 +209,8 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
         else
         {
             displaySprite(renderer, end->skull, 0, player->position, &end->skull.frame);
+            end->texture.dstrect.x = WINDOW_WIDTH/2 - end->texture.dstrect.w/2;
+            end->texture.dstrect.y = WINDOW_HEIGHT/2 - end->texture.dstrect.h/2;  
             SDL_RenderCopy(renderer, end->texture.texture, NULL, &end->texture.dstrect);
             SDL_RenderCopy(renderer, scoreprint, NULL, &end->scorerect);
         }
