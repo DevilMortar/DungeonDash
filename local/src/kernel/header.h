@@ -86,6 +86,7 @@ struct GAME
 
 // SDL
 void SDL_ExitWithError(const char * message); // Quitter
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole);
 
 
 
