@@ -71,18 +71,21 @@ struct COIN
     SPRITE sprite;  
 };
 
-typedef struct END END;
-struct END
+typedef struct GAME GAME;
+struct GAME
 {
-    TEXTURE texture;
-    SPRITE skull;
+    TEXTURE endscreen;
+    SPRITE deathAnimation;
+    SPRITE scoreCoin;
+    int score;
+    int best;
+    unsigned int loop;
     int status;
-    SDL_Rect rect, rect2, rect3, scorerect;
+    SDL_Rect endscorerect, endbestrect, coinrect;
 };
 
 // SDL
 void SDL_ExitWithError(const char * message); // Quitter
-int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer); // Initialisation des différents objets
 
 
 

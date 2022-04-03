@@ -129,7 +129,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     return texture;
 }
 
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, int loop, END *end, int score)
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game)
 {
     SDL_SetRenderDrawColor(renderer, 21, 33, 44, 255);
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
@@ -146,12 +146,16 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             }
         }
     }
-    if (loop % ANIMATION_LOOP == 0)
+    if (game->loop % ANIMATION_LOOP == 0)
     {
-        if (end->status == 0)
+        if (game->status == 0)
         {
+            POSITION scorecoin;
+            scorecoin.x = WINDOW_WIDTH/2 - SCORE_SIZE;
+            scorecoin.y = 10;
             updateSprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
             updateSprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
+            updateSprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
         }
         if (fireball.last != NULL)
         {
@@ -172,10 +176,14 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
     }
     else
     {
-        if (end->status == 0)
+        if (game->status == 0)
         {
+            POSITION scorecoin;
+            scorecoin.x = WINDOW_WIDTH/2 - SCORE_SIZE;
+            scorecoin.y = 10;
             displaySprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
             displaySprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
+            displaySprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
         }
         if (fireball.last != NULL)
         {
@@ -194,25 +202,33 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             }
         }
     }
-
-    if (end->status == 1)
+    if (game->status == 0) {
+        SDL_Color color_white = {255,255,255};
+        char scorestr[WIDGET_LENGTH];
+        sprintf(scorestr, "%d", game->score);
+        SDL_Texture *scoreCoin = renderWidgetText(scorestr, color_white, SCORE_SIZE, renderer, &game->coinrect);
+        SDL_RenderCopy(renderer, scoreCoin, NULL, &game->coinrect);
+    }
+    if (game->status == 1)
     {
         SDL_Color color_white = {255,255,255};
         char scorestr[WIDGET_LENGTH];
-        sprintf(scorestr, "Score   %d", score);
-        SDL_Texture *scoreprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &end->scorerect);
-
-        if (end->skull.frame < end->skull.max - 1)
+        sprintf(scorestr, "Score     %d", game->score);
+        SDL_Texture *scoreprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endscorerect);
+        sprintf(scorestr, "Record   %d", game->best);
+        SDL_Texture *recordprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endbestrect);
+        if (game->deathAnimation.frame < game->deathAnimation.max - 1)
         {
-            updateSprite(renderer, end->skull, 0, player->position, &end->skull.frame);
+            updateSprite(renderer, game->deathAnimation, 0, player->position, &game->deathAnimation.frame);
         }
         else
         {
-            displaySprite(renderer, end->skull, 0, player->position, &end->skull.frame);
-            end->texture.dstrect.x = WINDOW_WIDTH/2 - end->texture.dstrect.w/2;
-            end->texture.dstrect.y = WINDOW_HEIGHT/2 - end->texture.dstrect.h/2;  
-            SDL_RenderCopy(renderer, end->texture.texture, NULL, &end->texture.dstrect);
-            SDL_RenderCopy(renderer, scoreprint, NULL, &end->scorerect);
+            displaySprite(renderer, game->deathAnimation, 0, player->position, &game->deathAnimation.frame);
+            game->endscreen.dstrect.x = WINDOW_WIDTH/2 - game->endscreen.dstrect.w/2;
+            game->endscreen.dstrect.y = WINDOW_HEIGHT/2 - game->endscreen.dstrect.h/2;  
+            SDL_RenderCopy(renderer, game->endscreen.texture, NULL, &game->endscreen.dstrect);
+            SDL_RenderCopy(renderer, scoreprint, NULL, &game->endscorerect);
+            SDL_RenderCopy(renderer, recordprint, NULL, &game->endbestrect);
         }
     }
     return 0;
@@ -229,4 +245,33 @@ void SDL_LimitFPS(unsigned int limit)
     {
         printf("WARNING | Low FPS ! Time : %dms\n", limit);
     }
+}
+
+void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
+    if (!IMG_Init(IMG_INIT_PNG))
+        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        SDL_ExitWithError("SDL | Failed to initialize");
+    }
+    if (TTF_Init() != 0)
+    {
+        SDL_ExitWithError("SDL | TTF: Failed to initialize");
+    }
+
+    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+
+    if (*window == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a window");
+    }
+
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
+
+    if (*renderer == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a renderer");
+    }
+
+    printf("SDL | Initialized with success !\n");
 }

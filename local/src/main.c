@@ -11,43 +11,13 @@ int main()
     // Initialisation SDL
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-
-    if (!IMG_Init(IMG_INIT_PNG))
-        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        SDL_ExitWithError("SDL | Failed to initialize");
-    }
-    if (TTF_Init() != 0)
-    {
-        SDL_ExitWithError("SDL | TTF: Failed to initialize");
-    }
-
-    window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-
-    if (window == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a window");
-    }
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-
-    if (renderer == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a renderer");
-    }
-
-    printf("SDL | Initialized with success !\n");
+    SDL_initGameView(&window, &renderer);
 
     /* --------------------------------------- */
 
-    //  Initialisation End et Score
-    END *end = malloc(sizeof(END));
-    end->texture = newTexture(renderer, "asset/texture/end.png", 400, 200);
-    end->skull = newSprite(renderer, "asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
-    end->scorerect.x = 6 * WINDOW_WIDTH / 16 + 20;
-    end->scorerect.y = (WINDOW_HEIGHT / 2) - END_SCORE_SIZE / 2;
-    int score;
+    //  Initialisation Game et Score
+    GAME *game = malloc(sizeof(GAME));
+    initGame(renderer, game);
 
     // Initialisation Player
     PLAYER *player;
@@ -68,7 +38,7 @@ int main()
     coin->position.direction = 0;
 
     // Initialisation Global
-    score = init(player, &fireball, Hole, coin, renderer);
+    init(player, &fireball, Hole, coin, renderer, game);
 
     // Création de la texture de la grille et des trous
     TEXTURE map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
@@ -80,8 +50,7 @@ int main()
 
     // Set
     SDL_bool program_launched = SDL_TRUE;
-    unsigned int loop = 0;
-    end->status = 0;
+    game->status = 0;
 
     // FrameLimiter
     Uint32 frameStart;
@@ -105,19 +74,19 @@ int main()
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_z:
-                    if (end->status == 0 && player->move == 0)
+                    if (game->status == 0 && player->move == 0)
                         checkMovePlayer(player, 1, Hole);
                     continue;
                 case SDLK_s:
-                    if (end->status == 0 && player->move == 0)
+                    if (game->status == 0 && player->move == 0)
                         checkMovePlayer(player, 3, Hole);
                     continue;
                 case SDLK_q:
-                    if (end->status == 0 && player->move == 0)
+                    if (game->status == 0 && player->move == 0)
                         checkMovePlayer(player, 4, Hole);
                     continue;
                 case SDLK_d:
-                    if (end->status == 0 && player->move == 0)
+                    if (game->status == 0 && player->move == 0)
                         checkMovePlayer(player, 2, Hole);
                     continue;
                 case SDLK_f:
@@ -126,10 +95,21 @@ int main()
                     continue;
                 case SDLK_r:
                     printf("Admin | Restart completed ! \n");
-                    end->status = 0;
-                    end->skull.frame = 0;
-                    score = init(player, &fireball, Hole, coin, renderer);
+                    init(player, &fireball, Hole, coin, renderer, game);
                     continue;
+                case SDLK_o:
+                    printf("Admin | Fullscreen activated ! \n");
+                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                    continue;
+                case SDLK_p:
+                    printf("Admin | Fullscreen desactivated ! \n");
+                    SDL_SetWindowFullscreen(window, 0);
+                    continue;
+                case SDLK_m:
+                    printf("Admin | Force quit ! \n");
+                    program_launched == SDL_FALSE;
+                    break;
+
                 default:
                     continue;
                 }
@@ -141,24 +121,25 @@ int main()
             }
         }
 
-        //Player Movement
-        if (player->move > 0) {
-            movePlayer(player,player->position.direction, Hole);
+        // Player Movement
+        if (player->move > 0)
+        {
+            movePlayer(player, player->position.direction, Hole);
         }
 
         // Fireball
         OBSTACLE *temp = fireball.first;
         do
         {
-            if (loop % FIREBALL_MOVELOOP == 0 && loop != 0 && score > 0)
+            if (game->loop % FIREBALL_MOVELOOP == 0 && game->loop != 0 && game->score > 0)
             {
                 if (fireball.first != NULL)
                 {
-                    if (temp->warning == 0 && end->status == 0)
+                    if (temp->warning == 0 && game->status == 0)
                     {
                         if (detectColision(player->position, temp->position))
                         {
-                            end->status = 1;
+                            game->status = 1;
                         }
                     }
                     if (updateFireball(temp))
@@ -170,22 +151,23 @@ int main()
             if (temp != NULL)
                 temp = temp->next;
         } while (temp != NULL);
-        if ((double)loop >= 50 * exp((-(float)score) / 30) && end->status == 0 && score > 0)
+        if ((double)game->loop >= 100 * exp((-(float)game->score) / 40) && game->status == 0 && game->score > 0)
         {
+            printf("%f\n", 100 * exp((-(float)game->score) / 40));
             fireball = newObstacle(fireball);
-            loop = 0;
+            game->loop = 0;
         }
         else
-            loop += 1;
+            game->loop += 1;
 
         // Collision
-        if (end->status == 0)
+        if (game->status == 0)
         {
             if (detectColision(player->position, coin->position))
             {
                 coin->position = randomTeleport(coin->position, Hole);
-                score += 1;
-                printf("Game statut | Score : %d\n", score);
+                game->score += 1;
+                printf("Game statut | Score : %d\n", game->score);
             }
         }
 
@@ -194,7 +176,7 @@ int main()
         SDL_LimitFPS(frameTime);
 
         // Affichage
-        displayGame(renderer, player, map, fireball, coin, Hole, hole, loop, end, score);
+        displayGame(renderer, player, map, fireball, coin, Hole, hole, game);
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {
@@ -202,6 +184,10 @@ int main()
         }
     }
 
+    while (fireball.first != NULL)
+    {
+        fireball = deleteFromQueue(fireball);
+    }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

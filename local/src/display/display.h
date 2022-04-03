@@ -8,5 +8,7 @@ void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITIO
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
 void setPlayerSprite(SDL_Renderer * renderer, PLAYER * player); // Définit le sprite du joueur en fonction du skin
 SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, int loop, END *end, int score); // Affiche le jeu
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game); // Affiche le jeu
+
 void SDL_LimitFPS(unsigned int limit);
+void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);

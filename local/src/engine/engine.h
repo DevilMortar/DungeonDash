@@ -1,6 +1,8 @@
 #include "../display/display.h"
 
 //Engine
+void initGame(SDL_Renderer * renderer, GAME *game);
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME * game); // Initialisation des différents objets
 PLAYER * setPlayer(int skin); // Set le player
 POSITION randomTeleport(POSITION position, int Hole[5][5]); // Renvoie une position aléatoire où il n'y a pas de trous
 void checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]);

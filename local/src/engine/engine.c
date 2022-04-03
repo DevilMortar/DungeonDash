@@ -7,11 +7,29 @@ void SDL_ExitWithError(const char *message)
     exit(EXIT_FAILURE);
 }
 
-int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer)
+void initGame(SDL_Renderer * renderer, GAME *game) {
+    game->endscreen = newTexture(renderer, "asset/texture/end.png", 400, 200);
+    game->deathAnimation = newSprite(renderer, "asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
+    game->scoreCoin = newSprite(renderer, "asset/texture/coin.png", 16, 32, 32, SCORE_SIZE);
+    game->endscorerect.x = WINDOW_WIDTH / 2 - 100;
+    game->endscorerect.y = WINDOW_HEIGHT / 2 - END_SCORE_SIZE;
+    game->endbestrect.x = WINDOW_WIDTH / 2 - 100;
+    game->endbestrect.y = WINDOW_HEIGHT / 2 + END_SCORE_SIZE;
+    game->coinrect.x = WINDOW_WIDTH / 2 + 5;
+    game->coinrect.y = 8;
+}
+
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME * game)
 {
     // Initialisation du joueur
     setPlayer(2);
     setPlayerSprite(renderer, player);
+
+    // Initialisation du jeu
+    game->status = 0;
+    game->deathAnimation.frame = 0;
+    game->loop = 0;
+    game->score = 0;
 
     // Initialisation des boules de feu
     while (fireball->first != NULL) {
