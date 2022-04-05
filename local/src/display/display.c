@@ -1,4 +1,4 @@
-#include "display.h"
+#include "../kernel/header.h"
 
 SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize)
 {
@@ -88,14 +88,15 @@ TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position
     return texture;
 }
 
-void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player)
+void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
 {
-    char link[255] = "asset/texture/player/";
-    char skin[3];
-    sprintf(skin, "%d", player->skin);
-    strcat(link, skin);
-    strcat(link, ".png");
-    player->sprite = newSprite(renderer, link, 3, 32, 32, SPRITE_SIZE);
+    SKIN *skin = skinList;
+    for (int i = 0; i < player->skin-1; i++)
+    {
+        skin = skin->next;
+    }
+    player->sprite = skin->skin_sprite;
+    player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
 }
 
 SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
@@ -131,7 +132,6 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
 
 int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game)
 {
-    SDL_SetRenderDrawColor(renderer, 21, 33, 44, 255);
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
     for (int y = 0; y < 5; y++)
     {
@@ -272,6 +272,8 @@ void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
     {
         SDL_ExitWithError("SDL | Failed to create a renderer");
     }
+
+    SDL_SetRenderDrawColor(*renderer, 21, 33, 44, 255);
 
     printf("SDL | Initialized with success !\n");
 }
