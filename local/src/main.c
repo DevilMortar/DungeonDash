@@ -58,9 +58,21 @@ int main()
     TEXTURE title = newTexture(renderer, "asset/texture/title.png", 400, 150);
     title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
+    // Création des sons
+    if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048) == -1)
+    {
+        printf("%s", Mix_GetError());
+    }
+    
+    SONG *songList = NULL;
+    songList = loadSongInQueue(songList, "asset/sound/fire.wav", "fire", 0);
+    songList = loadSongInQueue(songList, "asset/sound/fire_2.wav", "fire_2", 1);
+    songList = loadSongInQueue(songList, "asset/sound/death.wav", "death", 2);
+    songList = loadSongInQueue(songList, "asset/sound/coin.wav", "coin", 3);
+    Mix_AllocateChannels(4);
+
     SDL_bool program_launched = SDL_TRUE;
     printf("\nGame statut | Game Initialized !\n");
-
     /* --------------------------------------- */
     while (program_launched)
     {
@@ -69,7 +81,7 @@ int main()
         {
             player = setPlayer(n);
             setPlayerSprite(renderer, player, skinList);
-            startGame(window, renderer, game, player, fireball, Hole, coin, map, hole);
+            startGame(window, renderer, game, player, fireball, Hole, coin, map, hole, songList);
         }
         else
         {
