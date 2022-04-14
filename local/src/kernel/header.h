@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include "config.h"
 
 typedef struct TEXTURE TEXTURE;
@@ -26,6 +27,15 @@ struct SPRITE
     int max;
     int srcsizew;
     int srcsizeh;
+};
+
+typedef struct SONG SONG;
+struct SONG
+{
+    Mix_Chunk * chunk;
+    char * name;
+    int channel;
+    SONG * next;
 };
 
 typedef struct POSITION POSITION;
@@ -109,7 +119,7 @@ struct SKIN{
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
 void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole);
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole, SONG * songList);
 
 //Engine
 void initGame(SDL_Renderer * renderer, GAME *game);
@@ -122,7 +132,7 @@ LIST_OBSTACLE setListObstacle(LIST_OBSTACLE list); // Initialise les listes d'ob
 LIST_OBSTACLE newObstacle(LIST_OBSTACLE list); // Créer un obstacle
 LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new); // Ajouter un obstacle dans une file
 LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list); // Supprime un obstacle d'une file
-bool updateFireball(OBSTACLE *obstacle); // Déplace les boules de feu actives
+int updateFireball(OBSTACLE *obstacle); // Déplace les boules de feu actives
 bool detectColision(POSITION posplayer, POSITION posobject); // Détecte la colision 
 
 // Display
@@ -150,7 +160,8 @@ int checkClickButtons(BUTTON * buttonList, SKIN *skinListTMP, int options, int x
 void checkOverButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
 
-
-
+//Son
+SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); //Charge une musique dans la file
+void playSong(SONG * songList, char * name); //Joue la musique
 
 
