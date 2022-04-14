@@ -55,8 +55,8 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
 PLAYER *setPlayer(int skin)
 {
     PLAYER *player = malloc(sizeof(PLAYER));
-    player->position.x = CASE_OFFSET_X;
-    player->position.y = CASE_OFFSET_Y;
+    player->position.x = CASE_OFFSET_X+2*CASE_SIZE;
+    player->position.y = CASE_OFFSET_Y+2*CASE_SIZE;
     player->move = 0;
     player->skin = skin;
     return player;
@@ -189,12 +189,16 @@ LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list)
     return list;
 }
 
-bool updateFireball(OBSTACLE *obstacle)
+int updateFireball(OBSTACLE *obstacle)
 {
-    if (obstacle->warning > 0)
+    if (obstacle->warning > 1)
     {
         obstacle->warning -= 1;
-        return false;
+        return 0;
+    }
+    else if (obstacle->warning == 1) {
+        obstacle->warning -= 1;
+        return rand()%2+2;
     }
     else
     {
@@ -203,7 +207,7 @@ bool updateFireball(OBSTACLE *obstacle)
         case 1:
             if (obstacle->position.y < CASE_OFFSET_Y - CASE_SIZE)
             {
-                return true;
+                return 1;
             }
             else
             {
@@ -213,7 +217,7 @@ bool updateFireball(OBSTACLE *obstacle)
         case 2:
             if (obstacle->position.x > CASE_OFFSET_X + 5 * CASE_SIZE)
             {
-                return true;
+                return 1;
             }
             else
             {
@@ -223,7 +227,7 @@ bool updateFireball(OBSTACLE *obstacle)
         case 3:
             if (obstacle->position.y > CASE_OFFSET_Y + 5 * CASE_SIZE)
             {
-                return true;
+                return 1;
             }
             else
             {
@@ -233,7 +237,7 @@ bool updateFireball(OBSTACLE *obstacle)
         case 4:
             if (obstacle->position.x < CASE_OFFSET_X - CASE_SIZE)
             {
-                return true;
+                return 1;
             }
             else
             {
@@ -242,7 +246,7 @@ bool updateFireball(OBSTACLE *obstacle)
             break;
         }
     }
-    return false;
+    return 0;
 }
 
 bool detectColision(POSITION posplayer, POSITION posobject)
@@ -273,4 +277,30 @@ POSITION randomTeleport(POSITION position, int Hole[5][5])
     position.x = x;
     position.y = y;
     return position;
+}
+
+SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel) {
+    SONG * song = malloc(sizeof(SONG));
+    song->channel = channel;
+    song->chunk = Mix_LoadWAV(path);
+    song->name = name;
+    if (songList == NULL) {
+        songList = song;
+        song->next = NULL;
+    }
+    else {
+        song->next = songList;
+        songList = song;
+    }
+    return songList;
+}
+
+void playSong(SONG * songList, char * name) {
+    SONG * song = songList;
+    while (song != NULL) {
+        if (strcmp(song->name, name) == 0) {
+            Mix_PlayChannel(song->channel, song->chunk, 0);
+        }
+        song = song->next;
+    }
 }
