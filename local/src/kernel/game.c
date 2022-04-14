@@ -1,6 +1,6 @@
 #include "header.h"
 
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole)
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole, SONG * songList)
 {
     // Set
     init(player, &fireball, Hole, coin, renderer, game);
@@ -50,6 +50,7 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
                     continue;
                 case SDLK_r:
                     printf("Admin | Restart completed ! \n");
+                    playSong(songList, "death");
                     init(player, &fireball, Hole, coin, renderer, game);
                     continue;
                 case SDLK_o:
@@ -91,16 +92,26 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
             {
                 if (fireball.first != NULL)
                 {
-                    if (temp->warning == 0 && game->status == 0)
+                    if (temp->warning <= 0 && game->status == 0)
                     {
                         if (detectColision(player->position, temp->position))
                         {
                             game->status = 1;
+                            playSong(songList, "death");
                         }
                     }
-                    if (updateFireball(temp))
+                    int output = updateFireball(temp);
+                    if (output == 1)
                     {
                         fireball = deleteFromQueue(fireball);
+                    }
+                    else if (output == 2)
+                    {
+                        playSong(songList, "fire");
+                    }
+                    else if (output == 3)
+                    {
+                        playSong(songList, "fire_2");
                     }
                 }
             }
@@ -121,6 +132,7 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
         {
             if (detectColision(player->position, coin->position))
             {
+                playSong(songList, "coin");
                 coin->position = randomTeleport(coin->position, Hole);
                 game->score += 1;
                 printf("Game statut | Score : %d\n", game->score);
