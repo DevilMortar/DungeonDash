@@ -1,4 +1,4 @@
-flags = -lm $(shell pkg-config --cflags --libs sdl2) -lSDL2_ttf -lSDL2_image -Og
+flags = -lm $(shell pkg-config --cflags --libs sdl2) -lSDL2_ttf -lSDL2_image -lSDL2_mixer -Og
 S_D = ./src/display
 S_E = ./src/engine
 S_K = ./src/kernel
