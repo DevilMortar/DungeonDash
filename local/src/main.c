@@ -59,17 +59,16 @@ int main()
     title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     // Création des sons
-    if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048) == -1)
+    if (Mix_OpenAudio(44100, AUDIO_S16, 2, 32) == -1)
     {
-        printf("%s", Mix_GetError());
+        SDL_ExitWithError(Mix_GetError());
     }
-    
+    Mix_AllocateChannels(4);
     SONG *songList = NULL;
     songList = loadSongInQueue(songList, "asset/sound/fire.wav", "fire", 0);
     songList = loadSongInQueue(songList, "asset/sound/fire_2.wav", "fire_2", 1);
     songList = loadSongInQueue(songList, "asset/sound/death.wav", "death", 2);
     songList = loadSongInQueue(songList, "asset/sound/coin.wav", "coin", 3);
-    Mix_AllocateChannels(4);
 
     SDL_bool program_launched = SDL_TRUE;
     printf("\nGame statut | Game Initialized !\n");
@@ -88,6 +87,7 @@ int main()
             program_launched = SDL_FALSE;
         }
     }
+    Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
