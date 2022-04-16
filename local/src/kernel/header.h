@@ -173,5 +173,5 @@ struct SAVE{
     int skinState[10];
 };
 
-void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb)); //Sauvegarde la progression du joueur dans un fichier binaire
+void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb); //Sauvegarde la progression du joueur dans un fichier binaire
 SAVE * recupData(int skinNb); //Récupère la Sauvegarde du joueur
