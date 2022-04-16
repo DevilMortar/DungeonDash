@@ -14,3 +14,4 @@
 #define END_SCORE_SIZE 20
 #define SCORE_SIZE 30
 #define PLAYER_MOVE 5
+#define SKIN_NB 4
