@@ -323,12 +323,9 @@ void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb){
     fclose(saveFile);
 }
 
-SAVE * recupData(SKIN *firstSkin){
+SAVE * recupData(){
     SAVE *dataSave=NULL;
     dataSave=malloc(sizeof(SAVE));
-
-    SKIN *tmp=firstSkin;
-
     FILE *saveFile;
     saveFile=fopen("saveFile.bin", "rb");
     if(saveFile==NULL){
