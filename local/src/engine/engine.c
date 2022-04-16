@@ -323,16 +323,21 @@ void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb){
     fclose(saveFile);
 }
 
-SAVE * recupData(){
+SAVE * recupData(int skinNb){
     SAVE *dataSave=NULL;
     dataSave=malloc(sizeof(SAVE));
     FILE *saveFile;
     saveFile=fopen("saveFile.bin", "rb");
     if(saveFile==NULL){
-        fprintf(stderr, "Error while opening file\n");
-        exit(EXIT_FAILURE);
+        dataSave->money=0;
+        dataSave->highscore=0;
+        dataSave->skinState[0]=1;
+        for(int i=1; i<skinNb; i++)
+            dataSave->skinState[i]=0;
     }
-    fread(dataSave, sizeof(dataSave), 1, saveFile);
-    fclose(saveFile);
+    else{
+        fread(dataSave, sizeof(dataSave), 1, saveFile);
+        fclose(saveFile);
+    }
     return dataSave;
 }
