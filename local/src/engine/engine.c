@@ -304,3 +304,38 @@ void playSong(SONG * songList, char * name) {
         song = song->next;
     }
 }
+
+void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb){
+    SKIN *tmp=firstSkin;
+    FILE *saveFile;
+    saveFile=fopen("saveFile.bin", "wba");
+    if(saveFile==NULL){
+        fprintf(stderr, "Error while opening file\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i=0; i<skinNb; i++){
+        dataSave->skinState[i]=tmp->state;
+        tmp=tmp->next;
+    }
+
+    fwrite(dataSave, sizeof(dataSave), 1, saveFile);
+    fclose(saveFile);
+}
+
+SAVE * recupData(SKIN *firstSkin){
+    SAVE *dataSave=NULL;
+    dataSave=malloc(sizeof(SAVE));
+
+    SKIN *tmp=firstSkin;
+
+    FILE *saveFile;
+    saveFile=fopen("saveFile.bin", "rb");
+    if(saveFile==NULL){
+        fprintf(stderr, "Error while opening file\n");
+        exit(EXIT_FAILURE);
+    }
+    fread(dataSave, sizeof(dataSave), 1, saveFile);
+    fclose(saveFile);
+    return dataSave;
+}
