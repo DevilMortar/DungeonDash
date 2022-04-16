@@ -164,4 +164,14 @@ void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les 
 SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); //Charge une musique dans la file
 void playSong(SONG * songList, char * name); //Joue la musique
 
+//Data save
 
+typedef struct SAVE SAVE;
+struct SAVE{
+    int money;
+    int highscore;
+    int skinState[10];
+};
+
+void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb)); //Sauvegarde la progression du joueur dans un fichier binaire
+SAVE * recupData(SKIN *firstSkin); //Récupère la Sauvegarde du joueur
