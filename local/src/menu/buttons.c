@@ -26,41 +26,23 @@ BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton){
     return buttonList;
 }
 
-int checkClickButtons(BUTTON * buttonList, SKIN *skinListTMP, int options, int x, int y){
+int checkClickButtons(BUTTON * buttonList, int options, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if(x>tmp->button_sprite.dstrect.x && x<tmp->button_sprite.dstrect.x+tmp->button_sprite.dstrect.w && y>tmp->button_sprite.dstrect.y && y<tmp->button_sprite.dstrect.y+tmp->button_sprite.dstrect.h && options==tmp->menu){
             tmp->state=2;
-            switch (tmp->function){
-                case play:
-                    return 1;
-                case skin:
-                    return -2;
-                case leave:
-                    return -9;
-                case confirm:
-                    return -5;
-                case left:
-                    return -3;
-                case right:
-                    return -4;
-                case locker:
-                    return -6;
-                default:
-                    return options;
-            }
+            return tmp->function;
         }
         tmp=tmp->next;
     }
     return options;
 }
 
-void checkOverButtons(BUTTON * buttonList, int options, int x, int y){
+bool checkOverButtons(BUTTON * buttonList, int options, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if(x>tmp->button_sprite.dstrect.x && x<tmp->button_sprite.dstrect.x+tmp->button_sprite.dstrect.w && y>tmp->button_sprite.dstrect.y && y<tmp->button_sprite.dstrect.y+tmp->button_sprite.dstrect.h && options==tmp->menu){
             tmp->state=3;
-            break;
         }
         tmp=tmp->next;
     }
@@ -70,6 +52,27 @@ void resetButtonState(BUTTON * buttonList){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         tmp->state=1;
+        tmp=tmp->next;
+    }
+}
+
+void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options){
+    BUTTON * tmp=buttonList;
+    while(tmp!=NULL){
+        if (tmp->menu == options){
+            switch (tmp->state){
+                case 1:
+                    tmp->button_sprite.srcrect.x=0;
+                    break;
+                case 2:
+                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
+                    break;
+                case 3:
+                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;
+                    break;
+            }
+            SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
+        }
         tmp=tmp->next;
     }
 }
