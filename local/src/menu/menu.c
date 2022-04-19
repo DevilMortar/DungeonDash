@@ -42,7 +42,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 break;
             case -3:
                 skinListTMP=skinListTMP->previous;
-                if(skinListTMP->price<0 && 1>skinListTMP->price))
+                if(skinListTMP->price<0 && 1>skinListTMP->price);
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
                 options=-2;
