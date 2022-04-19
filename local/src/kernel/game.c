@@ -1,9 +1,10 @@
 #include "header.h"
 
-int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, TEXTURE map, TEXTURE hole, SONG *songList)
+int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, TEXTURE map, TEXTURE hole, SONG *songList, BUTTON *buttonList)
 {
     // Set
     init(player, &fireball, Hole, coin, renderer, game);
+    enum functions options = none;
     game->game_launched = SDL_TRUE;
     game->status = 0;
 
@@ -21,10 +22,18 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
+            resetButtonState(buttonList);
+            checkOverButtons(buttonList, options, event.motion.x, event.motion.y);
             switch (event.type)
             {
             case SDL_MOUSEBUTTONDOWN:
-                printf("Event listener | Click detected in %d / %d\n", event.motion.x, event.motion.y);
+                options = checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
+                switch (options)
+                {
+                case backToMenu:
+                    game->game_launched = SDL_FALSE;
+                    break;
+                }
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
                 {
@@ -151,7 +160,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         SDL_LimitFPS(frameTime);
 
         // Affichage
-        displayGame(renderer, player, map, fireball, coin, Hole, hole, game);
+        displayGame(renderer, player, map, fireball, coin, Hole, hole, game, buttonList);
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {
