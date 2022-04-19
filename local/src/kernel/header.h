@@ -168,3 +168,5 @@ SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); 
 void playSong(SONG * songList, char * name); //Joue la musique
 
 //Data save
+void saveData(SKIN *firstSkin, GAME *game);
+void recupData(SKIN *firstSkin, GAME *game);
