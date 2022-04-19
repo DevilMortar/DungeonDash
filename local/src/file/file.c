@@ -12,7 +12,7 @@ void saveData(SKIN *firstSkin, GAME *game){
     fwrite(game->best, sizeof(int), 1, saveFile);
     fwrite(tmp->state, sizeof(int), 1, saveFile);
     tmp=tmp->next;
-    while(tmp!=firstSkin){
+    for(int i=0; i<9; i++){
         fwrite(tmp->state, sizeof(int), 1, saveFile);
         tmp=tmp->next;
     }
@@ -26,14 +26,14 @@ void recupData(SKIN *firstSkin, GAME *game){
     if(saveFile==NULL){
         game->money=0;
         game->best=0;
-        fclose(saveFile)
+        fclose(saveFile);
     }
     else{
         fread(game->money, sizeof(int), 1, saveFile);
         fread(game->best, sizeof(int), 1, saveFile);
         fread(tmp->state, sizeof(int), 1, saveFile);
         tmp=tmp->next;
-        while(tmp!=firstSkin){
+        for(int i=0; i<9; i++){
             fread(tmp->state, sizeof(int), 1, saveFile);
             tmp=tmp->next;
         }
