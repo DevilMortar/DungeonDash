@@ -77,10 +77,9 @@ int main()
 
     printf("Money: %d\n", dataSave->money);
 
-    SDL_bool program_launched = SDL_TRUE;
     printf("\nGame statut | Game Initialized !\n");
     /* --------------------------------------- */
-    while (program_launched)
+    while (game->program_launched)
     {
         int n = menu(buttonList, skinList, renderer, map, title, dataSave);
         if (n > -1)
@@ -88,13 +87,10 @@ int main()
             player = setPlayer(n);
             setPlayerSprite(renderer, player, skinList);
             startGame(window, renderer, game, player, fireball, Hole, coin, map, hole, songList);
-            if (game->score > game->best) {
-                game->best = game->score;
-            }
         }
         else
         {
-            program_launched = SDL_FALSE;
+            game->program_launched = SDL_FALSE;
         }
     }
     
