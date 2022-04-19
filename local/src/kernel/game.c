@@ -1,10 +1,10 @@
 #include "header.h"
 
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole, SONG * songList)
+int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, TEXTURE map, TEXTURE hole, SONG *songList)
 {
     // Set
     init(player, &fireball, Hole, coin, renderer, game);
-    SDL_bool game_launched = SDL_TRUE;
+    game->game_launched = SDL_TRUE;
     game->status = 0;
 
     // FrameLimiter
@@ -12,7 +12,7 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
     unsigned int frameTime;
 
     // Game Loop
-    while (game_launched)
+    while (game->game_launched)
     {
         // FPS check
         frameStart = SDL_GetTicks();
@@ -63,7 +63,8 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
                     continue;
                 case SDLK_m:
                     printf("Admin | Force quit ! \n");
-                    game_launched == SDL_FALSE;
+                    game->game_launched = SDL_FALSE;
+                    game->program_launched = SDL_FALSE;
                     return -1;
                     break;
 
@@ -71,7 +72,8 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
                     continue;
                 }
             case SDL_QUIT:
-                game_launched = SDL_FALSE;
+                game->game_launched = SDL_FALSE;
+                game->program_launched = SDL_FALSE;
                 break;
             default:
                 break;
@@ -96,6 +98,10 @@ int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER *
                     {
                         if (detectColision(player->position, temp->position))
                         {
+                            if (game->score > game->best)
+                            {
+                                game->best = game->score;
+                            }
                             game->status = 1;
                             playSong(songList, "death");
                         }
