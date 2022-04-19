@@ -130,7 +130,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     return texture;
 }
 
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game)
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game, BUTTON * buttonList)
 {
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
     for (int y = 0; y < 5; y++)
@@ -229,6 +229,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             SDL_RenderCopy(renderer, game->endscreen.texture, NULL, &game->endscreen.dstrect);
             SDL_RenderCopy(renderer, scoreprint, NULL, &game->endscorerect);
             SDL_RenderCopy(renderer, recordprint, NULL, &game->endbestrect);
+            displayButtons(renderer, buttonList, none);
         }
     }
     return 0;
