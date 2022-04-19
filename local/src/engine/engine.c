@@ -8,6 +8,7 @@ void SDL_ExitWithError(const char *message)
 }
 
 void initGame(SDL_Renderer * renderer, GAME *game) {
+    game->program_launched = SDL_TRUE;
     game->endscreen = newTexture(renderer, "asset/texture/end.png", 400, 200);
     game->deathAnimation = newSprite(renderer, "asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
     game->scoreCoin = newSprite(renderer, "asset/texture/coin.png", 16, 32, 32, SCORE_SIZE);
