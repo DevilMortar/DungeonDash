@@ -89,6 +89,7 @@ struct GAME
     SPRITE scoreCoin;
     int score;
     int best;
+    int money;
     unsigned int loop;
     int status;
     SDL_Rect endscorerect, endbestrect, coinrect;
@@ -113,13 +114,6 @@ struct SKIN{
     int price;
     SKIN * previous;
     SKIN * next;
-};
-
-typedef struct SAVE SAVE;
-struct SAVE{
-    int money;
-    int highscore;
-    int skinState[10];
 };
 
 // SDL
@@ -172,6 +166,13 @@ SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); 
 void playSong(SONG * songList, char * name); //Joue la musique
 
 //Data save
+
+typedef struct SAVE SAVE;
+struct SAVE{
+    int money;
+    int highscore;
+    int skinState[10];
+};
 
 void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb); //Sauvegarde la progression du joueur dans un fichier binaire
 SAVE * recupData(int skinNb); //Récupère la Sauvegarde du joueur
