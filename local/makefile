@@ -3,23 +3,26 @@ S_D = ./src/display
 S_E = ./src/engine
 S_K = ./src/kernel
 S_M = ./src/menu
+S_F = ./src/file
 S = ./src
 B_D = ./build/display
 B_E = ./build/engine
 B_M = ./build/menu
+B_F = ./build/file
 B = ./build
 
 
 main: main.o engine.o display.o
-	gcc -o main main.o engine.o display.o game.o menu.o buttons.o $(flags)
+	gcc -o main main.o engine.o display.o game.o menu.o buttons.o file.o $(flags)
 	mv display.o $(B_D)/
 	mv engine.o $(B_E)/
 	mv main.o $(B)/
 	mv game.o $(B)/
 	mv menu.o $(B_M)/
 	mv buttons.o $(B_M)/
+	mv file.o $(B_F)/
 
-main.o : engine.o engine.o display.o game.o menu.o buttons.o
+main.o : engine.o engine.o display.o game.o menu.o buttons.o file.o
 	gcc -g -Wall -c $(S)/main.c $(flags)
 
 menu.o : buttons.o
@@ -36,6 +39,9 @@ display.o : engine.o
 
 engine.o :
 	gcc -g -Wall -c $(S_E)/engine.c $(flags)
+
+file.o :
+	gcc -g -Wall -c $(S_F)/file.c $(flags)
 	
 deepclean :
 	rm -f *.o
