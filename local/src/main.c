@@ -75,12 +75,14 @@ int main()
     songList = loadSongInQueue(songList, "asset/sound/death.wav", "death", 2);
     songList = loadSongInQueue(songList, "asset/sound/coin.wav", "coin", 3);
 
+    printf("Money: %d\n", dataSave->money);
+
     SDL_bool program_launched = SDL_TRUE;
     printf("\nGame statut | Game Initialized !\n");
     /* --------------------------------------- */
     while (program_launched)
     {
-        int n = menu(buttonList, skinList, renderer, map, title, 50, 20);
+        int n = menu(buttonList, skinList, renderer, map, title, dataSave);
         if (n > -1)
         {
             player = setPlayer(n);
