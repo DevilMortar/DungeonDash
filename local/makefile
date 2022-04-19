@@ -51,4 +51,5 @@ deepclean :
 	rm -f $(B)/*.o
 	rm -f $(B)/*.o
 	rm -f $(B_M)/*.o
+	rm -f $(B_F)/*.o
 
