@@ -88,12 +88,16 @@ int main()
             player = setPlayer(n);
             setPlayerSprite(renderer, player, skinList);
             startGame(window, renderer, game, player, fireball, Hole, coin, map, hole, songList);
+            if (game->score > game->best) {
+                game->best = game->score;
+            }
         }
         else
         {
             program_launched = SDL_FALSE;
         }
     }
+    
     Mix_CloseAudio();
     saveData(firstSkin, dataSave, SKIN_NB);
     SDL_DestroyRenderer(renderer);
