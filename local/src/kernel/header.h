@@ -116,6 +116,13 @@ struct SKIN{
     SKIN * next;
 };
 
+typedef struct SAVE SAVE;
+struct SAVE{
+    int money;
+    int highscore;
+    int skinState[10];
+};
+
 // SDL
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
@@ -166,13 +173,6 @@ SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); 
 void playSong(SONG * songList, char * name); //Joue la musique
 
 //Data save
-
-typedef struct SAVE SAVE;
-struct SAVE{
-    int money;
-    int highscore;
-    int skinState[10];
-};
 
 void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb); //Sauvegarde la progression du joueur dans un fichier binaire
 SAVE * recupData(int skinNb); //Récupère la Sauvegarde du joueur
