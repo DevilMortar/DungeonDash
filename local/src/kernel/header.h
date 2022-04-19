@@ -122,7 +122,16 @@ typedef struct SAVE SAVE;
 struct SAVE{
     int money;
     int highscore;
-    int skinState[10];
+    int skinState1;
+    int skinState2;
+    int skinState3;
+    int skinState4;
+    int skinState5;
+    int skinState6;
+    int skinState7;
+    int skinState8;
+    int skinState9;
+    int skinState10;
 };
 
 // SDL
