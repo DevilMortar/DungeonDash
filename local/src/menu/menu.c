@@ -1,13 +1,13 @@
 #include "../kernel/header.h"
 
 int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, SAVE *dataSave){
-    SDL_bool program_launched = SDL_TRUE;
+    SDL_bool menu_active = SDL_TRUE;
     int options=-1;
     int skinChoice=1;
     SKIN *skinListTMP=skinList;
     SKIN *firstSkin=skinList;
 
-    while (program_launched)
+    while (menu_active)
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -18,7 +18,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 options=checkClickButtons(buttonList, skinListTMP, options, event.motion.x, event.motion.y);
                 break;
             case SDL_QUIT:
-                program_launched = SDL_FALSE;
+                menu_active = SDL_FALSE;
                 break;
             default:
                 resetButtonState(buttonList);
