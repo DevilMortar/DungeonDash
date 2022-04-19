@@ -95,7 +95,7 @@ int main()
         }
     }
     Mix_CloseAudio();
-    saveData(firstSkin, dataSave, SKIN_NB)
+    saveData(firstSkin, dataSave, SKIN_NB);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
