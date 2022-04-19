@@ -2,20 +2,23 @@
 
 int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game){
     SDL_bool menu_active = SDL_TRUE;
-    int options=-1;
+    enum functions options = mainmenu; 
     int skinChoice=1;
     SKIN *skinListTMP=skinList;
     SKIN *firstSkin=skinList;
+    Uint32 frameStart;
+    unsigned int frameTime;
 
     while (menu_active)
     {
         SDL_Event event;
+        frameStart = SDL_GetTicks();
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
             case SDL_MOUSEBUTTONDOWN:
-                options=checkClickButtons(buttonList, skinListTMP, options, event.motion.x, event.motion.y);
+                options=checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
                 break;
             case SDL_QUIT:
                 menu_active = SDL_FALSE;
@@ -27,55 +30,69 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
             }
         }
         switch(options){
-            case 1:
+            case play:
                 while(firstSkin!=skinList){
                     firstSkin=firstSkin->next;
                     skinChoice+=1;
                 }
                 return skinChoice;
-                return 1;
-            case -1:
+            case mainmenu:
                 displayMainMenu(buttonList, skinList, renderer, map, title);
                 break;
-            case -2:
+            case skin:
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
                 break;
-            case -3:
-                skinListTMP=skinListTMP->previous;
+            case left:
+                if (skinListTMP!=NULL){
+                    skinListTMP=skinListTMP->previous;
+                    if (skinListTMP==NULL){
+                        skinListTMP=skinList;
+                    }
+                }
                 if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
-                options=-2;
+                options=skin;
                 break;
-            case -4:
-                skinListTMP=skinListTMP->next;
+            case right:
+                if (skinListTMP!=NULL){
+                    skinListTMP=skinListTMP->next;
+                    if (skinListTMP==NULL){
+                        skinListTMP=skinList;
+                    }
+                }
                 if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
-                options=-2;
+                options=skin;
                 break;
-            case -5:
+            case confirm:
                 if(skinListTMP->state==1){
                     skinList=skinListTMP;
-                    options=-1;
+                    options=mainmenu;
                     displayMainMenu(buttonList, skinList, renderer, map, title);
                 }
                 else{
-                    options=-2;
+                    options=skin;
                     displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
                 }
                 break;
-            case -6:
+            case locker:
                 if(skinListTMP->state==0 && skinListTMP->price > 0 && skinListTMP->price <= game->money){
                     skinListTMP->state=-1;
                 }
-                options=-2;
+                displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
+                options=skin;
                 break;
-            case -9:
+            case leave:
                 return -6;
             default:
                 break;
         }
+        SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
+        frameTime = SDL_GetTicks() - frameStart;
+        SDL_LimitFPS(frameTime);
     }
     return -1;
 }
@@ -83,29 +100,9 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title){
     SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
     SDL_RenderCopy(renderer, title.texture, NULL, &title.dstrect);
-    BUTTON *tmp=buttonList;
-
-    while(tmp!=NULL){
-        if(tmp->menu==-1){
-            switch(tmp->state){
-                case 1:
-                    tmp->button_sprite.srcrect.x=0;
-                    break;
-                case 2:
-                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
-                    break;
-                case 3:
-                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;
-                    break;
-            }
-            SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
-        }
-        tmp=tmp->next;
-    }
+    displayButtons(renderer, buttonList, mainmenu);
     skinList->skin_sprite.srcrect.x=0*skinList->skin_sprite.srcsizew;
     SDL_RenderCopy(renderer, skinList->skin_sprite.texture, &skinList->skin_sprite.srcrect, &skinList->skin_sprite.dstrect);
-    SDL_RenderPresent(renderer);
-    SDL_RenderClear(renderer);
 }
 
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title){
@@ -117,7 +114,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     int wait=0;
 
     while(tmp!=NULL){
-        if(tmp->menu==-2){
+        if(tmp->menu==skin){
             switch(tmp->state){
                 case 1:
                     tmp->button_sprite.srcrect.x=0;
@@ -144,13 +141,6 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
         }
         tmp=tmp->next;
-    }
-
-    SDL_RenderPresent(renderer);
-    SDL_RenderClear(renderer);
-    if(wait==1){
-        SDL_Delay(200);
-        wait=0;
     }
 }
 
@@ -179,13 +169,4 @@ SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin){
         skinList=newSkin;
     }
     return skinList;
-}
-
-void closeSkinList(SKIN *skinList){
-    SKIN *tmp=skinList;
-    while(tmp->next!=NULL){
-        tmp=tmp->next;
-    }
-    tmp->next=skinList;
-    skinList->previous=tmp;
 }
