@@ -78,7 +78,7 @@ int main()
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        int n = menu(buttonList, skinList, renderer, map, title);
+        int n = menu(buttonList, skinList, renderer, map, title, game);
         if (n > -1)
         {
             player = setPlayer(n);
