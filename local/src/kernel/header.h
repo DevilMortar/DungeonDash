@@ -87,6 +87,8 @@ struct GAME
     TEXTURE endscreen;
     SPRITE deathAnimation;
     SPRITE scoreCoin;
+    SDL_bool program_launched;
+    SDL_bool game_launched;
     int score;
     int best;
     int money;
