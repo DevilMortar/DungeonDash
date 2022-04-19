@@ -28,10 +28,10 @@ int main()
     buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, locker, 1, -2, 32, 32);
 
     SKIN *skinList = NULL;
-    skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState[3], 50, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState[2], 30, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState[1], 20, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState[0], 0, 32, 32);
+    skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState4, 50, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState3, 30, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState1, 20, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState1, 0, 32, 32);
     SKIN *firstSkin = skinList;
     closeSkinList(skinList);
 
