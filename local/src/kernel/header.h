@@ -98,7 +98,7 @@ struct GAME
 };
 
 typedef enum functions functions;
-enum functions {play, skin, leave, confirm, right, left, locker};
+enum functions {play, skin, leave, confirm, right, left, locker, mainmenu, none, backToMenu};
 
 typedef struct BUTTON BUTTON;
 struct BUTTON{
@@ -122,7 +122,7 @@ struct SKIN{
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
 void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole, SONG * songList);
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, TEXTURE map, TEXTURE hole, SONG * songList, BUTTON * buttonList);
 
 //Engine
 void initGame(SDL_Renderer * renderer, GAME *game);
@@ -146,7 +146,7 @@ void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITIO
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList);
 SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game); // Affiche le jeu
+int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game, BUTTON * buttonList); // Affiche le jeu
 
 // Menu
 int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, GAME *game);
@@ -154,14 +154,14 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
 SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin); //Ajoute un skin à la liste
-void closeSkinList(SKIN *skinList); //Relie le premier élément de la liste au dernier, pout créer une boucle
 
 //Buttons
 BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function,int state, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
 BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un bouton à la liste des boutons
-int checkClickButtons(BUTTON * buttonList, SKIN *skinListTMP, int options, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
-void checkOverButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si la souris survole un bouton
+int checkClickButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
+bool checkOverButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
+void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options); //Affiche tous les boutons
 
 //Son
 SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); //Charge une musique dans la file
