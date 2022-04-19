@@ -115,6 +115,13 @@ struct SKIN{
     SKIN * next;
 };
 
+typedef struct SAVE SAVE;
+struct SAVE{
+    int money;
+    int highscore;
+    int skinState[10];
+};
+
 // SDL
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
@@ -146,7 +153,7 @@ SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
 int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game); // Affiche le jeu
 
 // Menu
-int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, int money, int highScore);
+int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, SAVE *dataSave);
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title); //Affiche le menu principal
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
@@ -165,13 +172,6 @@ SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); 
 void playSong(SONG * songList, char * name); //Joue la musique
 
 //Data save
-
-typedef struct SAVE SAVE;
-struct SAVE{
-    int money;
-    int highscore;
-    int skinState[10];
-};
 
 void saveData(SKIN *firstSkin, SAVE *dataSave, int skinNb); //Sauvegarde la progression du joueur dans un fichier binaire
 SAVE * recupData(int skinNb); //Récupère la Sauvegarde du joueur
