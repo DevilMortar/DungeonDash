@@ -102,6 +102,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                             {
                                 game->best = game->score;
                             }
+                            game->money += game->score;
                             game->status = 1;
                             playSong(songList, "death");
                         }
