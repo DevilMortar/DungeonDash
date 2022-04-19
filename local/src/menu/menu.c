@@ -1,6 +1,6 @@
 #include "../kernel/header.h"
 
-int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, SAVE *dataSave){
+int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title){
     SDL_bool menu_active = SDL_TRUE;
     int options=-1;
     int skinChoice=1;
@@ -42,14 +42,14 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 break;
             case -3:
                 skinListTMP=skinListTMP->previous;
-                if(skinListTMP->price<0 && dataSave->highscore>floor(skinListTMP->price))
+                if(skinListTMP->price<0 && 1>skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
                 options=-2;
                 break;
             case -4:
                 skinListTMP=skinListTMP->next;
-                if(skinListTMP->price<0 && dataSave->highscore>floor(skinListTMP->price))
+                if(skinListTMP->price<0 && 1>floor(skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title);
                 options=-2;
@@ -66,8 +66,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 }
                 break;
             case -6:
-                if(skinListTMP->state==0 && skinListTMP->price > 0 && skinListTMP->price <= dataSave->money){
-                    dataSave->money=dataSave->money-skinListTMP->price;
+                if(skinListTMP->state==0 && skinListTMP->price > 0 && skinListTMP->price <= 1){
                     skinListTMP->state=-1;
                 }
                 options=-2;

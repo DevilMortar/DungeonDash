@@ -14,8 +14,6 @@ int main()
     SDL_initGameView(&window, &renderer);
     
     //Récupération la sauvegarde
-    SAVE *dataSave=NULL;
-    dataSave=recupData(SKIN_NB);
 
     // Initialisation du menu
     BUTTON *buttonList = NULL;
@@ -28,10 +26,10 @@ int main()
     buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, locker, 1, -2, 32, 32);
 
     SKIN *skinList = NULL;
-    skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState4, 50, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState3, 30, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState1, 20, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, dataSave->skinState1, 0, 32, 32);
+    skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 30, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 20, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 1, 0, 32, 32);
     SKIN *firstSkin = skinList;
     closeSkinList(skinList);
 
@@ -75,13 +73,11 @@ int main()
     songList = loadSongInQueue(songList, "asset/sound/death.wav", "death", 2);
     songList = loadSongInQueue(songList, "asset/sound/coin.wav", "coin", 3);
 
-    printf("Money: %d\n", dataSave->money);
-
     printf("\nGame statut | Game Initialized !\n");
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        int n = menu(buttonList, skinList, renderer, map, title, dataSave);
+        int n = menu(buttonList, skinList, renderer, map, title);
         if (n > -1)
         {
             player = setPlayer(n);
@@ -95,7 +91,6 @@ int main()
     }
     
     Mix_CloseAudio();
-    saveData(firstSkin, dataSave, SKIN_NB);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
