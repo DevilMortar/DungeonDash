@@ -13,8 +13,6 @@ int main()
     SDL_Renderer *renderer = NULL;
     SDL_initGameView(&window, &renderer);
     
-    //Récupération la sauvegarde
-
     // Initialisation du menu
     BUTTON *buttonList = NULL;
     buttonList = createButton(renderer, "asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, 1, -1, 52, 15);
@@ -36,6 +34,9 @@ int main()
     //  Initialisation Game et Score
     GAME *game = malloc(sizeof(GAME));
     initGame(renderer, game);
+
+    //Récupération de la sauvegarde
+    recupData(firstSkin, game);
 
     // Initialisation Player
     PLAYER *player;
@@ -89,7 +90,7 @@ int main()
             game->program_launched = SDL_FALSE;
         }
     }
-    
+    saveData(firstSkin, game);
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
