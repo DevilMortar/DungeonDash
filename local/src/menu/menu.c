@@ -113,7 +113,7 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
 
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
     SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
-    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+    SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
     // Display Money
     SDL_Color color = {255, 255, 255};
     char money[20];
@@ -139,6 +139,12 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
                 case 3:
                     tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;
                     break;
+            }
+            if(tmp->function==left && skinListTMP->previous==NULL){
+                tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
+            }
+            if(tmp->function==right && skinListTMP->next==NULL){
+                tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
             }
             if(tmp->function==locker && skinListTMP->state==1){
                  tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*5;
