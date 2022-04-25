@@ -175,3 +175,4 @@ void playSong(SONG * songList, char * name); //Joue la musique
 //Data save
 void saveData(SKIN *firstSkin, GAME *game);
 void recupData(SKIN *firstSkin, GAME *game);
+void resetData(SKIN *firstSkin, GAME *game);
