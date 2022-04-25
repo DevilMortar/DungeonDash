@@ -102,13 +102,13 @@ void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
 SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
 {
     // Open the font
-    TTF_Font *font = TTF_OpenFont("asset/police/arcade.ttf", fontSize);
+    TTF_Font *font = TTF_OpenFont("asset/police/arcade.ttf", fontSize); // Open the font you want
     if (font == NULL)
     {
         SDL_ExitWithError("SDL || TTF_OpenFont");
         return NULL;
     }
-
+    // Render the text to a surface
     SDL_Surface *surf = TTF_RenderText_Solid(font, message, color);
     if (surf == NULL)
     {
@@ -116,6 +116,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
         SDL_ExitWithError("SDL || TTF_RenderText");
         return NULL;
     }
+    // Create a texture from the surface
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
     if (texture == NULL)
     {
@@ -127,6 +128,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     // Clean up the surface and font
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
+    // Return the texture
     return texture;
 }
 
@@ -229,6 +231,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
             SDL_RenderCopy(renderer, game->endscreen.texture, NULL, &game->endscreen.dstrect);
             SDL_RenderCopy(renderer, scoreprint, NULL, &game->endscorerect);
             SDL_RenderCopy(renderer, recordprint, NULL, &game->endbestrect);
+            SDL_RenderCopy(renderer, game->gameOver.texture, NULL, &game->gameOver.dstrect);
             displayButtons(renderer, buttonList, none);
         }
     }
