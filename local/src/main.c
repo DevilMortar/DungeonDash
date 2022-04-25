@@ -25,6 +25,8 @@ int main()
     buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, 1, none, 32, 32);
 
     SKIN *skinList = NULL;
+    skinList = createSkin(renderer, "asset/texture/player/6.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
+    skinList = createSkin(renderer, "asset/texture/player/5.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
     skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 64, 64);
     skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 30, 64, 64);
     skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 20, 64, 64);
@@ -40,7 +42,7 @@ int main()
 
     // Initialisation Player
     PLAYER *player;
-    player = setPlayer(2);
+    player = setPlayer(1);
 
     // Initialisation Fireball
     LIST_OBSTACLE fireball;
@@ -57,10 +59,15 @@ int main()
     coin->position.direction = 0;
 
     // Création de la texture de la grille et des trous
+    game->gameOver = newTexture(renderer, "asset/texture/game_over.png", 400, 50);
+    game->gameOver.dstrect.y = 350;
     TEXTURE map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
     TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
-    TEXTURE title = newTexture(renderer, "asset/texture/title.png", 400, 150);
+    TEXTURE title = newTexture(renderer, "asset/texture/title.png", 700, 110);
+    
     title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
+
+    TEXTURE unclickable_button = newTexture(renderer, "asset/texture/button/unclikable_button.png", 32, 32);
 
     // Création des sons
     if (Mix_OpenAudio(44100, AUDIO_S16, 2, 32) == -1)
@@ -78,10 +85,8 @@ int main()
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        int n = menu(buttonList, skinList, renderer, map, title, game);
-        if (n > -1)
+        if(menu(buttonList, skinList, renderer, map, title, game, &player->skin)>0)
         {
-            player = setPlayer(n);
             setPlayerSprite(renderer, player, skinList);
             startGame(window, renderer, game, player, fireball, Hole, coin, map, hole, songList, buttonList);
         }
