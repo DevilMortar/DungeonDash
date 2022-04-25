@@ -28,6 +28,11 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     game->loop = 0;
     game->score = 0;
 
+    // Initialisation du joueur
+    player->position.x = CASE_OFFSET_X + 2 * CASE_SIZE;
+    player->position.y = CASE_OFFSET_Y + 2 * CASE_SIZE;
+    player->position.direction = 3;
+
     // Initialisation des boules de feu
     while (fireball->first != NULL) {
         *fireball = deleteFromQueue(*fireball);
