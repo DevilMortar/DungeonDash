@@ -1,6 +1,6 @@
 #include "../kernel/header.h"
 
-int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game, int *playerSkin){
+int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *game, int *playerSkin){
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = mainmenu; 
     SKIN *skinListTMP=skinList;
@@ -36,44 +36,42 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 }
                 return *playerSkin;
             case mainmenu:
-                displayMainMenu(buttonList, skinList, renderer, map, title, game);
+                displayMainMenu(buttonList, skinList, renderer, game);
                 break;
             case skin:
-                displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
+                displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 break;
             case left:
                 if (skinListTMP!=NULL){
-                    skinListTMP=skinListTMP->previous;
-                    if (skinListTMP==NULL){
-                        skinListTMP=skinList;
+                    if (skinListTMP->previous!=NULL){
+                        skinListTMP=skinListTMP->previous;
                     }
                 }
                 if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
                     skinListTMP->state=1;
-                displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
+                displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
                 break;
             case right:
                 if (skinListTMP!=NULL){
-                    skinListTMP=skinListTMP->next;
-                    if (skinListTMP==NULL){
-                        skinListTMP=skinList;
+                    if (skinListTMP->next!=NULL){
+                        skinListTMP=skinListTMP->next;
                     }
                 }
                 if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
                     skinListTMP->state=1;
-                displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
+                displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
                 break;
             case confirm:
                 if(skinListTMP->state==1){
                     skinList=skinListTMP;
                     options=mainmenu;
-                    displayMainMenu(buttonList, skinList, renderer, map, title, game);
+                    displayMainMenu(buttonList, skinList, renderer, game);
                 }
                 else{
                     options=skin;
-                    displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
+                    displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 }
                 break;
             case locker:
@@ -81,7 +79,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                     game->money=game->money-skinListTMP->price;
                     skinListTMP->state=-1;
                 }
-                displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
+                displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
                 break;
             case leave:
@@ -97,9 +95,9 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
     return -1;
 }
 
-void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game){
-    SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
-    SDL_RenderCopy(renderer, title.texture, NULL, &title.dstrect);
+void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME *game){
+    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
+    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     //Display Record
     SDL_Color color = {255, 255, 255};
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
@@ -113,9 +111,9 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     SDL_RenderCopy(renderer, skinList->skin_sprite.texture, &skinList->skin_sprite.srcrect, &skinList->skin_sprite.dstrect);
 }
 
-void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game){
-    SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
-    SDL_RenderCopy(renderer, title.texture, NULL, &title.dstrect);
+void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
+    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
+    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     // Display Money
     SDL_Color color = {255, 255, 255};
     char money[20];
@@ -151,7 +149,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
                  if(skinListTMP->state==-4){skinListTMP->state=1;}
                  wait=1;
             }
-            if(tmp->function==confirm && skinListTMP->state==0){
+            if(skinListTMP->state==0){
                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
             }
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
