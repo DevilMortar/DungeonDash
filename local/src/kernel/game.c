@@ -1,6 +1,6 @@
 #include "header.h"
 
-int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, TEXTURE map, TEXTURE hole, SONG *songList, BUTTON *buttonList)
+int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, SONG *songList, BUTTON *buttonList)
 {
     // Set
     init(player, &fireball, Hole, coin, renderer, game);
@@ -163,7 +163,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         SDL_LimitFPS(frameTime);
 
         // Affichage
-        displayGame(renderer, player, map, fireball, coin, Hole, hole, game, buttonList);
+        displayGame(renderer, player, fireball, coin, Hole, game, buttonList);
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {

@@ -61,11 +61,11 @@ int main()
     // Création de la texture de la grille et des trous
     game->gameOver = newTexture(renderer, "asset/texture/game_over.png", 400, 50);
     game->gameOver.dstrect.y = 350;
-    TEXTURE map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
-    TEXTURE hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
-    TEXTURE title = newTexture(renderer, "asset/texture/title.png", 700, 110);
+    game->map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
+    game->hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
+    game->title = newTexture(renderer, "asset/texture/title.png", 700, 110);
     
-    title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
+    game->title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     TEXTURE unclickable_button = newTexture(renderer, "asset/texture/button/unclikable_button.png", 32, 32);
 
@@ -85,10 +85,10 @@ int main()
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        if(menu(buttonList, skinList, renderer, map, title, game, &player->skin)>0)
+        if(menu(buttonList, skinList, renderer, game, &player->skin)>0)
         {
             setPlayerSprite(renderer, player, skinList);
-            startGame(window, renderer, game, player, fireball, Hole, coin, map, hole, songList, buttonList);
+            startGame(window, renderer, game, player, fireball, Hole, coin, songList, buttonList);
         }
         else
         {

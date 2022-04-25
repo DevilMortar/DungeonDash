@@ -132,9 +132,9 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     return texture;
 }
 
-int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game, BUTTON * buttonList)
+int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList)
 {
-    SDL_RenderCopy(renderer, map.texture, NULL, &map.dstrect);
+    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
     for (int y = 0; y < 5; y++)
     {
         for (int x = 0; x < 5; x++)
@@ -144,7 +144,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
                 POSITION temp;
                 temp.x = CASE_OFFSET_X + x * CASE_SIZE;
                 temp.y = CASE_OFFSET_Y + y * CASE_SIZE;
-                hole = updateTexture(renderer, hole, temp, SPRITE_SIZE, SPRITE_SIZE);
+                game->hole = updateTexture(renderer, game->hole, temp, SPRITE_SIZE, SPRITE_SIZE);
             }
         }
     }
