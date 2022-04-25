@@ -1,9 +1,8 @@
 #include "../kernel/header.h"
 
-int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game){
+int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME *game, int *playerSkin){
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = mainmenu; 
-    int skinChoice=1;
     SKIN *skinListTMP=skinList;
     SKIN *firstSkin=skinList;
     Uint32 frameStart;
@@ -33,9 +32,9 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
             case play:
                 while(firstSkin!=skinList){
                     firstSkin=firstSkin->next;
-                    skinChoice+=1;
+                    *playerSkin+=1;
                 }
-                return skinChoice;
+                return *playerSkin;
             case mainmenu:
                 displayMainMenu(buttonList, skinList, renderer, map, title, game);
                 break;
@@ -79,6 +78,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, TEXTURE m
                 break;
             case locker:
                 if(skinListTMP->state==0 && skinListTMP->price > 0 && skinListTMP->price <= game->money){
+                    game->money=game->money-skinListTMP->price;
                     skinListTMP->state=-1;
                 }
                 displaySkinMenu(buttonList, skinListTMP, renderer, map, title, game);
