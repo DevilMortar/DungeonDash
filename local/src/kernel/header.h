@@ -87,6 +87,7 @@ struct GAME
     TEXTURE endscreen;
     TEXTURE map;
     TEXTURE title;
+    TEXTURE titleSkin;
     TEXTURE hole;
     TEXTURE gameOver;
     SPRITE deathAnimation;
