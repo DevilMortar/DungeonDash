@@ -38,6 +38,7 @@ int main()
     initGame(renderer, game);
 
     //Récupération de la sauvegarde
+    resetData(firstSkin, game);
     recupData(firstSkin, game);
 
     // Initialisation Player
@@ -88,6 +89,7 @@ int main()
     {
         if(menu(buttonList, skinList, renderer, game, &player->skin)>0)
         {
+            setPlayer(player->skin);
             setPlayerSprite(renderer, player, skinList);
             startGame(window, renderer, game, player, fireball, Hole, coin, songList, buttonList);
         }
