@@ -150,8 +150,8 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTAC
 
 // Menu
 int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, GAME *game);
-void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title); //Affiche le menu principal
-void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title); //Affiche le menu des skins
+void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME * game); //Affiche le menu principal
+void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME * game); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
 SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin); //Ajoute un skin à la liste
 
