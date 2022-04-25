@@ -27,12 +27,15 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
             switch (event.type)
             {
             case SDL_MOUSEBUTTONDOWN:
-                options = checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
-                switch (options)
+                if (game->status == 1)
                 {
-                case backToMenu:
-                    game->game_launched = SDL_FALSE;
-                    break;
+                    options = checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
+                    switch (options)
+                    {
+                    case backToMenu:
+                        game->game_launched = SDL_FALSE;
+                        break;
+                    }
                 }
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
