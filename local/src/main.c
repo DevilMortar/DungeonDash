@@ -64,8 +64,9 @@ int main()
     game->map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
     game->hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
     game->title = newTexture(renderer, "asset/texture/title.png", 700, 110);
+    game->titleSkin = newTexture(renderer, "asset/texture/title_hero.png", 700, 110);
     
-    game->title.dstrect.y = WINDOW_HEIGHT / 2 - 330;
+    game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     TEXTURE unclickable_button = newTexture(renderer, "asset/texture/button/unclikable_button.png", 32, 32);
 
