@@ -33,3 +33,15 @@ void recupData(SKIN *firstSkin, GAME *game){
     }
     fclose(saveFile);
 }
+
+void resetData(SKIN *firstSkin, GAME *game){
+    game->money=0;
+    game->best=0;
+    SKIN *tmp=firstSkin;
+    tmp=tmp->next;
+    while(tmp!=NULL){
+        tmp->state=0;
+        tmp=tmp->next;
+    }
+    saveData(firstSkin, game);
+}
