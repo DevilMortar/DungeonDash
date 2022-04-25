@@ -87,10 +87,13 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *gam
             default:
                 break;
         }
-        SDL_RenderPresent(renderer);
-        SDL_RenderClear(renderer);
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
+        SDL_RenderPresent(renderer);
+        if (SDL_RenderClear(renderer) != 0)
+        {
+            SDL_ExitWithError("SDL | Failed to clear renderer");
+        }
     }
     return -1;
 }
@@ -108,7 +111,8 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     // Display Buttons
     displayButtons(renderer, buttonList, mainmenu);
     skinList->skin_sprite.srcrect.x=0*skinList->skin_sprite.srcsizew;
-    SDL_RenderCopy(renderer, skinList->skin_sprite.texture, &skinList->skin_sprite.srcrect, &skinList->skin_sprite.dstrect);
+    POSITION skinPosition = {skinList->skin_sprite.dstrect.x, skinList->skin_sprite.dstrect.y, 0};
+    updateSprite(renderer, skinList->skin_sprite,0, skinPosition, &skinList->skin_sprite.frame);
 }
 
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
@@ -155,7 +159,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
                  if(skinListTMP->state==-4){skinListTMP->state=1;}
                  wait=1;
             }
-            if(skinListTMP->state==0){
+            if(tmp->function==confirm && skinListTMP->state==0){
                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
             }
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
