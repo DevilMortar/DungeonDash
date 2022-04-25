@@ -85,6 +85,9 @@ typedef struct GAME GAME;
 struct GAME
 {
     TEXTURE endscreen;
+    TEXTURE map;
+    TEXTURE title;
+    TEXTURE gameOver;
     SPRITE deathAnimation;
     SPRITE scoreCoin;
     SDL_bool program_launched;
@@ -149,7 +152,7 @@ SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
 int displayGame(SDL_Renderer *renderer, PLAYER *player, TEXTURE map, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], TEXTURE hole, GAME *game, BUTTON * buttonList); // Affiche le jeu
 
 // Menu
-int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, GAME *game);
+int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer,  TEXTURE map, TEXTURE title, GAME *game, int *playerSkin); // Affiche le menu
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME * game); //Affiche le menu principal
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, TEXTURE map, TEXTURE title, GAME * game); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
