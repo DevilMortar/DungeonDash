@@ -58,14 +58,6 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     printf("Admin | Restart completed ! \n");
                     init(player, &fireball, Hole, coin, renderer, game);
                     continue;
-                case SDLK_o:
-                    printf("Admin | Fullscreen activated ! \n");
-                    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-                    continue;
-                case SDLK_p:
-                    printf("Admin | Fullscreen desactivated ! \n");
-                    SDL_SetWindowFullscreen(window, 0);
-                    continue;
                 case SDLK_m:
                     printf("Admin | Force quit ! \n");
                     game->game_launched = SDL_FALSE;
@@ -94,6 +86,8 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 case SDLK_d:
                     if (player->directionPressed == 2)
                         player->directionPressed = 0;
+                    continue;
+                default:
                     continue;
                 }
             case SDL_QUIT:
