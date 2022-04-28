@@ -134,6 +134,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
 
 int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList)
 {
+    SDL_RenderCopy(renderer, game->background.texture, NULL, &game->background.dstrect);
     SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
     for (int y = 0; y < 5; y++)
     {
@@ -152,9 +153,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
     {
         if (game->status == 0)
         {
-            POSITION scorecoin;
-            scorecoin.x = WINDOW_WIDTH/2 - SCORE_SIZE;
-            scorecoin.y = 10;
+            POSITION scorecoin = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10};
             updateSprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
             updateSprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
             updateSprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
@@ -180,9 +179,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
     {
         if (game->status == 0)
         {
-            POSITION scorecoin;
-            scorecoin.x = WINDOW_WIDTH/2 - SCORE_SIZE;
-            scorecoin.y = 10;
+            POSITION scorecoin = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10};
             displaySprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
             displaySprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
             displaySprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
@@ -209,6 +206,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
         char scorestr[WIDGET_LENGTH];
         sprintf(scorestr, "%d", game->score);
         SDL_Texture *scoreCoin = renderWidgetText(scorestr, color_white, SCORE_SIZE, renderer, &game->coinrect);
+        game->coinrect.x = WINDOW_WIDTH / 2 - (numberOfDigit(game->money)-1) * SCORE_SIZE/2;
         SDL_RenderCopy(renderer, scoreCoin, NULL, &game->coinrect);
     }
     if (game->status == 1)
@@ -263,7 +261,7 @@ void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
         SDL_ExitWithError("SDL | TTF: Failed to initialize");
     }
 
-    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     if (*window == NULL)
     {
