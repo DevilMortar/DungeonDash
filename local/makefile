@@ -4,13 +4,13 @@ S_E = ./src/engine
 S_K = ./src/kernel
 S_M = ./src/menu
 S_F = ./src/file
-S_S = ./src/sound
+S_S = ./src/soundLib
 S = ./src
 B_D = ./build/display
 B_E = ./build/engine
 B_M = ./build/menu
 B_F = ./build/file
-B_S = ./build/sound
+B_S = ./build/soundLib
 B = ./build
 
 
