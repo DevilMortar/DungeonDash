@@ -1,12 +1,10 @@
 #include "header.h"
 
-int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, SONG *songList, BUTTON *buttonList)
+int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, SL_SOUND *soundList, BUTTON *buttonList)
 {
     // Set
     init(player, &fireball, Hole, coin, renderer, game);
     enum functions options = none;
-    game->game_launched = SDL_TRUE;
-    game->status = 0;
 
     // FrameLimiter
     Uint32 frameStart;
@@ -41,20 +39,16 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_z:
-                    if (game->status == 0 && player->move == 0)
-                        checkMovePlayer(player, 1, Hole);
+                    player->directionPressed = 1;
                     continue;
                 case SDLK_s:
-                    if (game->status == 0 && player->move == 0)
-                        checkMovePlayer(player, 3, Hole);
+                    player->directionPressed = 3;
                     continue;
                 case SDLK_q:
-                    if (game->status == 0 && player->move == 0)
-                        checkMovePlayer(player, 4, Hole);
+                    player->directionPressed = 4;
                     continue;
                 case SDLK_d:
-                    if (game->status == 0 && player->move == 0)
-                        checkMovePlayer(player, 2, Hole);
+                    player->directionPressed = 2;
                     continue;
                 case SDLK_f:
                     printf("Admin | You spawned a fireball\n");
@@ -62,7 +56,6 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     continue;
                 case SDLK_r:
                     printf("Admin | Restart completed ! \n");
-                    playSong(songList, "death");
                     init(player, &fireball, Hole, coin, renderer, game);
                     continue;
                 case SDLK_o:
@@ -83,6 +76,26 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 default:
                     continue;
                 }
+            case SDL_KEYUP:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_z:
+                    if (player->directionPressed == 1)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_s:
+                    if (player->directionPressed == 3)
+                        player->directionPressed = 0;   
+                    continue;
+                case SDLK_q:
+                    if (player->directionPressed == 4)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_d:
+                    if (player->directionPressed == 2)
+                        player->directionPressed = 0;
+                    continue;
+                }
             case SDL_QUIT:
                 game->game_launched = SDL_FALSE;
                 game->program_launched = SDL_FALSE;
@@ -93,6 +106,14 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         }
 
         // Player Movement
+        if (game->status == 0 && player->move == 0 && player->directionPressed != 0) {
+            if (checkMovePlayer(player, player->directionPressed, Hole)) {
+                player->move = PLAYER_MOVE;
+                player->position.direction = player->directionPressed;
+                // Play sound jump
+                SL_playSong(soundList, "jump");
+            }
+        }
         if (player->move > 0)
         {
             movePlayer(player, player->position.direction, Hole);
@@ -116,7 +137,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                             }
                             game->money += game->score;
                             game->status = 1;
-                            playSong(songList, "death");
+                            SL_playSong(soundList, "death");
                         }
                     }
                     int output = updateFireball(temp);
@@ -126,11 +147,11 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     }
                     else if (output == 2)
                     {
-                        playSong(songList, "fire");
+                        SL_playSong(soundList, "fire");
                     }
                     else if (output == 3)
                     {
-                        playSong(songList, "fire_2");
+                        SL_playSong(soundList, "fire_2");
                     }
                 }
             }
@@ -139,7 +160,6 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         } while (temp != NULL);
         if ((double)game->loop >= 100 * exp((-(float)game->score) / 40) && game->status == 0 && game->score > 0)
         {
-            printf("%f\n", 100 * exp((-(float)game->score) / 40));
             fireball = newObstacle(fireball);
             game->loop = 0;
         }
@@ -151,7 +171,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         {
             if (detectColision(player->position, coin->position))
             {
-                playSong(songList, "coin");
+                SL_playSong(soundList, "coin");
                 coin->position = randomTeleport(coin->position, Hole);
                 game->score += 1;
                 printf("Game statut | Score : %d\n", game->score);
