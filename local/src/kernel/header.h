@@ -7,9 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
 #include "config.h"
-#include "../sound/sound.h"
+#include "../soundLib/sound.h"
 
 typedef struct TEXTURE TEXTURE;
 struct TEXTURE
