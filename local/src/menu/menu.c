@@ -20,6 +20,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *gam
             case SDL_MOUSEBUTTONDOWN:
                 options=checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
                 break;
+                
             case SDL_QUIT:
                 menu_active = SDL_FALSE;
                 break;
@@ -135,18 +136,21 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     // Display Money
     SDL_Color color = {255, 255, 255};
     char money[20];
-    SDL_Rect moneyRect = {WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 130, 0, 0};
-    sprintf(money, "Money   %d", game->money);
-    SDL_Texture * moneyTexture = renderWidgetText(money, color, 20, renderer, &moneyRect);
+    SDL_Rect moneyRect = {WINDOW_WIDTH / 2 - (numberOfDigit(game->money) - 1) * SCORE_SIZE/2, 8, 0, 0};
+    sprintf(money, "%d", game->money);
+    SDL_Texture * moneyTexture = renderWidgetText(money, color, SCORE_SIZE, renderer, &moneyRect);
     SDL_RenderCopy(renderer, moneyTexture, NULL, &moneyRect);
     // Display Skin
     skinListTMP->skin_sprite.srcrect.x=0;
     POSITION skinPosition = {skinListTMP->skin_sprite.dstrect.x, skinListTMP->skin_sprite.dstrect.y, 0};
+    POSITION coinPosition = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10, 0};
     if (game->loop>=ANIMATION_LOOP){
         updateSprite(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame);
+        updateSprite(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame);
     }
     else {
         displaySprite(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame);
+        displaySprite(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame);
     }
     BUTTON *tmp=buttonList;
     int wait=0;
