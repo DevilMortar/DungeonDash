@@ -285,3 +285,18 @@ POSITION randomTeleport(POSITION position, int Hole[5][5])
     position.y = y;
     return position;
 }
+
+int numberOfDigit(int number)
+{
+    if (number == 0)
+    {
+        return 1;
+    }
+    int count = 0;
+    while (number != 0)
+    {
+        number /= 10;
+        count++;
+    }
+    return count;
+}
