@@ -167,3 +167,6 @@ void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options); /
 void saveData(SKIN *firstSkin, GAME *game);
 void recupData(SKIN *firstSkin, GAME *game);
 void resetData(SKIN *firstSkin, GAME *game);
+
+//Utils
+int numberOfDigit(int number);

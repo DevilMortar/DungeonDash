@@ -12,6 +12,6 @@
 #define OBSTACLE_WARNING 50
 #define WIDGET_LENGTH 48
 #define END_SCORE_SIZE 20
-#define SCORE_SIZE 30
+#define SCORE_SIZE 25
 #define PLAYER_MOVE 5
 #define SKIN_NB 4
