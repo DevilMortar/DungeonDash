@@ -78,6 +78,7 @@ int main()
     SL_SOUND *soundList = SL_initSoundLib(4, "asset/sound/", soundName);
 
     printf("\nGame statut | Game Initialized !\n");
+    printf("\n------------------------------------------------------\n");
     /* --------------------------------------- */
     while (game->program_launched)
     {
@@ -92,26 +93,30 @@ int main()
             game->program_launched = SDL_FALSE;
         }
     }
+    printf("\nGame statut | Game is shutting down !\n");
+    // DATA
+    printf("\nGame statut | Prepare to save data...\n");
+    saveData(firstSkin, game);
+    printf("\nGame statut | Data saved !\n");
     // Free sound
+    printf("\nGame statut | Preparing to free memory...\n");
     SL_freeSoundLib(soundList);
-    // Free menu
     freeButtons(buttonList);
     freeSkinList(skinList);
-    // free all textures
     SDL_DestroyTexture(game->map.texture);
     SDL_DestroyTexture(game->hole.texture);
     SDL_DestroyTexture(game->title.texture);
     SDL_DestroyTexture(game->titleSkin.texture);
     SDL_DestroyTexture(game->background.texture);
     SDL_DestroyTexture(game->gameOver.texture);
-    // free all pointers
     free(game);
     free(player);
     free(coin);
-    // DATA
-    saveData(firstSkin, game);
+    printf("\nGame statut | Memory has been freed with success !\n");
     // SDL QUIT
+    printf("\nGame statut | Preparing to quit...\n");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    printf("\nGame statut | Game is now closed !\n");
 }
