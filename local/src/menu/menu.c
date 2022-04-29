@@ -1,6 +1,6 @@
 #include "../kernel/header.h"
 
-int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *game, int *playerSkin){
+int menu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin){
     game->loop = 0;
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = mainmenu; 
@@ -83,6 +83,9 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *gam
                 }
                 displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
+                break;
+            case reset:
+                resetData(firstSkin, game);
                 break;
             case leave:
                 return -6;
