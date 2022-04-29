@@ -129,6 +129,7 @@ int checkClickButtons(BUTTON * buttonList, int options, int menu, int x, int y);
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
 void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Affiche tous les boutons
+void freeButtons(BUTTON * buttonList); //Libère la mémoire allouée pour les boutons
 
 //Data save
 void saveData(SKIN *firstSkin, GAME *game);
