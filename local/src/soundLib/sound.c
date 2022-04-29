@@ -28,7 +28,7 @@ void SL_playSong(SL_SOUND * soundList, char * name) {
 
 SL_SOUND * SL_initSoundLib(int channels, char folder[], char * name[]) {
     SL_SOUND * soundList = NULL;
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1) {
+    if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
         printf("%s", Mix_GetError());
         exit(EXIT_FAILURE);
     }
@@ -42,4 +42,15 @@ SL_SOUND * SL_initSoundLib(int channels, char folder[], char * name[]) {
         soundList = SL_loadSongInQueue(soundList, path, name[i], i);
     }
     return soundList;
+}
+
+void SL_freeSoundLib(SL_SOUND * soundList) {
+    SL_SOUND * tmp = soundList;
+    while (tmp != NULL) {
+        SL_SOUND * tmp2 = tmp->next;
+        Mix_FreeChunk(tmp->chunk);
+        free(tmp);
+        tmp = tmp2;
+    }
+    Mix_CloseAudio();
 }

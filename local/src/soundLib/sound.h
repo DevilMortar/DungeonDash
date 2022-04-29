@@ -12,3 +12,4 @@ struct SL_SOUND
 SL_SOUND * SL_initSoundLib(int channels, char folder[], char * name[]);
 SL_SOUND * SL_loadSongInQueue(SL_SOUND * soundList, char * path, char * name, int channel); //Charge une musique dans la file
 void SL_playSong(SL_SOUND * soundList, char * name); //Joue la musique
+void SL_freeSoundLib(SL_SOUND * soundList); //Libère la mémoire

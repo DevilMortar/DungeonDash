@@ -98,8 +98,8 @@ int main()
             game->program_launched = SDL_FALSE;
         }
     }
+    SL_freeSoundLib(soundList);
     saveData(firstSkin, game);
-    Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
