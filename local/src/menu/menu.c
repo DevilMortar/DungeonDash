@@ -58,7 +58,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *r
                         skinListTMP=skinListTMP->previous;
                     }
                 }
-                if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
+                if(skinListTMP->price<0 && game->best>=abs(skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
@@ -69,7 +69,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *r
                         skinListTMP=skinListTMP->next;
                     }
                 }
-                if(skinListTMP->price<0 && game->best>abs(skinListTMP->price))
+                if(skinListTMP->price<0 && game->best>=abs(skinListTMP->price))
                     skinListTMP->state=1;
                 displaySkinMenu(buttonList, skinListTMP, renderer, game);
                 options=skin;
