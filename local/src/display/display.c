@@ -1,5 +1,36 @@
 #include "../kernel/header.h"
 
+void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
+    if (!IMG_Init(IMG_INIT_PNG))
+        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        SDL_ExitWithError("SDL | Failed to initialize");
+    }
+    if (TTF_Init() != 0)
+    {
+        SDL_ExitWithError("SDL | TTF: Failed to initialize");
+    }
+
+    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+    if (*window == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a window");
+    }
+
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
+
+    if (*renderer == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a renderer");
+    }
+
+    SDL_SetRenderDrawColor(*renderer, 21, 33, 44, 255);
+
+    printf("SDL | Initialized with success !\n");
+}
+
 SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize)
 {
     SPRITE new;
@@ -88,17 +119,6 @@ TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position
     return texture;
 }
 
-void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
-{
-    SKIN *skin = skinList;
-    for (int i = 0; i < player->skin-1; i++)
-    {
-        skin = skin->next;
-    }
-    player->sprite = skin->skin_sprite;
-    player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
-}
-
 SDL_Texture *renderWidgetText(char *message, SDL_Color* color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
 {
     // Color
@@ -164,33 +184,17 @@ void SDL_LimitFPS(unsigned int limit)
     }
 }
 
-void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
-    if (!IMG_Init(IMG_INIT_PNG))
-        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+int numberOfDigit(int number)
+{
+    if (number == 0)
     {
-        SDL_ExitWithError("SDL | Failed to initialize");
+        return 1;
     }
-    if (TTF_Init() != 0)
+    int count = 0;
+    while (number != 0)
     {
-        SDL_ExitWithError("SDL | TTF: Failed to initialize");
+        number /= 10;
+        count++;
     }
-
-    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
-
-    if (*window == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a window");
-    }
-
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
-
-    if (*renderer == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a renderer");
-    }
-
-    SDL_SetRenderDrawColor(*renderer, 21, 33, 44, 255);
-
-    printf("SDL | Initialized with success !\n");
+    return count;
 }
