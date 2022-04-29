@@ -15,22 +15,22 @@ int main()
     
     // Initialisation du menu
     BUTTON *buttonList = NULL;
-    buttonList = createButton(renderer, "asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, 1, mainmenu, 52, 15);
-    buttonList = createButton(renderer, "asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, 1, mainmenu, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, 1, mainmenu, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, 1, skin, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, 1, skin, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, 1, skin, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, locker, 1, skin, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, 1, none, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, 1, mainmenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, 1, mainMenu, 52, 15);
+    buttonList = createButton(renderer, "asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, 1, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, 1, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, 1, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, 1, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, 1, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, locker, 1, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, 1, gameOverMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, 1, mainMenu, 32, 32);
 
     SKIN *skinList = NULL;
     skinList = createSkin(renderer, "asset/texture/player/6.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
     skinList = createSkin(renderer, "asset/texture/player/5.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
     skinList = createSkin(renderer, "asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 64, 64);
     skinList = createSkin(renderer, "asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 30, 64, 64);
-    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 20, 64, 64);
+    skinList = createSkin(renderer, "asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, -2, 64, 64);
     skinList = createSkin(renderer, "asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 1, 0, 32, 32);
     SKIN *firstSkin = skinList;
 
@@ -82,18 +82,12 @@ int main()
     // Création des sons
     char *soundName[4] = {"fire", "fire_2", "coin", "death"};
     SL_SOUND *soundList = SL_initSoundLib(4, "asset/sound/", soundName);
-    /*
-    soundList = loadSongInQueue(soundList, "asset/sound/fire.wav", "fire", 0);
-    soundList = loadSongInQueue(soundList, "asset/sound/fire_2.wav", "fire_2", 1);
-    soundList = loadSongInQueue(soundList, "asset/sound/death.wav", "death", 2);
-    soundList = loadSongInQueue(soundList, "asset/sound/coin.wav", "coin", 3);
-    */
 
     printf("\nGame statut | Game Initialized !\n");
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        if(menu(buttonList, skinList, firstSkin, renderer, game, &player->skin)>0)
+        if(startMenu(buttonList, skinList, firstSkin, renderer, game, &player->skin)>0)
         {
             setPlayer(player->skin);
             setPlayerSprite(renderer, player, skinList);

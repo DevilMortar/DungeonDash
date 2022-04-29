@@ -26,23 +26,29 @@ BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton){
     return buttonList;
 }
 
-int checkClickButtons(BUTTON * buttonList, int options, int x, int y){
+int checkClickButtons(BUTTON * buttonList, int options, int menu, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if(x>tmp->button_sprite.dstrect.x && x<tmp->button_sprite.dstrect.x+tmp->button_sprite.dstrect.w && y>tmp->button_sprite.dstrect.y && y<tmp->button_sprite.dstrect.y+tmp->button_sprite.dstrect.h && options==tmp->menu){
-            tmp->state=2;
-            return tmp->function;
+        if (tmp->menu==menu){
+            SDL_Point mouse = {x, y};
+            if(SDL_PointInRect(&mouse, &tmp->button_sprite.dstrect)){
+                tmp->state=2;
+                return tmp->function;
+            }
         }
         tmp=tmp->next;
     }
     return options;
 }
 
-bool checkOverButtons(BUTTON * buttonList, int options, int x, int y){
+void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if(x>tmp->button_sprite.dstrect.x && x<tmp->button_sprite.dstrect.x+tmp->button_sprite.dstrect.w && y>tmp->button_sprite.dstrect.y && y<tmp->button_sprite.dstrect.y+tmp->button_sprite.dstrect.h && options==tmp->menu){
-            tmp->state=3;
+        if (tmp->menu==menu){
+            SDL_Point mouse = {x, y};
+            if(SDL_PointInRect(&mouse, &tmp->button_sprite.dstrect)){
+                tmp->state=3;
+            }
         }
         tmp=tmp->next;
     }
@@ -56,10 +62,10 @@ void resetButtonState(BUTTON * buttonList){
     }
 }
 
-void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options){
+void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if (tmp->menu == options){
+        if (tmp->menu == menu){
             switch (tmp->state){
                 case 1:
                     tmp->button_sprite.srcrect.x=0;

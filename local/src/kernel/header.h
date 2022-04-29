@@ -10,6 +10,9 @@
 #include "config.h"
 #include "../soundLib/sound.h"
 
+typedef enum menu menu;
+enum menu {mainMenu, skinMenu, gameOverMenu, gameLaunched};
+
 typedef struct TEXTURE TEXTURE;
 struct TEXTURE
 {
@@ -88,6 +91,7 @@ struct GAME
     SPRITE scoreCoin;
     SDL_bool program_launched;
     SDL_bool game_launched;
+    enum menu menu;
     int score;
     int best;
     int money;
@@ -97,7 +101,7 @@ struct GAME
 };
 
 typedef enum functions functions;
-enum functions {play, skin, leave, confirm, right, left, locker, mainmenu, none, backToMenu, reset};
+enum functions {play, skin, leave, confirm, right, left, locker, backToMenu, reset, none};
 
 typedef struct BUTTON BUTTON;
 struct BUTTON{
@@ -149,19 +153,20 @@ SDL_Texture* renderWidgetText(char *message, SDL_Color *color, int fontSize, SDL
 void displayNumber(SDL_Renderer *renderer, int number, SDL_Color *color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
 
 // Menu
-int menu(BUTTON * button, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
+int startMenu(BUTTON * button, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME * game); //Affiche le menu principal
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME * game); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
 SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin); //Ajoute un skin à la liste
+SKIN * browseSkin(SKIN *tmp, int direction, int best); //Parcours la liste de skin
 
 //Buttons
 BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function,int state, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
 BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un bouton à la liste des boutons
-int checkClickButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
-bool checkOverButtons(BUTTON * buttonList, int options, int x, int y); //Vérifie si la souris survole un bouton
+int checkClickButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
+void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
-void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options); //Affiche tous les boutons
+void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Affiche tous les boutons
 
 //Data save
 void saveData(SKIN *firstSkin, GAME *game);
