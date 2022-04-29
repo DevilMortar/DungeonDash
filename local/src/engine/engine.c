@@ -69,6 +69,17 @@ PLAYER *setPlayer(int skin)
     return player;
 }
 
+void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
+{
+    SKIN *skin = skinList;
+    for (int i = 0; i < player->skin-1; i++)
+    {
+        skin = skin->next;
+    }
+    player->sprite = skin->skin_sprite;
+    player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
+}
+
 bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]) {
     player->position.direction = direction;
     switch (direction)
@@ -284,19 +295,4 @@ POSITION randomTeleport(POSITION position, int Hole[5][5])
     position.x = x;
     position.y = y;
     return position;
-}
-
-int numberOfDigit(int number)
-{
-    if (number == 0)
-    {
-        return 1;
-    }
-    int count = 0;
-    while (number != 0)
-    {
-        number /= 10;
-        count++;
-    }
-    return count;
 }
