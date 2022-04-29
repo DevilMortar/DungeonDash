@@ -260,21 +260,19 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
         }
     }
     if (game->status == 0) {
-        SDL_Color color_white = {255,255,255};
         char scorestr[WIDGET_LENGTH];
         sprintf(scorestr, "%d", game->score);
-        SDL_Texture *scoreCoin = renderWidgetText(scorestr, color_white, SCORE_SIZE, renderer, &game->coinrect);
+        SDL_Texture *scoreCoin = renderWidgetText(scorestr, NULL, SCORE_SIZE, renderer, &game->coinrect);
         game->coinrect.x = WINDOW_WIDTH / 2 - (numberOfDigit(game->money)-1) * SCORE_SIZE/2;
         SDL_RenderCopy(renderer, scoreCoin, NULL, &game->coinrect);
     }
     if (game->status == 1)
     {
-        SDL_Color color_white = {255,255,255};
         char scorestr[WIDGET_LENGTH];
         sprintf(scorestr, "Score     %d", game->score);
-        SDL_Texture *scoreprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endscorerect);
+        SDL_Texture *scoreprint = renderWidgetText(scorestr, NULL, END_SCORE_SIZE, renderer, &game->endscorerect);
         sprintf(scorestr, "Record   %d", game->best);
-        SDL_Texture *recordprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endbestrect);
+        SDL_Texture *recordprint = renderWidgetText(scorestr, NULL, END_SCORE_SIZE, renderer, &game->endbestrect);
         if (game->deathAnimation.frame < game->deathAnimation.max - 1)
         {
             updateSprite(renderer, game->deathAnimation, 0, player->position, &game->deathAnimation.frame);

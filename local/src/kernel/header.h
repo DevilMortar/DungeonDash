@@ -145,8 +145,8 @@ void updateSprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION
 void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame); // Affiche un sprite
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList);
-SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
-void displayNumber(SDL_Renderer *renderer, int number, SDL_Color color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
+SDL_Texture* renderWidgetText(char *message, SDL_Color *color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
+void displayNumber(SDL_Renderer *renderer, int number, SDL_Color *color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
 
 // Menu
 int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu

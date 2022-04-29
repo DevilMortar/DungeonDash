@@ -99,8 +99,17 @@ void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
     player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
 }
 
-SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
+SDL_Texture *renderWidgetText(char *message, SDL_Color* color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
 {
+    // Color
+    if (color == NULL)
+    {
+        color = malloc(sizeof(SDL_Color));
+        color->r = 255;
+        color->g = 255;
+        color->b = 255;
+    }
+    color->a = 255;
     // Open the font
     TTF_Font *font = TTF_OpenFont("asset/police/arcade.ttf", fontSize); // Open the font you want
     if (font == NULL)
@@ -109,7 +118,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
         return NULL;
     }
     // Render the text to a surface
-    SDL_Surface *surf = TTF_RenderText_Solid(font, message, color);
+    SDL_Surface *surf = TTF_RenderText_Solid(font, message, *color);
     if (surf == NULL)
     {
         TTF_CloseFont(font);
@@ -132,7 +141,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
     return texture;
 }
 
-void displayNumber(SDL_Renderer *renderer, int number, SDL_Color color, int fontSize, SDL_Rect *dstrect)
+void displayNumber(SDL_Renderer *renderer, int number, SDL_Color* color, int fontSize, SDL_Rect *dstrect)
 {
     char message[255];
     dstrect->x -= (numberOfDigit(abs(number)) - 1) * (fontSize)/2;

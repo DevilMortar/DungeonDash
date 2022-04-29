@@ -17,6 +17,16 @@ int menu(BUTTON * buttonList, SKIN * skinList, SDL_Renderer *renderer, GAME *gam
         {
             switch (event.type)
             {
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
+                    {
+                        case SDLK_ESCAPE:
+                            options = leave;
+                            continue;
+                        default:
+                            continue;
+                    }
+                    break;
             case SDL_MOUSEBUTTONDOWN:
                 options=checkClickButtons(buttonList, options, event.motion.x, event.motion.y);
                 break;
@@ -112,11 +122,10 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
     SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     //Display Record
-    SDL_Color color = {255, 255, 255};
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
     char record[20];
     sprintf(record, "Best score   %d", game->best);
-    SDL_Texture * recordTexture = renderWidgetText(record, color, 20, renderer, &recordRect);
+    SDL_Texture * recordTexture = renderWidgetText(record, NULL, 20, renderer, &recordRect);
     SDL_RenderCopy(renderer, recordTexture, NULL, &recordRect);
     // Display Buttons
     displayButtons(renderer, buttonList, mainmenu);
@@ -134,12 +143,8 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
     SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
     // Display Money
-    SDL_Color color = {255, 255, 255};
-    char money[20];
-    SDL_Rect moneyRect = {WINDOW_WIDTH / 2 - (numberOfDigit(game->money) - 1) * SCORE_SIZE/2, 8, 0, 0};
-    sprintf(money, "%d", game->money);
-    SDL_Texture * moneyTexture = renderWidgetText(money, color, SCORE_SIZE, renderer, &moneyRect);
-    SDL_RenderCopy(renderer, moneyTexture, NULL, &moneyRect);
+    SDL_Rect moneyRect = {WINDOW_WIDTH / 2, 10, 0, 0};
+    displayNumber(renderer, game->money, NULL, SCORE_SIZE-5, &moneyRect);
     // Display Skin
     skinListTMP->skin_sprite.srcrect.x=0;
     POSITION skinPosition = {skinListTMP->skin_sprite.dstrect.x, skinListTMP->skin_sprite.dstrect.y, 0};
@@ -193,11 +198,8 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
 
     // Display price if skin is locked
     if(skinListTMP->price>0 && skinListTMP->state==0){
-        SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7 - (numberOfDigit(abs(skinListTMP->price)) - 1) * (SCORE_SIZE-5)/2, WINDOW_HEIGHT / 2 + 110, 0, 0};
-        char price[20];
-        sprintf(price, "%d", abs(skinListTMP->price));
-        SDL_Texture * priceTexture = renderWidgetText(price, color, (SCORE_SIZE-5), renderer, &priceRect);
-        SDL_RenderCopy(renderer, priceTexture, NULL, &priceRect);
+        SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7, WINDOW_HEIGHT / 2 + 110, 0, 0};
+        displayNumber(renderer, skinListTMP->price, NULL, SCORE_SIZE-5, &priceRect);
     }
 }
 
