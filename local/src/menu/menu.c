@@ -13,6 +13,8 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
     {
         SDL_Event event;
         frameStart = SDL_GetTicks();
+        SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
+        SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -96,7 +98,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
         SDL_RenderPresent(renderer);
-        if (game->loop == ANIMATION_LOOP)
+        if (game->loop >= 10000)
         {
             game->loop = 0;
         }
@@ -113,44 +115,29 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
 }
 
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME *game){
-    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
-    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     //Display Record
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
-    char record[20];
-    sprintf(record, "Best score   %d", game->best);
-    SDL_Texture * recordTexture = renderWidgetText(record, NULL, 20, renderer, &recordRect);
-    SDL_RenderCopy(renderer, recordTexture, NULL, &recordRect);
+    displayTextAndNumber(renderer, "Best Score   ", game->best, NULL, 20, &recordRect);
     // Display Buttons
     displayButtons(renderer, buttonList, mainMenu);
-    skinList->skin_sprite.srcrect.x=0*skinList->skin_sprite.srcsizew;
     POSITION skinPosition = {skinList->skin_sprite.dstrect.x, skinList->skin_sprite.dstrect.y, 0};
-    if (game->loop>=ANIMATION_LOOP){
-        updateSprite(renderer, skinList->skin_sprite, 0, skinPosition, &skinList->skin_sprite.frame);
-    }
-    else {
-        displaySprite(renderer, skinList->skin_sprite, 0, skinPosition, &skinList->skin_sprite.frame);
-    }
+    // Display Skin
+    updateSpriteIfNeeded(renderer, skinList->skin_sprite, 0, skinPosition, &skinList->skin_sprite.frame, game->loop);
 }
 
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
-    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
-    SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
     // Display Money
-    SDL_Rect moneyRect = {WINDOW_WIDTH / 2, 10, 0, 0};
-    displayNumber(renderer, game->money, NULL, SCORE_SIZE-5, &moneyRect);
+    SDL_Rect moneyRect = {WINDOW_WIDTH / 2 + 5, 10, 0, 0};
+    displayNumber(renderer, game->money, NULL, MONEY_SIZE, &moneyRect);
+    POSITION coinPosition = {WINDOW_WIDTH / 2 - 15 - numberOfDigit(game->money) * (MONEY_SIZE)/2, 8, 0};
+    updateSpriteIfNeeded(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame, game->loop);
     // Display Skin
     skinListTMP->skin_sprite.srcrect.x=0;
     POSITION skinPosition = {skinListTMP->skin_sprite.dstrect.x, skinListTMP->skin_sprite.dstrect.y, 0};
-    POSITION coinPosition = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10, 0};
-    if (game->loop>=ANIMATION_LOOP){
-        updateSprite(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame);
-        updateSprite(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame);
-    }
-    else {
-        displaySprite(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame);
-        displaySprite(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame);
-    }
+    // Display Skin
+    updateSpriteIfNeeded(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame, game->loop);
+
+    // PATCH THIS FK SHIT
     BUTTON *tmp=buttonList;
     int wait=0;
 
@@ -193,7 +180,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     // Display price if skin is locked
     if(skinListTMP->price>0 && skinListTMP->state==0){
         SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7, WINDOW_HEIGHT / 2 + 110, 0, 0};
-        displayNumber(renderer, skinListTMP->price, NULL, SCORE_SIZE-5, &priceRect);
+        displayNumber(renderer, skinListTMP->price, NULL, MONEY_SIZE, &priceRect);
     }
 }
 
