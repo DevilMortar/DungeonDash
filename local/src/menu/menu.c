@@ -5,7 +5,6 @@ int menu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *r
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = mainmenu; 
     SKIN *skinListTMP=skinList;
-    SKIN *firstSkin=skinList;
     Uint32 frameStart;
     unsigned int frameTime;
 
@@ -96,6 +95,7 @@ int menu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *r
                 break;
             case reset:
                 resetData(firstSkin, game);
+                options=mainmenu;
                 break;
             case leave:
                 return -6;

@@ -39,7 +39,6 @@ int main()
     initGame(renderer, game);
 
     //Récupération de la sauvegarde
-    resetData(firstSkin, game);
     recupData(firstSkin, game);
 
     // Initialisation Player
