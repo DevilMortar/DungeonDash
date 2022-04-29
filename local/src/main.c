@@ -99,6 +99,7 @@ int main()
         }
     }
     SL_freeSoundLib(soundList);
+    freeButtons(buttonList);
     saveData(firstSkin, game);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
