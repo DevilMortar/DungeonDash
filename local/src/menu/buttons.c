@@ -4,10 +4,8 @@
 BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function,int state, int menu, int srcsizew, int srcsizeh){
     BUTTON *new = malloc(sizeof(BUTTON));
     new->button_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
-    new->button_sprite.dstrect.w=w;
-    new->button_sprite.dstrect.h=h;
-    new->button_sprite.dstrect.x=x;
-    new->button_sprite.dstrect.y=y;
+    SDL_Rect dstrect = {x, y, w, h};
+    new->button_sprite.dstrect=dstrect;
     new->function=function;
     new->state=state;
     new->menu=menu;
