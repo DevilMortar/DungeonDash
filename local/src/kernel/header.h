@@ -4,41 +4,12 @@
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include "config.h"
 #include "../soundLib/sound.h"
+#include "../display/display.h"
 
 typedef enum menu menu;
 enum menu {mainMenu, skinMenu, gameOverMenu, gameLaunched};
-
-typedef struct TEXTURE TEXTURE;
-struct TEXTURE
-{
-    SDL_Texture * texture;
-    SDL_Rect dstrect;
-};
-
-typedef struct SPRITE SPRITE;
-struct SPRITE
-{
-    SDL_Texture * texture;
-    SDL_Rect dstrect;
-    SDL_Rect srcrect;
-    int frame;
-    int max;
-    int srcsizew;
-    int srcsizeh;
-};
-
-typedef struct POSITION POSITION;
-struct POSITION
-{
-    int x;
-    int y;
-    int direction;
-};
 
 typedef struct OBSTACLE OBSTACLE;
 struct OBSTACLE
@@ -141,16 +112,7 @@ LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new); // Ajouter un obsta
 LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list); // Supprime un obstacle d'une file
 int updateFireball(OBSTACLE *obstacle); // Déplace les boules de feu actives
 bool detectColision(POSITION posplayer, POSITION posobject); // Détecte la colision 
-
-// Display
-SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize);
-TEXTURE newTexture (SDL_Renderer *renderer, char link[255], int w, int h); // Renvoie une texture initialisée
-void updateSprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int * frame); // Affiche un sprite et modifie sa frame
-void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame); // Affiche un sprite
-TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
-void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList);
-SDL_Texture* renderWidgetText(char *message, SDL_Color *color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
-void displayNumber(SDL_Renderer *renderer, int number, SDL_Color *color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
+void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList); // Set le sprite du joueur
 
 // Menu
 int startMenu(BUTTON * button, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
@@ -172,6 +134,3 @@ void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Af
 void saveData(SKIN *firstSkin, GAME *game);
 void recupData(SKIN *firstSkin, GAME *game);
 void resetData(SKIN *firstSkin, GAME *game);
-
-//Utils
-int numberOfDigit(int number);
