@@ -190,6 +190,15 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
         }
         tmp=tmp->next;
     }
+
+    // Display price if skin is locked
+    if(skinListTMP->price>0 && skinListTMP->state==0){
+        SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7 - (numberOfDigit(abs(skinListTMP->price)) - 1) * (SCORE_SIZE-5)/2, WINDOW_HEIGHT / 2 + 110, 0, 0};
+        char price[20];
+        sprintf(price, "%d", abs(skinListTMP->price));
+        SDL_Texture * priceTexture = renderWidgetText(price, color, (SCORE_SIZE-5), renderer, &priceRect);
+        SDL_RenderCopy(renderer, priceTexture, NULL, &priceRect);
+    }
 }
 
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh){
