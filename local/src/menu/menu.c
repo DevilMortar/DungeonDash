@@ -229,3 +229,12 @@ SKIN * browseSkin(SKIN * tmp, int direction, int best){
     return tmp;
 }
 
+void freeSkinList(SKIN *skinList){
+    SKIN *tmp;
+    while(skinList!=NULL){
+        tmp=skinList;
+        skinList=skinList->next;
+        free(tmp);
+    }
+}
+
