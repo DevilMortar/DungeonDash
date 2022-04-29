@@ -122,6 +122,7 @@ void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
 void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);
 int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, SL_SOUND * soundList, BUTTON * buttonList);
+int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList); // Affiche le jeu
 
 //Engine
 void initGame(SDL_Renderer * renderer, GAME *game);
@@ -145,7 +146,7 @@ void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITIO
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height); // Affiche une texture
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList);
 SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_Renderer *renderer, SDL_Rect * dstrect); // Renvoie le texte sous forme d'une texture
-int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList); // Affiche le jeu
+void displayNumber(SDL_Renderer *renderer, int number, SDL_Color color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
 
 // Menu
 int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
