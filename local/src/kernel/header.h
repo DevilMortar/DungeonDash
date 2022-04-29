@@ -148,7 +148,7 @@ SDL_Texture* renderWidgetText(char *message, SDL_Color color, int fontSize, SDL_
 int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList); // Affiche le jeu
 
 // Menu
-int menu(BUTTON * button, SKIN * skinList, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
+int menu(BUTTON * button, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin); // Affiche le menu
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME * game); //Affiche le menu principal
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME * game); //Affiche le menu des skins
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
