@@ -109,6 +109,18 @@ void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITIO
     SDL_RenderCopy(renderer, sprite.texture, &sprite.srcrect, &sprite.dstrect);
 }
 
+void updateSpriteIfNeeded(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame, int loop)
+{
+    if (loop%ANIMATION_LOOP == 0) 
+    {
+        updateSprite(renderer, sprite, direction, position, frame);
+    }
+    else
+    {
+        displaySprite(renderer, sprite, direction, position, frame);
+    }
+}
+
 TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position, int width, int height)
 {
     texture.dstrect.x = position.x;
@@ -167,6 +179,15 @@ void displayNumber(SDL_Renderer *renderer, int number, SDL_Color* color, int fon
     dstrect->x -= (numberOfDigit(abs(number)) - 1) * (fontSize)/2;
     sprintf(message, "%d", number);
     SDL_Texture *texture = renderWidgetText(message, color, fontSize, renderer, dstrect);
+    SDL_RenderCopy(renderer, texture, NULL, dstrect);
+    SDL_DestroyTexture(texture);
+}
+
+void displayTextAndNumber(SDL_Renderer *renderer, char *message, int number, SDL_Color* color, int fontSize, SDL_Rect *dstrect)
+{
+    char message2[255];
+    sprintf(message2, "%s %d", message, number);
+    SDL_Texture *texture = renderWidgetText(message2, color, fontSize, renderer, dstrect);
     SDL_RenderCopy(renderer, texture, NULL, dstrect);
     SDL_DestroyTexture(texture);
 }
