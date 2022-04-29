@@ -57,7 +57,6 @@ struct GAME
     TEXTURE titleSkin;
     TEXTURE hole;
     TEXTURE gameOver;
-    TEXTURE boat;
     SPRITE deathAnimation;
     SPRITE scoreCoin;
     SDL_bool program_launched;
@@ -121,6 +120,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
 SKIN * createSkin(SDL_Renderer *renderer, char link[255], SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh); //Créé un nouveau skin
 SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin); //Ajoute un skin à la liste
 SKIN * browseSkin(SKIN *tmp, int direction, int best); //Parcours la liste de skin
+void freeSkinList(SKIN *skinList); //Libère la liste de skin
 
 //Buttons
 BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function,int state, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
