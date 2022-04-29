@@ -27,6 +27,7 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     game->deathAnimation.frame = 0;
     game->loop = 0;
     game->score = 0;
+    game->game_launched = SDL_TRUE;
 
     // Initialisation du joueur
     player->position.x = CASE_OFFSET_X + 2 * CASE_SIZE;
@@ -68,35 +69,36 @@ PLAYER *setPlayer(int skin)
     return player;
 }
 
-void checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]) {
+bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]) {
     player->position.direction = direction;
     switch (direction)
     {
     case 1:
         if (player->position.y > CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE - 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
         {
-            player->move = PLAYER_MOVE;
+            return true;
         }
         break;
     case 2:
         if (player->position.x < 4 * CASE_SIZE + CASE_OFFSET_X && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE][(player->position.x - CASE_OFFSET_X) / CASE_SIZE + 1] != 1)
         {
-            player->move = PLAYER_MOVE;
+            return true;
         }
         break;
     case 3:
         if (player->position.y < 4 * CASE_SIZE + CASE_OFFSET_Y && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE + 1][(player->position.x - CASE_OFFSET_X) / CASE_SIZE] != 1)
         {
-            player->move = PLAYER_MOVE;
+            return true;
         }
         break;
     case 4:
         if (player->position.x > CASE_OFFSET_X && Hole[(player->position.y - CASE_OFFSET_Y) / CASE_SIZE][(player->position.x - CASE_OFFSET_X) / CASE_SIZE - 1] != 1)
         {
-            player->move = PLAYER_MOVE;
+            return true;
         }
         break;
     }
+    return false;
 }
 
 void movePlayer(PLAYER *player, int direction, int Hole[5][5])
@@ -262,7 +264,6 @@ bool detectColision(POSITION posplayer, POSITION posobject)
     int distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
     if (distance < SPRITE_SIZE / 2)
     {
-        printf("Game statut | Colision detected\n");
         return true;
     }
     else
@@ -285,28 +286,17 @@ POSITION randomTeleport(POSITION position, int Hole[5][5])
     return position;
 }
 
-SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel) {
-    SONG * song = malloc(sizeof(SONG));
-    song->channel = channel;
-    song->chunk = Mix_LoadWAV(path);
-    song->name = name;
-    if (songList == NULL) {
-        songList = song;
-        song->next = NULL;
+int numberOfDigit(int number)
+{
+    if (number == 0)
+    {
+        return 1;
     }
-    else {
-        song->next = songList;
-        songList = song;
+    int count = 0;
+    while (number != 0)
+    {
+        number /= 10;
+        count++;
     }
-    return songList;
-}
-
-void playSong(SONG * songList, char * name) {
-    SONG * song = songList;
-    while (song != NULL) {
-        if (strcmp(song->name, name) == 0) {
-            Mix_PlayChannel(song->channel, song->chunk, 0);
-        }
-        song = song->next;
-    }
+    return count;
 }

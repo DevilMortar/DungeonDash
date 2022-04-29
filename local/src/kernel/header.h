@@ -7,8 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
 #include "config.h"
+#include "../soundLib/sound.h"
 
 typedef struct TEXTURE TEXTURE;
 struct TEXTURE
@@ -27,15 +27,6 @@ struct SPRITE
     int max;
     int srcsizew;
     int srcsizeh;
-};
-
-typedef struct SONG SONG;
-struct SONG
-{
-    Mix_Chunk * chunk;
-    char * name;
-    int channel;
-    SONG * next;
 };
 
 typedef struct POSITION POSITION;
@@ -71,7 +62,8 @@ struct PLAYER
     POSITION position;
     SPRITE sprite;
     int skin;
-    int move; 
+    int move;
+    int directionPressed; 
 };
 
 typedef struct COIN COIN;
@@ -84,12 +76,14 @@ struct COIN
 typedef struct GAME GAME;
 struct GAME
 {
+    TEXTURE background;
     TEXTURE endscreen;
     TEXTURE map;
     TEXTURE title;
     TEXTURE titleSkin;
     TEXTURE hole;
     TEXTURE gameOver;
+    TEXTURE boat;
     SPRITE deathAnimation;
     SPRITE scoreCoin;
     SDL_bool program_launched;
@@ -127,14 +121,14 @@ struct SKIN{
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
 void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, SONG * songList, BUTTON * buttonList);
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, SL_SOUND * soundList, BUTTON * buttonList);
 
 //Engine
 void initGame(SDL_Renderer * renderer, GAME *game);
 int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME * game); // Initialisation des différents objets
 PLAYER * setPlayer(int skin); // Set le player
 POSITION randomTeleport(POSITION position, int Hole[5][5]); // Renvoie une position aléatoire où il n'y a pas de trous
-void checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]);
+bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]);
 void movePlayer(PLAYER * player, int direction, int Hole[5][5]); // Déplace le joueur dans la direction "direction", si il n'y a pas de trous
 LIST_OBSTACLE setListObstacle(LIST_OBSTACLE list); // Initialise les listes d'obstacles
 LIST_OBSTACLE newObstacle(LIST_OBSTACLE list); // Créer un obstacle
@@ -168,11 +162,10 @@ bool checkOverButtons(BUTTON * buttonList, int options, int x, int y); //Vérifi
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
 void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int options); //Affiche tous les boutons
 
-//Son
-SONG * loadSongInQueue(SONG * songList, char * path, char * name, int channel); //Charge une musique dans la file
-void playSong(SONG * songList, char * name); //Joue la musique
-
 //Data save
 void saveData(SKIN *firstSkin, GAME *game);
 void recupData(SKIN *firstSkin, GAME *game);
 void resetData(SKIN *firstSkin, GAME *game);
+
+//Utils
+int numberOfDigit(int number);

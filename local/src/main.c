@@ -63,26 +63,32 @@ int main()
     // Création de la texture de la grille et des trous
     game->gameOver = newTexture(renderer, "asset/texture/game_over.png", 400, 50);
     game->gameOver.dstrect.y = 350;
-    game->map = newTexture(renderer, "asset/texture/board.bmp", MAP_SIZE, MAP_SIZE);
+    game->map = newTexture(renderer, "asset/texture/board.png", MAP_SIZE, MAP_SIZE);
     game->hole = newTexture(renderer, "asset/texture/hole.png", MAP_SIZE, MAP_SIZE);
     game->title = newTexture(renderer, "asset/texture/title.png", 700, 110);
     game->titleSkin = newTexture(renderer, "asset/texture/title_hero.png", 700, 110);
+    game->background = newTexture(renderer, "asset/texture/background.jpg", WINDOW_WIDTH, WINDOW_HEIGHT);
+    game->boat = newTexture(renderer, "asset/texture/boat.png", WINDOW_WIDTH, MAP_SIZE*3.1);
+    
+    game->boat.dstrect.y = WINDOW_HEIGHT/2 - MAP_SIZE*1.8;
+    game->boat.dstrect.x = WINDOW_WIDTH/2 - MAP_SIZE*1.83;
+
+    game->background.dstrect.y = 0;
+    game->background.dstrect.x = 0;
     
     game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     TEXTURE unclickable_button = newTexture(renderer, "asset/texture/button/unclikable_button.png", 32, 32);
 
     // Création des sons
-    if (Mix_OpenAudio(44100, AUDIO_S16, 2, 32) == -1)
-    {
-        SDL_ExitWithError(Mix_GetError());
-    }
-    Mix_AllocateChannels(4);
-    SONG *songList = NULL;
-    songList = loadSongInQueue(songList, "asset/sound/fire.wav", "fire", 0);
-    songList = loadSongInQueue(songList, "asset/sound/fire_2.wav", "fire_2", 1);
-    songList = loadSongInQueue(songList, "asset/sound/death.wav", "death", 2);
-    songList = loadSongInQueue(songList, "asset/sound/coin.wav", "coin", 3);
+    char *soundName[4] = {"fire", "fire_2", "coin", "death"};
+    SL_SOUND *soundList = SL_initSoundLib(4, "asset/sound/", soundName);
+    /*
+    soundList = loadSongInQueue(soundList, "asset/sound/fire.wav", "fire", 0);
+    soundList = loadSongInQueue(soundList, "asset/sound/fire_2.wav", "fire_2", 1);
+    soundList = loadSongInQueue(soundList, "asset/sound/death.wav", "death", 2);
+    soundList = loadSongInQueue(soundList, "asset/sound/coin.wav", "coin", 3);
+    */
 
     printf("\nGame statut | Game Initialized !\n");
     /* --------------------------------------- */
@@ -92,7 +98,7 @@ int main()
         {
             setPlayer(player->skin);
             setPlayerSprite(renderer, player, skinList);
-            startGame(window, renderer, game, player, fireball, Hole, coin, songList, buttonList);
+            startGame(window, renderer, game, player, fireball, Hole, coin, soundList, buttonList);
         }
         else
         {

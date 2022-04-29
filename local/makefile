@@ -4,16 +4,18 @@ S_E = ./src/engine
 S_K = ./src/kernel
 S_M = ./src/menu
 S_F = ./src/file
+S_S = ./src/soundLib
 S = ./src
 B_D = ./build/display
 B_E = ./build/engine
 B_M = ./build/menu
 B_F = ./build/file
+B_S = ./build/soundLib
 B = ./build
 
 
 main: main.o engine.o display.o
-	gcc -o main main.o engine.o display.o game.o menu.o buttons.o file.o $(flags)
+	gcc -o main main.o engine.o display.o game.o menu.o buttons.o file.o sound.o $(flags)
 	mv display.o $(B_D)/
 	mv engine.o $(B_E)/
 	mv main.o $(B)/
@@ -21,8 +23,9 @@ main: main.o engine.o display.o
 	mv menu.o $(B_M)/
 	mv buttons.o $(B_M)/
 	mv file.o $(B_F)/
+	mv sound.o $(B_S)/
 
-main.o : engine.o engine.o display.o game.o menu.o buttons.o file.o
+main.o : engine.o engine.o display.o game.o menu.o buttons.o file.o sound.o
 	gcc -g -Wall -c $(S)/main.c $(flags)
 
 menu.o : buttons.o
@@ -37,11 +40,14 @@ game.o : display.o
 display.o : engine.o
 	gcc -g -Wall -c $(S_D)/display.c $(flags)
 
-engine.o :
+engine.o : file.o
 	gcc -g -Wall -c $(S_E)/engine.c $(flags)
 
-file.o :
+file.o : sound.o
 	gcc -g -Wall -c $(S_F)/file.c $(flags)
+
+sound.o : 
+	gcc -g -Wall -c $(S_S)/sound.c $(flags)
 	
 deepclean :
 	rm -f *.o
