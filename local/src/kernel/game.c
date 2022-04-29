@@ -189,3 +189,107 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         fireball = deleteFromQueue(fireball);
     }
 }
+
+int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList)
+{
+    SDL_RenderCopy(renderer, game->background.texture, NULL, &game->background.dstrect);
+    SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
+    for (int y = 0; y < 5; y++)
+    {
+        for (int x = 0; x < 5; x++)
+        {
+            if (Hole[y][x] == 1)
+            {
+                POSITION temp;
+                temp.x = CASE_OFFSET_X + x * CASE_SIZE;
+                temp.y = CASE_OFFSET_Y + y * CASE_SIZE;
+                game->hole = updateTexture(renderer, game->hole, temp, SPRITE_SIZE, SPRITE_SIZE);
+            }
+        }
+    }
+    if (game->loop % ANIMATION_LOOP == 0)
+    {
+        if (game->status == 0)
+        {
+            POSITION scorecoin = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10};
+            updateSprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
+            updateSprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
+            updateSprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
+        }
+        if (fireball.last != NULL)
+        {
+            OBSTACLE *temp = fireball.first;
+            while (temp != NULL)
+            {
+                if (temp->warning > 0)
+                {
+                    updateSprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
+                }
+                else
+                {
+                    updateSprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                }
+                temp = temp->next;
+            }
+        }
+    }
+    else
+    {
+        if (game->status == 0)
+        {
+            POSITION scorecoin = {WINDOW_WIDTH / 2 - 20 - numberOfDigit(game->money) * SCORE_SIZE/2, 10};
+            displaySprite(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame);
+            displaySprite(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame);
+            displaySprite(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame);
+        }
+        if (fireball.last != NULL)
+        {
+            OBSTACLE *temp = fireball.first;
+            while (temp != NULL)
+            {
+                if (temp->warning > 0)
+                {
+                    displaySprite(renderer, fireball.warning, 0, temp->position, &temp->frame);
+                }
+                else
+                {
+                    displaySprite(renderer, fireball.sprite, temp->position.direction, temp->position, &temp->frame);
+                }
+                temp = temp->next;
+            }
+        }
+    }
+    if (game->status == 0) {
+        SDL_Color color_white = {255,255,255};
+        char scorestr[WIDGET_LENGTH];
+        sprintf(scorestr, "%d", game->score);
+        SDL_Texture *scoreCoin = renderWidgetText(scorestr, color_white, SCORE_SIZE, renderer, &game->coinrect);
+        game->coinrect.x = WINDOW_WIDTH / 2 - (numberOfDigit(game->money)-1) * SCORE_SIZE/2;
+        SDL_RenderCopy(renderer, scoreCoin, NULL, &game->coinrect);
+    }
+    if (game->status == 1)
+    {
+        SDL_Color color_white = {255,255,255};
+        char scorestr[WIDGET_LENGTH];
+        sprintf(scorestr, "Score     %d", game->score);
+        SDL_Texture *scoreprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endscorerect);
+        sprintf(scorestr, "Record   %d", game->best);
+        SDL_Texture *recordprint = renderWidgetText(scorestr, color_white, END_SCORE_SIZE, renderer, &game->endbestrect);
+        if (game->deathAnimation.frame < game->deathAnimation.max - 1)
+        {
+            updateSprite(renderer, game->deathAnimation, 0, player->position, &game->deathAnimation.frame);
+        }
+        else
+        {
+            displaySprite(renderer, game->deathAnimation, 0, player->position, &game->deathAnimation.frame);
+            game->endscreen.dstrect.x = WINDOW_WIDTH/2 - game->endscreen.dstrect.w/2;
+            game->endscreen.dstrect.y = WINDOW_HEIGHT/2 - game->endscreen.dstrect.h/2;  
+            SDL_RenderCopy(renderer, game->endscreen.texture, NULL, &game->endscreen.dstrect);
+            SDL_RenderCopy(renderer, scoreprint, NULL, &game->endscorerect);
+            SDL_RenderCopy(renderer, recordprint, NULL, &game->endbestrect);
+            SDL_RenderCopy(renderer, game->gameOver.texture, NULL, &game->gameOver.dstrect);
+            displayButtons(renderer, buttonList, none);
+        }
+    }
+    return 0;
+}
