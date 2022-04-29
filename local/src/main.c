@@ -67,17 +67,11 @@ int main()
     game->title = newTexture(renderer, "asset/texture/title.png", 700, 110);
     game->titleSkin = newTexture(renderer, "asset/texture/title_hero.png", 700, 110);
     game->background = newTexture(renderer, "asset/texture/background.jpg", WINDOW_WIDTH, WINDOW_HEIGHT);
-    game->boat = newTexture(renderer, "asset/texture/boat.png", WINDOW_WIDTH, MAP_SIZE*3.1);
-    
-    game->boat.dstrect.y = WINDOW_HEIGHT/2 - MAP_SIZE*1.8;
-    game->boat.dstrect.x = WINDOW_WIDTH/2 - MAP_SIZE*1.83;
 
     game->background.dstrect.y = 0;
     game->background.dstrect.x = 0;
     
     game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
-
-    TEXTURE unclickable_button = newTexture(renderer, "asset/texture/button/unclikable_button.png", 32, 32);
 
     // Création des sons
     char *soundName[4] = {"fire", "fire_2", "coin", "death"};
@@ -98,9 +92,25 @@ int main()
             game->program_launched = SDL_FALSE;
         }
     }
+    // Free sound
     SL_freeSoundLib(soundList);
+    // Free menu
     freeButtons(buttonList);
+    freeSkinList(skinList);
+    // free all textures
+    SDL_DestroyTexture(game->map.texture);
+    SDL_DestroyTexture(game->hole.texture);
+    SDL_DestroyTexture(game->title.texture);
+    SDL_DestroyTexture(game->titleSkin.texture);
+    SDL_DestroyTexture(game->background.texture);
+    SDL_DestroyTexture(game->gameOver.texture);
+    // free all pointers
+    free(game);
+    free(player);
+    free(coin);
+    // DATA
     saveData(firstSkin, game);
+    // SDL QUIT
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
