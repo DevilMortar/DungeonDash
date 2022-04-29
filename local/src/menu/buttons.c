@@ -80,3 +80,12 @@ void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
         tmp=tmp->next;
     }
 }
+
+void freeButtons(BUTTON * buttonList){
+    BUTTON * tmp=buttonList;
+    while(tmp!=NULL){
+        tmp=tmp->next;
+        free(buttonList);
+        buttonList=tmp;
+    }
+}
