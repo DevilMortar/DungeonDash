@@ -23,7 +23,7 @@ int main()
     buttonList = createButton(renderer, "asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, 1, skin, 32, 32);
     buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50, locker, 1, skin, 32, 32);
     buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, 1, none, 32, 32);
-    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 100, 100, 0, 0, reset, 1, menu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 100, 100, 0, 0, reset, 1, mainmenu, 32, 32);
 
     SKIN *skinList = NULL;
     skinList = createSkin(renderer, "asset/texture/player/6.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
