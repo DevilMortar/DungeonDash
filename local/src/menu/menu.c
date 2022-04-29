@@ -4,7 +4,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
     game->loop = 0;
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = none;
-    game->menu = mainMenu;
+    game->menu = mainMenu; 
     SKIN *skinListTMP=skinList;
     Uint32 frameStart;
     unsigned int frameTime;
@@ -35,11 +35,11 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 menu_active = SDL_FALSE;
                 break;
             default:
+                resetButtonState(buttonList);
+                checkOverButtons(buttonList, options, game->menu, event.motion.x, event.motion.y);
                 break;
             }
         }
-        resetButtonState(buttonList);
-        checkOverButtons(buttonList, options, game->menu, event.motion.x, event.motion.y);
         switch(options){
             case play:
                 while(firstSkin!=skinList){
