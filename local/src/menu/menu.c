@@ -170,8 +170,8 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     // Display price if skin is locked
     if(skinListTMP->state==0){
         if (skinListTMP->price<0) {
-            SDL_Rect unlockCondition = {WINDOW_WIDTH / 2 - 310, WINDOW_HEIGHT / 2 - 125, 0, 0};
-            displayText(renderer, "Unlock this skin with your highscore", NULL, 20, &unlockCondition);
+            SDL_Rect unlockCondition = {WINDOW_WIDTH / 2 - 274, WINDOW_HEIGHT / 2 - 125, 0, 0};
+            displayText(renderer, "Unlock this skin with your highscore", NULL, 17, &unlockCondition);
         }
         SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7, WINDOW_HEIGHT / 2 + 110, 0, 0};
         displayNumber(renderer, abs(skinListTMP->price), NULL, MONEY_SIZE, &priceRect);
