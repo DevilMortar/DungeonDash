@@ -192,6 +192,13 @@ void displayTextAndNumber(SDL_Renderer *renderer, char *message, int number, SDL
     SDL_DestroyTexture(texture);
 }
 
+void displayText(SDL_Renderer *renderer, char *message, SDL_Color* color, int fontSize, SDL_Rect *dstrect)
+{
+    SDL_Texture *texture = renderWidgetText(message, color, fontSize, renderer, dstrect);
+    SDL_RenderCopy(renderer, texture, NULL, dstrect);
+    SDL_DestroyTexture(texture);
+}
+
 void SDL_LimitFPS(unsigned int limit)
 {
     float delay = FPS_DELAY;
