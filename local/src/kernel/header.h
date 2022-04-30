@@ -79,6 +79,7 @@ struct BUTTON{
     enum functions function;
     int state;
     int menu;
+    bool preventReset;
     BUTTON * next;
 };
 
@@ -110,7 +111,8 @@ LIST_OBSTACLE newObstacle(LIST_OBSTACLE list); // Créer un obstacle
 LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new); // Ajouter un obstacle dans une file
 LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list); // Supprime un obstacle d'une file
 int updateFireball(OBSTACLE *obstacle); // Déplace les boules de feu actives
-bool detectColision(POSITION posplayer, POSITION posobject); // Détecte la colision 
+int distance(POSITION pos1, POSITION pos2); // Renvoie la distance entre deux positions
+bool detectColision(POSITION pos1, POSITION pos2); // Détecte la colision 
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList); // Set le sprite du joueur
 
 // Menu
@@ -123,12 +125,14 @@ SKIN * browseSkin(SKIN *tmp, int direction, int best); //Parcours la liste de sk
 void freeSkinList(SKIN *skinList); //Libère la liste de skin
 
 //Buttons
-BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function,int state, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
+BUTTON * createButton(SDL_Renderer *renderer, char link[255], BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh, bool preventReset); //Créé un nouveau bouton
 BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un bouton à la liste des boutons
-int checkClickButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
+BUTTON * checkClickButtons(BUTTON * buttonList, int *options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
-void displayButtons(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Affiche tous les boutons
+void displayButton(SDL_Renderer *renderer, BUTTON * button); //Affiche un bouton
+void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Affiche la liste des boutons
+void buttonChangeState(BUTTON * button, int state); //Change l'état d'un bouton
 void freeButtons(BUTTON * buttonList); //Libère la mémoire allouée pour les boutons
 
 //Data save

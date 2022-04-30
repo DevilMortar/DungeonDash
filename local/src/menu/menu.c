@@ -30,7 +30,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                     }
                     break;
             case SDL_MOUSEBUTTONDOWN:
-                options=checkClickButtons(buttonList, options, game->menu, event.motion.x, event.motion.y);
+                checkClickButtons(buttonList, &options, game->menu, event.motion.x, event.motion.y);
                 break;
                 
             case SDL_QUIT:
@@ -95,9 +95,9 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
             default:
                 break;
         }
+        SDL_RenderPresent(renderer);
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
-        SDL_RenderPresent(renderer);
         if (game->loop >= 10000)
         {
             game->loop = 0;
@@ -119,7 +119,7 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
     displayTextAndNumber(renderer, "Best Score   ", game->best, NULL, 20, &recordRect);
     // Display Buttons
-    displayButtons(renderer, buttonList, mainMenu);
+    displayButtonList(renderer, buttonList, mainMenu);
     POSITION skinPosition = {skinList->skin_sprite.dstrect.x, skinList->skin_sprite.dstrect.y, 0};
     // Display Skin
     updateSpriteIfNeeded(renderer, skinList->skin_sprite, 0, skinPosition, &skinList->skin_sprite.frame, game->loop);
@@ -139,26 +139,17 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
 
     // PATCH THIS FK SHIT
     BUTTON *tmp=buttonList;
-    int wait=0;
 
     while(tmp!=NULL){
         if(tmp->menu==skin){
-            switch(tmp->state){
-                case 1:
-                    tmp->button_sprite.srcrect.x=0;
-                    break;
-                case 2:
-                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
-                    break;
-                case 3:
-                    tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;
-                    break;
+            tmp->button_sprite.srcrect.x= tmp->button_sprite.srcsizew*tmp->state;
+            if(tmp->function==left){
+                if (skinListTMP->previous==NULL)
+                    buttonChangeState(tmp, 3);
             }
-            if(tmp->function==left && skinListTMP->previous==NULL){
-                tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
-            }
-            if(tmp->function==right && skinListTMP->next==NULL){
-                tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
+            else if(tmp->function==right){
+                if (skinListTMP->next==NULL)
+                    buttonChangeState(tmp, 3);
             }
             if(tmp->function==locker && skinListTMP->state==1){
                  tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*5;
@@ -167,7 +158,6 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
                  tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*(-skinListTMP->state+1);
                  skinListTMP->state=skinListTMP->state-1;
                  if(skinListTMP->state==-4){skinListTMP->state=1;}
-                 wait=1;
             }
             if(tmp->function==confirm && skinListTMP->state==0){
                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
@@ -178,9 +168,13 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     }
 
     // Display price if skin is locked
-    if(skinListTMP->price>0 && skinListTMP->state==0){
+    if(skinListTMP->state==0){
+        if (skinListTMP->price<0) {
+            SDL_Rect unlockCondition = {WINDOW_WIDTH / 2 - 310, WINDOW_HEIGHT / 2 - 125, 0, 0};
+            displayText(renderer, "Unlock this skin with your highscore", NULL, 20, &unlockCondition);
+        }
         SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7, WINDOW_HEIGHT / 2 + 110, 0, 0};
-        displayNumber(renderer, skinListTMP->price, NULL, MONEY_SIZE, &priceRect);
+        displayNumber(renderer, abs(skinListTMP->price), NULL, MONEY_SIZE, &priceRect);
     }
 }
 
