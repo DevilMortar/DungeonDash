@@ -7,7 +7,8 @@ void SDL_ExitWithError(const char *message)
     exit(EXIT_FAILURE);
 }
 
-void initGame(SDL_Renderer * renderer, GAME *game) {
+void initGame(SDL_Renderer *renderer, GAME *game)
+{
     game->program_launched = SDL_TRUE;
     game->endscreen = newTexture(renderer, "asset/texture/end.png", 400, 200);
     game->deathAnimation = newSprite(renderer, "asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
@@ -20,7 +21,7 @@ void initGame(SDL_Renderer * renderer, GAME *game) {
     game->coinrect.y = 8;
 }
 
-int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME * game)
+int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME *game)
 {
     // Initialisation du jeu
     game->status = 0;
@@ -35,22 +36,27 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     player->position.direction = 3;
 
     // Initialisation des boules de feu
-    while (fireball->first != NULL) {
+    while (fireball->first != NULL)
+    {
         *fireball = deleteFromQueue(*fireball);
     }
     *fireball = setListObstacle(*fireball);
-    for (int i=0; i<25; i++) {
-        *(Hole + i) = 0;
-    }
 
     // Initialisation des trous
-    int ran = 0;
-    for (int i=0; i<2; i++) {
-    do {
-        ran = rand()%25;
-    } while (*(Hole + ran) == 1 || ran==0 || ran==4 || ran==20 || ran==24);
-    *(Hole + ran) = 1;
+    for (int i = 0; i < 25; i++)
+    {
+        *(Hole + i) = 0;
     }
+    int ran = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        do
+        {
+            ran = rand() % 12 + 12*i;
+        } while (*(Hole + ran) == 1 || ran == 0 || ran == 4 || ran == 20 || ran == 24 || ran == 12);
+        *(Hole + ran) = 1;
+    }
+
 
     // Initialisation de la pièce
     coin->position = randomTeleport(coin->position, Hole);
@@ -62,8 +68,8 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
 PLAYER *setPlayer(int skin)
 {
     PLAYER *player = malloc(sizeof(PLAYER));
-    player->position.x = CASE_OFFSET_X+2*CASE_SIZE;
-    player->position.y = CASE_OFFSET_Y+2*CASE_SIZE;
+    player->position.x = CASE_OFFSET_X + 2 * CASE_SIZE;
+    player->position.y = CASE_OFFSET_Y + 2 * CASE_SIZE;
     player->move = 0;
     player->skin = skin;
     return player;
@@ -72,7 +78,7 @@ PLAYER *setPlayer(int skin)
 void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
 {
     SKIN *skin = skinList;
-    for (int i = 0; i < player->skin-1; i++)
+    for (int i = 0; i < player->skin - 1; i++)
     {
         skin = skin->next;
     }
@@ -80,7 +86,8 @@ void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
     player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
 }
 
-bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]) {
+bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5])
+{
     player->position.direction = direction;
     switch (direction)
     {
@@ -117,22 +124,23 @@ void movePlayer(PLAYER *player, int direction, int Hole[5][5])
     switch (direction)
     {
     case 1:
-        player->position.y -= CASE_SIZE/PLAYER_MOVE;
+        player->position.y -= CASE_SIZE / PLAYER_MOVE;
         break;
     case 2:
-        player->position.x += CASE_SIZE/PLAYER_MOVE;
+        player->position.x += CASE_SIZE / PLAYER_MOVE;
         break;
     case 3:
-        player->position.y += CASE_SIZE/PLAYER_MOVE;
+        player->position.y += CASE_SIZE / PLAYER_MOVE;
         break;
     case 4:
-        player->position.x -= CASE_SIZE/PLAYER_MOVE;
+        player->position.x -= CASE_SIZE / PLAYER_MOVE;
         break;
     }
-    if (player->move > 0) {
+    if (player->move > 0)
+    {
         player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE + player->move;
-    } 
-    player->move -= 1; 
+    }
+    player->move -= 1;
 }
 
 LIST_OBSTACLE setListObstacle(LIST_OBSTACLE list)
@@ -215,9 +223,10 @@ int updateFireball(OBSTACLE *obstacle)
         obstacle->warning -= 1;
         return 0;
     }
-    else if (obstacle->warning == 1) {
+    else if (obstacle->warning == 1)
+    {
         obstacle->warning -= 1;
-        return rand()%2+2;
+        return rand() % 2 + 2;
     }
     else
     {
@@ -268,12 +277,14 @@ int updateFireball(OBSTACLE *obstacle)
     return 0;
 }
 
-bool detectColision(POSITION posplayer, POSITION posobject)
+int distance(POSITION pos1, POSITION pos2)
 {
-    int deltax = posplayer.x - posobject.x;
-    int deltay = posplayer.y - posobject.y;
-    int distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
-    if (distance < SPRITE_SIZE / 2)
+    return (int)sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
+}
+
+bool detectColision(POSITION pos1, POSITION pos2)
+{
+    if (distance(pos1, pos2) < SPRITE_SIZE / 2)
     {
         return true;
     }

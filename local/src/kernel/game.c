@@ -6,6 +6,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
     init(player, &fireball, Hole, coin, renderer, game);
     enum functions options = none;
     game->menu = gameLaunched;
+    BUTTON * buttonClicked = NULL;
 
     // FrameLimiter
     Uint32 frameStart;
@@ -28,7 +29,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
             case SDL_MOUSEBUTTONDOWN:
                 if (game->status == 1)
                 {
-                    options = checkClickButtons(buttonList, options, game->menu, event.motion.x, event.motion.y);
+                    buttonClicked = checkClickButtons(buttonList, &options, game->menu, event.motion.x, event.motion.y);
                     switch (options)
                     {
                     case backToMenu:
@@ -176,12 +177,12 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
             }
         }
 
+        // Affichage
+        displayGame(renderer, player, fireball, coin, Hole, game, buttonList);
+
         // FPS
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
-
-        // Affichage
-        displayGame(renderer, player, fireball, coin, Hole, game, buttonList);
         SDL_RenderPresent(renderer);
         if (SDL_RenderClear(renderer) != 0)
         {
@@ -254,7 +255,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
             SDL_RenderCopy(renderer, scoreprint, NULL, &game->endscorerect);
             SDL_RenderCopy(renderer, recordprint, NULL, &game->endbestrect);
             SDL_RenderCopy(renderer, game->gameOver.texture, NULL, &game->gameOver.dstrect);
-            displayButtons(renderer, buttonList, gameOverMenu);
+            displayButtonList(renderer, buttonList, gameOverMenu);
         }
     }
     return 0;
