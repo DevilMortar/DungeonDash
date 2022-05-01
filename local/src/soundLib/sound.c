@@ -16,10 +16,13 @@ SL_SOUND * SL_loadSongInQueue(SL_SOUND * soundList, char * path, char * name, in
     return soundList;
 }
 
-void SL_playSong(SL_SOUND * soundList, char * name) {
+void SL_playSong(SL_SOUND * soundList, char * name, int volume) {
     SL_SOUND * song = soundList;
     while (song != NULL) {
         if (strcmp(song->name, name) == 0) {
+            if (volume>0) {
+                Mix_Volume(song->channel, (int)MIX_MAX_VOLUME*volume/100);
+            }
             Mix_PlayChannel(song->channel, song->chunk, 0);
         }
         song = song->next;
