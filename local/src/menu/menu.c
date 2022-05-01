@@ -2,6 +2,9 @@
 
 int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin){
     game->loop = 0;
+    for (int i=1; i<*playerSkin; i++){
+        skinList = skinList->next;
+    }
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = none;
     game->menu = mainMenu; 
@@ -44,6 +47,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
         }
         switch(options){
             case play:
+                *playerSkin = 1;
                 while(firstSkin!=skinList){
                     firstSkin=firstSkin->next;
                     *playerSkin+=1;
