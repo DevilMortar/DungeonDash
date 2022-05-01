@@ -71,7 +71,7 @@ struct GAME
 };
 
 typedef enum functions functions;
-enum functions {play, skin, leave, confirm, right, left, locker, backToMenu, reset, none};
+enum functions {play, skin, leave, confirm, right, left, locker, backToMenu, reset, sound, none};
 
 typedef struct BUTTON BUTTON;
 struct BUTTON{
