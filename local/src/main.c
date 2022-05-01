@@ -77,12 +77,16 @@ int main()
     // Création des sons
     char *soundName[7] = {"fire", "fire_2", "coin", "death", "play", "step", "warn"};
     SL_SOUND *soundList = SL_initSoundLib(7, "asset/sound/", soundName);
+    Mix_Music *musique = Mix_LoadMUS("asset/sound/music.wav");
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
+
 
     printf("\nGame statut | Game Initialized !\n");
     printf("\n------------------------------------------------------\n");
     /* --------------------------------------- */
     while (game->program_launched)
     {
+        Mix_PlayMusic(musique, -1);
         if(startMenu(buttonList, skinList, firstSkin, renderer, game, &player->skin)>0)
         {
             setPlayer(player->skin);
