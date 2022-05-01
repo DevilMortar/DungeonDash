@@ -75,8 +75,8 @@ int main()
     game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     // Création des sons
-    char *soundName[4] = {"fire", "fire_2", "coin", "death"};
-    SL_SOUND *soundList = SL_initSoundLib(4, "asset/sound/", soundName);
+    char *soundName[7] = {"fire", "fire_2", "coin", "death", "play", "step", "warn"};
+    SL_SOUND *soundList = SL_initSoundLib(7, "asset/sound/", soundName);
 
     printf("\nGame statut | Game Initialized !\n");
     printf("\n------------------------------------------------------\n");
