@@ -19,6 +19,7 @@ SL_SOUND *SL_loadSongInQueue(SL_SOUND *soundList, char *path, char *name, int ch
         song->next = soundList;
         soundList = song;
     }
+    numberOfSounds++;
     printf("SL_loadSongInQueue | Sound from %s sucessfully loaded !\n", path);
     return soundList;
 }
@@ -45,7 +46,6 @@ void SL_playSong(SL_SOUND *soundList, char *name, int volume)
 
 SL_SOUND *SL_initSoundLib(int channels, char folder[], char *name[])
 {
-    numberOfSounds = channels;
     Mix_Init(MIX_INIT_MOD | MIX_INIT_OGG);
     if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
     {
