@@ -83,6 +83,10 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 game->menu=skinMenu;
                 break;
             case sound:
+                if(SL_isMusicPlaying())
+                    SL_mute();
+                else
+                    SL_unmute();
                 break;
             case none:
                 break;
@@ -125,6 +129,16 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
     displayTextAndNumber(renderer, "Best Score   ", game->best, NULL, 20, &recordRect);
     // Display Buttons
+    BUTTON *tmp=buttonList;
+    while(tmp!=NULL){
+        if(tmp->function==sound){
+            if(SL_isMusicPlaying()==false){
+                if(tmp->state==0){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;}
+                else if(tmp->state==1){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*4;}
+            }
+        }
+        tmp=tmp->next;
+    }
     displayButtonList(renderer, buttonList, mainMenu);
     POSITION skinPosition = {skinList->skin_sprite.dstrect.x, skinList->skin_sprite.dstrect.y, 0};
     // Display Skin
