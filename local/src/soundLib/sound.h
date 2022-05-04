@@ -18,6 +18,6 @@ SL_SOUND * SL_loadSongInQueue(SL_SOUND * soundList, char * path, char * name, in
 void SL_playSong(SL_SOUND * soundList, char * name, int volume); //Joue la musique
 void SL_freeSoundLib(SL_SOUND * soundList); //Libère la mémoire
 int SL_getNumberOfSounds(); //Renvoie le nombre de musiques
-bool SL_isMusicPlaying(); //Renvoie si une musique est en cours de lecture
-void SL_mute(); //Mute toutes les musiques et sons
-void SL_unmute(); //Unmute toutes les musiques et sons
+bool SL_isMusicPlaying(); //Renvoie si la lecture est possible
+void SL_mute(); //Empêche les musiques de jouer
+void SL_unmute(); //Autorise les musiques à jouer
