@@ -75,10 +75,12 @@ int main()
     game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     // Création des sons
+    printf("%d\n", SL_getNumberOfSounds());
     char *soundName[7] = {"fire", "fire_2", "coin", "death", "play", "step", "warn"};
     SL_SOUND *soundList = SL_initSoundLib(7, "asset/sound/", soundName);
     Mix_Music *musique = Mix_LoadMUS("asset/sound/music.wav");
     Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
+    printf("%d\n", SL_getNumberOfSounds());
 
 
     printf("\nGame statut | Game Initialized !\n");
@@ -86,7 +88,10 @@ int main()
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        Mix_PlayMusic(musique, -1);
+        if (SL_isMusicPlaying())
+        {
+            Mix_PlayMusic(musique, -1);
+        }
         if(startMenu(buttonList, skinList, firstSkin, renderer, game, &player->skin)>0)
         {
             setPlayer(player->skin);
@@ -123,5 +128,6 @@ int main()
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    Mix_Quit();
     printf("\nGame statut | Game is now closed !\n");
 }

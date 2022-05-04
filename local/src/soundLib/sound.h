@@ -1,4 +1,8 @@
 #include <SDL2/SDL_mixer.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 typedef struct SL_SOUND SL_SOUND;
 struct SL_SOUND
@@ -13,3 +17,7 @@ SL_SOUND * SL_initSoundLib(int channels, char folder[], char * name[]);
 SL_SOUND * SL_loadSongInQueue(SL_SOUND * soundList, char * path, char * name, int channel); //Charge une musique dans la file
 void SL_playSong(SL_SOUND * soundList, char * name, int volume); //Joue la musique
 void SL_freeSoundLib(SL_SOUND * soundList); //Libère la mémoire
+int SL_getNumberOfSounds(); //Renvoie le nombre de musiques
+bool SL_isMusicPlaying(); //Renvoie si une musique est en cours de lecture
+void SL_mute(); //Mute toutes les musiques et sons
+void SL_unmute(); //Unmute toutes les musiques et sons
