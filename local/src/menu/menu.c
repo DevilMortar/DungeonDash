@@ -82,6 +82,8 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
             case skin:
                 game->menu=skinMenu;
                 break;
+            case sound:
+                break;
             case none:
                 break;
             default:
