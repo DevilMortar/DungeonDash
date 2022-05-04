@@ -133,8 +133,8 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     while(tmp!=NULL){
         if(tmp->function==sound){
             if(SL_isMusicPlaying()==false){
-                if(tmp->state==0){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew;}
-                else if(tmp->state==1){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*4;}
+                if(tmp->state==0){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*4;}
+                else if(tmp->state==1){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*5;}
             }
         }
         tmp=tmp->next;
