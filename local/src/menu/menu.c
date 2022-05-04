@@ -83,7 +83,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 game->menu=skinMenu;
                 break;
             case sound:
-                if(SL_isMusicPlaying())
+                if(SL_isPlaying())
                     SL_mute();
                 else
                     SL_unmute();
@@ -132,7 +132,7 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     BUTTON *tmp=buttonList;
     while(tmp!=NULL){
         if(tmp->function==sound){
-            if(SL_isMusicPlaying()==false){
+            if(SL_isPlaying()==false){
                 if(tmp->state==0){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*3;}
                 else if(tmp->state==1){tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*4;}
             }

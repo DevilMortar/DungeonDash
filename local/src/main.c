@@ -89,7 +89,7 @@ int main()
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        if (SL_isMusicPlaying())
+        if (SL_isPlaying())
         {
             Mix_PlayMusic(musique, -1);
         }
@@ -104,13 +104,13 @@ int main()
             game->program_launched = SDL_FALSE;
         }
     }
-    printf("\nGame statut | Game is shutting down !\n");
+    printf("Game statut | Game is shutting down !\n");
     // DATA
-    printf("\nGame statut | Prepare to save data...\n");
+    printf("Game statut | Prepare to save data...\n");
     saveData(firstSkin, game);
-    printf("\nGame statut | Data saved !\n");
+    printf("Game statut | Data saved !\n");
     // Free sound
-    printf("\nGame statut | Preparing to free memory...\n");
+    printf("Game statut | Preparing to free memory...\n");
     SL_freeSoundLib(soundList);
     freeButtons(buttonList);
     freeSkinList(skinList);
@@ -123,12 +123,12 @@ int main()
     free(game);
     free(player);
     free(coin);
-    printf("\nGame statut | Memory has been freed with success !\n");
+    printf("Game statut | Memory has been freed with success !\n");
     // SDL QUIT
-    printf("\nGame statut | Preparing to quit...\n");
+    printf("Game statut | Preparing to quit...\n");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     Mix_Quit();
-    printf("\nGame statut | Game is now closed !\n");
+    printf("Game statut | Game is now closed !\n");
 }

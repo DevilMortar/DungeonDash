@@ -25,7 +25,7 @@ SL_SOUND *SL_loadSongInQueue(SL_SOUND *soundList, char *path, char *name, int ch
 
 void SL_playSong(SL_SOUND *soundList, char *name, int volume)
 {
-    if (isPlaying)
+    if (SL_isPlaying())
     {
         SL_SOUND *song = soundList;
         while (song != NULL)
@@ -84,27 +84,19 @@ int SL_getNumberOfSounds()
     return numberOfSounds;
 }
 
-bool SL_isMusicPlaying()
+bool SL_isPlaying()
 {
     return isPlaying;
 }
 
 void SL_mute()
 {
-    for (int i = 0; i < numberOfSounds; i++)
-    {
-        Mix_Volume(i, 0);
-    }
     isPlaying = false;
     Mix_PauseMusic();
 }
 
 void SL_unmute()
 {
-    for (int i = 0; i < numberOfSounds; i++)
-    {
-        Mix_Volume(i, MIX_MAX_VOLUME);
-    }
     isPlaying = true;
     Mix_ResumeMusic();
 }
