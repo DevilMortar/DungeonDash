@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
 
     //Récupération de la sauvegarde
     recupData(firstSkin, game);
-    game->money = 10000000;
 
     // Initialisation Player
     PLAYER *player;
