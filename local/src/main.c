@@ -1,9 +1,8 @@
-#include "./kernel/header.h"
+#include "../include/header.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     // Start
-    system("clear");
     srand(time(NULL));
 
     /* --------------------------------------- */
