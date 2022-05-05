@@ -1,0 +1,1 @@
+clear && make deepclean && make && clear && ./main
