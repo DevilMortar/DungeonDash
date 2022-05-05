@@ -69,7 +69,10 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     game->program_launched = SDL_FALSE;
                     return -1;
                     break;
-
+                case SDLK_ESCAPE:
+                    game->game_launched = SDL_FALSE;
+                    game->program_launched = SDL_FALSE;
+                    break;
                 default:
                     continue;
                 }
