@@ -14,16 +14,17 @@ int main(int argc, char *argv[])
     
     // Initialisation du menu
     BUTTON *buttonList = NULL;
-    buttonList = createButton(renderer, "asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, mainMenu, 52, 15, false);
-    buttonList = createButton(renderer, "asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, mainMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, mainMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, skinMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, skinMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, skinMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 70, 70, WINDOW_WIDTH / 2 - 35, WINDOW_HEIGHT / 2 - 7, locker, skinMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32, false);
-    buttonList = createButton(renderer, "asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH-80, 0, sound, mainMenu, 32, 32, false);
+    buttonList = createButton(renderer, "asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, mainMenu, 52, 15);
+    buttonList = createButton(renderer, "asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/locker.png", buttonList, 70, 70, WINDOW_WIDTH / 2 - 35, WINDOW_HEIGHT / 2 - 7, locker, skinMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH-80, 0, sound, mainMenu, 32, 32);
+    printf("GGGGGGGGGGGGGGGg %d\n", buttonList->function);
 
     SKIN *skinList = NULL;
     skinList = createSkin(renderer, "asset/texture/player/6.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
@@ -74,12 +75,10 @@ int main(int argc, char *argv[])
     game->title.dstrect.y = game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
 
     // Création des sons
-    printf("%d\n", SL_getNumberOfSounds());
     char *soundName[7] = {"fire", "fire_2", "coin", "death", "play", "step", "warn"};
     SL_SOUND *soundList = SL_initSoundLib(7, "asset/sound/", soundName);
     Mix_Music *musique = Mix_LoadMUS("asset/sound/music.wav");
     Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
-    printf("%d\n", SL_getNumberOfSounds());
 
 
     printf("\nGame statut | Game Initialized !\n");

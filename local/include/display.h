@@ -41,3 +41,4 @@ void displayText(SDL_Renderer *renderer, char *message, SDL_Color* color, int fo
 void displayNumber(SDL_Renderer *renderer, int number, SDL_Color *color, int fontSize, SDL_Rect *dstrect); // Affiche un nombre 
 void displayTextAndNumber(SDL_Renderer *renderer, char *message, int number, SDL_Color* color, int fontSize, SDL_Rect *dstrect); // Affiche un texte et un nombre
 int numberOfDigit(int number); // Renvoie le nombre de chiffre d'un nombre
+SDL_Rect createRect(int x, int y, int w, int h); // Renvoie un rectangle

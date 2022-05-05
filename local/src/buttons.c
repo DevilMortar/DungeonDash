@@ -9,7 +9,7 @@ Button state :
 
 */
 
-BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh, bool preventReset){
+BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh){
     BUTTON *new = malloc(sizeof(BUTTON));
     new->button_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
     SDL_Rect dstrect = {x, y, w, h};
@@ -17,7 +17,6 @@ BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, i
     new->function=function;
     new->menu=menu;
     new->next=NULL;
-    new->preventReset=preventReset;
     return addButtonInList(buttonList, new);
 }
 
@@ -63,9 +62,7 @@ void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y){
 void resetButtonState(BUTTON * buttonList){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if(tmp->preventReset==false){
-            buttonChangeState(tmp, 0);
-        }
+        buttonChangeState(tmp, 0);
         tmp=tmp->next;
     }
 }
@@ -74,6 +71,7 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if (tmp->menu == menu){
+            printf("%d Affichage\n", tmp->function);
             displayButton(renderer, tmp);
         }
         tmp=tmp->next;
@@ -86,8 +84,10 @@ void displayButton(SDL_Renderer *renderer, BUTTON * button){
 }
 
 void buttonChangeState(BUTTON * button, int state){
-    button->state=state;
-    button->button_sprite.srcrect.x=button->state*button->button_sprite.srcrect.w;
+    if (button != NULL){
+        button->state=state;
+        button->button_sprite.srcrect.x=button->state*button->button_sprite.srcrect.w;
+    }
 }
 
 void freeButtons(BUTTON * buttonList){

@@ -78,8 +78,7 @@ struct BUTTON{
     SPRITE button_sprite;
     enum functions function;
     int state;
-    int menu;
-    bool preventReset;
+    enum menu menu;
     BUTTON * next;
 };
 
@@ -125,7 +124,7 @@ SKIN * browseSkin(SKIN *tmp, int direction, int best); //Parcours la liste de sk
 void freeSkinList(SKIN *skinList); //Libère la liste de skin
 
 //Buttons
-BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh, bool preventReset); //Créé un nouveau bouton
+BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
 BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un bouton à la liste des boutons
 BUTTON * checkClickButtons(BUTTON * buttonList, enum functions * options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton

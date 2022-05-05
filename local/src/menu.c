@@ -105,6 +105,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
             default:
                 break;
         }
+        SDL_RenderCopy(renderer, buttonList->button_sprite.texture, &buttonList->button_sprite.srcrect, &buttonList->button_sprite.dstrect);
         SDL_RenderPresent(renderer);
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
@@ -165,11 +166,16 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
             tmp->button_sprite.srcrect.x= tmp->button_sprite.srcsizew*tmp->state;
             if(tmp->function==left){
                 if (skinListTMP->previous==NULL)
-                    buttonChangeState(tmp, 3);
+                {
+                    tmp->state=0;
+                }
+
             }
             else if(tmp->function==right){
                 if (skinListTMP->next==NULL)
-                    buttonChangeState(tmp, 3);
+                {
+                    tmp->state=0;
+                }
             }
             if(tmp->function==locker && skinListTMP->state==1){
                  tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*5;
@@ -214,7 +220,7 @@ SKIN * createSkin(SDL_Renderer *renderer, char *link, SKIN * skinList, int w, in
 }
 
 SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin){
-    if(skinList != NULL && newSkin !=NULL){
+    if(skinList != NULL){
         newSkin->next=skinList;
         skinList->previous=newSkin;
         skinList=newSkin;
