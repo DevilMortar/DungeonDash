@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     // Création des sons
     char *soundName[7] = {"fire", "fire_2", "coin", "death", "play", "step", "warn"};
     SL_SOUND *soundList = SL_initSoundLib(7, "asset/sound/", soundName);
-    Mix_Music *musique = Mix_LoadMUS("asset/sound/music.wav");
+    Mix_Music *musique = Mix_LoadMUS("asset/sound/music.mp3");
     Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
 
 
