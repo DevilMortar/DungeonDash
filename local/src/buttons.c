@@ -1,4 +1,4 @@
-#include "../include/header.h"
+#include "../include/button.h"
 
 /*
 
@@ -20,13 +20,12 @@ BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, i
     return addButtonInList(buttonList, new);
 }
 
-BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton){
-    if(buttonList != NULL && newButton !=NULL){
+BUTTON *addButtonInList(BUTTON *buttonList, BUTTON * newButton){
+    if(buttonList != NULL && newButton != NULL){
         newButton->next = buttonList;
         buttonList = newButton;
-    }
-    else{
-        buttonList=newButton;
+    } else{
+        buttonList = newButton;
     }
     return buttonList;
 }
@@ -79,7 +78,6 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
 }
 
 void displayButton(SDL_Renderer *renderer, BUTTON * button){
-    //button->button_sprite.srcrect.x=button->state*button->button_sprite.srcrect.w;
     SDL_RenderCopy(renderer, button->button_sprite.texture, &button->button_sprite.srcrect, &button->button_sprite.dstrect);
 }
 

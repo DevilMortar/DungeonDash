@@ -38,7 +38,7 @@
 #include "SDL_rwops.h"
 
 #include "begin_code.h"
-/* Set up for C function definitions, even when using C++ */
+/* Set up for C function definition.s, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif

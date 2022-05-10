@@ -1,3 +1,6 @@
+#ifndef SOUND_H
+#define SOUND_H
+
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,3 +24,5 @@ int SL_getNumberOfSounds(); //Renvoie le nombre de musiques
 bool SL_isPlaying(); //Renvoie si la lecture est possible
 void SL_mute(); //Empêche les musiques de jouer
 void SL_unmute(); //Autorise les musiques à jouer
+
+#endif

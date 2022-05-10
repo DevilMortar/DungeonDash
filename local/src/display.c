@@ -1,35 +1,4 @@
-#include "../include/header.h"
-
-void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
-    if (!IMG_Init(IMG_INIT_PNG))
-        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        SDL_ExitWithError("SDL | Failed to initialize");
-    }
-    if (TTF_Init() != 0)
-    {
-        SDL_ExitWithError("SDL | TTF: Failed to initialize");
-    }
-
-    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
-
-    if (*window == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a window");
-    }
-
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
-
-    if (*renderer == NULL)
-    {
-        SDL_ExitWithError("SDL | Failed to create a renderer");
-    }
-
-    SDL_SetRenderDrawColor(*renderer, 21, 33, 44, 255);
-
-    printf("SDL | Initialized with success !\n");
-}
+#include "../include/display.h"
 
 SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize)
 {
@@ -41,18 +10,17 @@ SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, 
     new.srcrect.w = srcsizew;
     new.srcrect.h = srcsizeh;
     new.texture = IMG_LoadTexture(renderer, link);
-    if (new.texture == NULL)
-    {
+    if (new.texture == NULL) {
         SDL_ExitWithError("NewSprite | Failed to create texture");
-    }
-    else
-    {
-        printf("NewSprite | Sprite from %s sucessfully loaded !\n", link);
+    } else {
+        printf("NewSprite | Sprite from %s successfully loaded !\n", link);
     }
     new.dstrect.w = dstsize;
     new.dstrect.h = dstsize;
+    printf("Done with dstrect w and h\n");
     new.dstrect.x = (WINDOW_WIDTH - new.dstrect.w) / 2;
     new.dstrect.y = (WINDOW_HEIGHT - new.dstrect.h) / 2;
+    printf("Done with dstrect x and y\n");
     return new;
 }
 
@@ -64,11 +32,11 @@ TEXTURE newTexture(SDL_Renderer *renderer, char link[255], int w, int h)
     new.texture = IMG_LoadTexture(renderer, link);
     if (new.texture == NULL)
     {
-        SDL_ExitWithError("newTexture | Failed to create texture ");
+        SDL_ExitWithError("NewTexture | Failed to create texture ");
     }
     else
     {
-        printf("NewSprite | Texture from %s sucessfully loaded !\n", link);
+        printf("NewTexture | Texture from %s successfully loaded !\n", link);
     }
     new.dstrect.w = w;
     new.dstrect.h = h;
@@ -199,19 +167,6 @@ void displayText(SDL_Renderer *renderer, char *message, SDL_Color* color, int fo
     SDL_DestroyTexture(texture);
 }
 
-void SDL_LimitFPS(unsigned int limit)
-{
-    float delay = FPS_DELAY;
-    if (delay > limit)
-    {
-        SDL_Delay(delay - limit);
-    }
-    else
-    {
-        printf("WARNING | Low FPS ! Time : %dms\n", limit);
-    }
-}
-
 int numberOfDigit(int number)
 {
     if (number == 0)
@@ -235,4 +190,57 @@ SDL_Rect createRect(int x, int y, int w, int h)
     rect.w = w;
     rect.h = h;
     return rect;
+}
+
+// SDL Helper functions
+
+void SDL_ExitWithError(const char *message)
+{
+    SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
+    SDL_Quit();
+    exit(EXIT_FAILURE);
+}
+
+void SDL_LimitFPS(unsigned int limit)
+{
+    float delay = FPS_DELAY;
+    if (delay > limit)
+    {
+        SDL_Delay(delay - limit);
+    }
+    else
+    {
+        printf("WARNING | Low FPS ! Time : %dms\n", limit);
+    }
+}
+
+void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
+    if (!IMG_Init(IMG_INIT_PNG))
+        printf("\033[1;31mIMG INIT: %s\033[0m\n", IMG_GetError());
+    if (SDL_Init(SDL_INIT_EVERYTHING|SDL_INIT_NOPARACHUTE) != 0)
+    {
+        SDL_ExitWithError("SDL | Failed to initialize");
+    }
+    if (TTF_Init() != 0)
+    {
+        SDL_ExitWithError("SDL | TTF: Failed to initialize");
+    }
+
+    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+    if (*window == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a window");
+    }
+
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
+
+    if (*renderer == NULL)
+    {
+        SDL_ExitWithError("SDL | Failed to create a renderer");
+    }
+
+    SDL_SetRenderDrawColor(*renderer, 21, 33, 44, 255);
+
+    printf("SDL | Initialized with success !\n");
 }
