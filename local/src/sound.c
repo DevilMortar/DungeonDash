@@ -28,7 +28,7 @@ void SL_initSoundLib(char folder[], int nbChannels, bool allowDevelopment)
     {
         while (file = readdir(rep))
         {
-            if (strcmp(file->d_name, ".") != 0 && strcmp(file->d_name, "..") != 0)
+            if (strcmp(file->d_name, ".") != 0 && strcmp(file->d_name, "..") != 0 && strstr(file->d_name, ".wav") != NULL)
             {
                 char path[100];
                 strcpy(path, folder);
