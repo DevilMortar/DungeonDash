@@ -129,7 +129,6 @@ BUTTON * addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un b
 BUTTON * checkClickButtons(BUTTON * buttonList, enum functions * options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton
 void resetButtonState(BUTTON * buttonList); //Réinitialise l'état de tous les boutons à unclicked
-void displayButton(SDL_Renderer *renderer, BUTTON * button); //Affiche un bouton
 void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu); //Affiche la liste des boutons
 void buttonChangeState(BUTTON * button, int state); //Change l'état d'un bouton
 void freeButtons(BUTTON * buttonList); //Libère la mémoire allouée pour les boutons

@@ -71,16 +71,11 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if (tmp->menu == menu){
-            printf("%d Affichage\n", tmp->function);
             displayButton(renderer, tmp);
+            SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
         }
         tmp=tmp->next;
     }
-}
-
-void displayButton(SDL_Renderer *renderer, BUTTON * button){
-    //button->button_sprite.srcrect.x=button->state*button->button_sprite.srcrect.w;
-    SDL_RenderCopy(renderer, button->button_sprite.texture, &button->button_sprite.srcrect, &button->button_sprite.dstrect);
 }
 
 void buttonChangeState(BUTTON * button, int state){
