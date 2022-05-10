@@ -10,9 +10,9 @@ void SDL_ExitWithError(const char *message)
 void initGame(SDL_Renderer *renderer, GAME *game)
 {
     game->program_launched = SDL_TRUE;
-    game->endscreen = newTexture(renderer, "asset/texture/end.png", 400, 200);
-    game->deathAnimation = newSprite(renderer, "asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
-    game->scoreCoin = newSprite(renderer, "asset/texture/coin.png", 16, 32, 32, SCORE_SIZE);
+    game->endscreen = newTexture(renderer, "../asset/texture/end.png", 400, 200);
+    game->deathAnimation = newSprite(renderer, "../asset/texture/skull.png", 18, 196, 196, SPRITE_SIZE);
+    game->scoreCoin = newSprite(renderer, "../asset/texture/coin.png", 16, 32, 32, SCORE_SIZE);
     game->endscorerect.x = WINDOW_WIDTH / 2 - 100;
     game->endscorerect.y = WINDOW_HEIGHT / 2 - END_SCORE_SIZE;
     game->endbestrect.x = WINDOW_WIDTH / 2 - 100;
@@ -226,7 +226,7 @@ int updateFireball(OBSTACLE *obstacle)
     else if (obstacle->warning == 1)
     {
         obstacle->warning -= 1;
-        return rand() % 2 + 2;
+        return rand() % 3 + 2;
     }
     else
     {

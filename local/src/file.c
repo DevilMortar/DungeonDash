@@ -1,7 +1,7 @@
 #include "../include/header.h"
 
 void saveData(SKIN *firstSkin, GAME *game){
-    FILE *saveFile=fopen("saveFile.bin" ,"wb");
+    FILE *saveFile=fopen("../saveFile.bin" ,"wb");
     SKIN *tmp=firstSkin;
     if(saveFile==NULL){
         printf("Error while trying to open saveFile.bin\n");
@@ -17,7 +17,7 @@ void saveData(SKIN *firstSkin, GAME *game){
 }
 
 void recupData(SKIN *firstSkin, GAME *game){
-    FILE *saveFile=fopen("saveFile.bin" ,"rb");
+    FILE *saveFile=fopen("../saveFile.bin" ,"rb");
     SKIN *tmp=firstSkin;
     if(saveFile==NULL){
         printf("Error while trying to open saveFile.bin\n");
