@@ -17,7 +17,6 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
         SDL_Event event;
         frameStart = SDL_GetTicks();
         SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
-        SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -52,17 +51,21 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                     firstSkin=firstSkin->next;
                     *playerSkin+=1;
                 }
+                SL_playSong("play", 80);
                 return *playerSkin;
             case left:
+                SL_playSong("left", 80);
                 skinListTMP = browseSkin(skinListTMP, -1, game->best);
                 break;
             case right:
+                SL_playSong("right", 80);
                 skinListTMP = browseSkin(skinListTMP, 1, game->best);
                 break;
             case confirm:
                 if(skinListTMP->state==1){
                     skinList=skinListTMP;
                     game->menu=mainMenu;
+                    SL_playSong("drum", 80);
                 }
                 break;
             case locker:
@@ -73,6 +76,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 break;
             case reset:
                 resetData(firstSkin, game);
+                SL_playSong("reset", 80);
                 break;
             case leave:
                 return -6;
@@ -81,12 +85,17 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 break;
             case skin:
                 game->menu=skinMenu;
+                SL_playSong("next", 80);
                 break;
             case sound:
-                if(SL_isPlaying())
+                if(SL_isPlaying()) {
+                    SL_playSong("next", 80);
                     SL_mute();
-                else
+                }
+                else {
                     SL_unmute();
+                    SL_playSong("next", 80);
+                }
                 break;
             case none:
                 break;
@@ -126,6 +135,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
 }
 
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME *game){
+    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     //Display Record
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
     displayTextAndNumber(renderer, "Best Score   ", game->best, NULL, 20, &recordRect);
@@ -147,6 +157,7 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
 }
 
 void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
+    SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
     // Display Money
     SDL_Rect moneyRect = {WINDOW_WIDTH / 2 + 5, 10, 0, 0};
     displayNumber(renderer, game->money, NULL, MONEY_SIZE, &moneyRect);
