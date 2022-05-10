@@ -19,7 +19,7 @@ void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
         SDL_ExitWithError("SDL | Failed to create a window");
     }
 
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
 
     if (*renderer == NULL)
     {
@@ -143,7 +143,7 @@ SDL_Texture *renderWidgetText(char *message, SDL_Color* color, int fontSize, SDL
     }
     color->a = 255;
     // Open the font
-    TTF_Font *font = TTF_OpenFont("asset/police/arcade.ttf", fontSize); // Open the font you want
+    TTF_Font *font = TTF_OpenFont("../asset/police/arcade.ttf", fontSize); // Open the font you want
     if (font == NULL)
     {
         SDL_ExitWithError("SDL || TTF_OpenFont");
