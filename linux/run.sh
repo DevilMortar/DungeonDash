@@ -1,0 +1,1 @@
+clear && cd ../local && make deepclean && make && clear && mv main bin/ && cd ./bin && ./main 

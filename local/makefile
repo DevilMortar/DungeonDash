@@ -40,7 +40,7 @@ sound.o :
 	
 deepclean :
 	rm -f *.o
-	rm -f main
+	rm -f $(B)/main
 	rm -f $(B)/*
 	rm -f $(B)/*
 	rm -f $(B)/*.o
