@@ -15,4 +15,3 @@
 #define SCORE_SIZE 25
 #define MONEY_SIZE 20
 #define PLAYER_MOVE 10
-#define SKIN_NB 4
