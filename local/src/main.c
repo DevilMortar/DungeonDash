@@ -81,6 +81,34 @@ int main(int argc, char *argv[])
 
     printf("\nGame statut | Game Initialized !\n");
     printf("\n------------------------------------------------------\n");
+
+    // Intro
+    SDL_RenderClear(renderer);
+    SL_playSong("intro", 100);
+    SL_playSong("intro_2", 100);
+    SL_playSong("intro_drum", 100);
+    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+    SDL_RenderPresent(renderer);
+    game->title.dstrect.y = WINDOW_HEIGHT / 2 - game->title.dstrect.h / 2;
+    for (int i = 0; i < 51; i++) {
+        SDL_SetTextureAlphaMod(game->title.texture, i*5);
+        SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+        SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
+    }
+    for (int i = 255; i > 0; i--) {
+        SDL_SetTextureAlphaMod(game->title.texture, i);
+        SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16.67);
+        SDL_RenderClear(renderer);
+    }
+    game->title.dstrect.y = 100;
+    SDL_SetTextureAlphaMod(game->title.texture, 255);
+
+
+
+
     /* --------------------------------------- */
     while (game->program_launched)
     {
