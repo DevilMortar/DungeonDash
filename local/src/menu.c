@@ -16,6 +16,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
     {
         SDL_Event event;
         frameStart = SDL_GetTicks();
+        SDL_RenderCopy(renderer, game->background.texture, NULL, &game->background.dstrect);
         SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
         while (SDL_PollEvent(&event))
         {
