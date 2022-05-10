@@ -71,7 +71,6 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if (tmp->menu == menu){
-            displayButton(renderer, tmp);
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
         }
         tmp=tmp->next;
