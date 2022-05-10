@@ -95,7 +95,7 @@ struct SKIN{
 void SDL_ExitWithError(const char * message); // Quitter
 void SDL_LimitFPS(unsigned int limit);
 void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer);
-int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, SL_SOUND * soundList, BUTTON * buttonList);
+int startGame(SDL_Window * window, SDL_Renderer *renderer, GAME * game, PLAYER * player, LIST_OBSTACLE fireball, int Hole[5][5],COIN * coin, BUTTON * buttonList);
 int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, COIN *coin, int Hole[5][5], GAME *game, BUTTON * buttonList); // Affiche le jeu
 
 //Engine

@@ -1,14 +1,52 @@
 #include "../include/sound.h"
+#include <dirent.h>
 
-int numberOfSounds = 0;
-bool isPlaying = true;
+static int numberOfSounds = 0;
+static bool isPlaying = true;
+static SL_SOUND *soundList = NULL;
+static bool development = false;
 
-SL_SOUND *SL_loadSongInQueue(SL_SOUND *soundList, char *path, char *name, int channel)
+void SL_initSoundLib(char folder[], int nbChannels, bool allowDevelopment)
+{
+    // Check if user want to use development mode
+    development = allowDevelopment;
+    // Initialize SDL_mixer
+    Mix_Init(MIX_INIT_MOD | MIX_INIT_OGG);
+    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+    {
+        printf("%s", Mix_GetError());
+        exit(EXIT_FAILURE);
+    }
+    Mix_AllocateChannels(NB_CHANNELS);
+    // Load sounds
+    soundList = NULL;
+    DIR *rep;
+    struct dirent *file;
+
+    rep = opendir(folder);
+    if (rep != NULL)
+    {
+        while (file = readdir(rep))
+        {
+            if (strcmp(file->d_name, ".") != 0 && strcmp(file->d_name, "..") != 0)
+            {
+                char path[100];
+                strcpy(path, folder);
+                strcat(path, file->d_name);
+                SL_loadSongInQueue(path, file->d_name, numberOfSounds);
+            }
+        }
+        (void)closedir(rep);
+    }
+}
+
+void SL_loadSongInQueue(char *path, char *name, int channel)
 {
     SL_SOUND *song = malloc(sizeof(SL_SOUND));
-    song->channel = channel;
+    char *songToken = strtok(name, ".");
     song->chunk = Mix_LoadWAV(path);
-    song->name = name;
+    song->name = malloc(sizeof(char) * (strlen(songToken) + 1));
+    strcpy(song->name, songToken);
     if (soundList == NULL)
     {
         soundList = song;
@@ -20,53 +58,38 @@ SL_SOUND *SL_loadSongInQueue(SL_SOUND *soundList, char *path, char *name, int ch
         soundList = song;
     }
     numberOfSounds++;
-    printf("SL_loadSongInQueue | Sound from %s sucessfully loaded !\n", path);
-    return soundList;
+    if (development)
+    {
+        printf("SL_loadSongInQueue | Sound %s from %s sucessfully loaded !\n", songToken, path);
+    }
 }
 
-void SL_playSong(SL_SOUND *soundList, char *name, int volume)
+void SL_playSong(char *name, int volume)
 {
+    int channel = -1;
     if (SL_isPlaying())
     {
         SL_SOUND *song = soundList;
-        while (song != NULL)
+        while (song != NULL && strcmp(song->name, name) != 0)
         {
-            if (strcmp(song->name, name) == 0)
-            {
-                if (volume > 0)
-                {
-                    Mix_Volume(song->channel, (int)MIX_MAX_VOLUME * volume / 100);
-                }
-                Mix_PlayChannel(song->channel, song->chunk, 0);
-            }
             song = song->next;
+        }
+        if (song != NULL)
+        {
+            channel = Mix_PlayChannel(-1, song->chunk, 0);
+            if (volume > 0)
+            {
+                Mix_Volume(channel, (int)MIX_MAX_VOLUME * volume / 100);
+            }
+            if (development)
+            {
+                printf("SL_playSong | Sound %s played !\n", song->name);
+            }
         }
     }
 }
 
-SL_SOUND *SL_initSoundLib(int channels, char folder[], char *name[])
-{
-    Mix_Init(MIX_INIT_MOD | MIX_INIT_OGG);
-    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
-    {
-        printf("%s", Mix_GetError());
-        exit(EXIT_FAILURE);
-    }
-    Mix_AllocateChannels(channels);
-    SL_SOUND *soundList = NULL;
-    for (int i = 0; i < channels; i++)
-    {
-        char path[100];
-        strcpy(path, folder);
-        strcat(path, "/");
-        strcat(path, name[i]);
-        strcat(path, ".wav");
-        soundList = SL_loadSongInQueue(soundList, path, name[i], i);
-    }
-    return soundList;
-}
-
-void SL_freeSoundLib(SL_SOUND *soundList)
+void SL_freeSoundLib()
 {
     SL_SOUND *tmp = soundList;
     while (tmp != NULL)
@@ -77,6 +100,7 @@ void SL_freeSoundLib(SL_SOUND *soundList)
         tmp = tmp2;
     }
     Mix_CloseAudio();
+    Mix_Quit();
 }
 
 int SL_getNumberOfSounds()
