@@ -23,7 +23,7 @@ struct BUTTON{
     BUTTON * next;
 };
 
-BUTTON *createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
+BUTTON *createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh); //Créé un nouveau bouton
 BUTTON *addButtonInList(BUTTON * buttonList, BUTTON * newButton); //Ajoute un bouton à la liste des boutons
 BUTTON *checkClickButtons(BUTTON * buttonList, enum functions * options, int menu, int x, int y); //Vérifie si le click de la souris se fait dans un bouton
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y); //Vérifie si la souris survole un bouton

@@ -35,14 +35,13 @@ int main(int argc, char *argv[])
     skinList = createSkin(renderer, "../asset/texture/player/3.png", skinList, 0, 30, 64, 64);
     skinList = createSkin(renderer, "../asset/texture/player/2.png", skinList, 0, -2, 64, 64);
     skinList = createSkin(renderer, "../asset/texture/player/1.png", skinList, 1, 0, 32, 32);
-    SKIN *firstSkin = skinList;
 
     //  Initialisation Game et Score
     GAME *game = malloc(sizeof(GAME));
     initGame(renderer, game);
 
     //Récupération de la sauvegarde
-    recupData(firstSkin, game);
+    recupData(skinList, game);
 
     // Initialisation Player
     PLAYER *player = malloc(sizeof(PLAYER));

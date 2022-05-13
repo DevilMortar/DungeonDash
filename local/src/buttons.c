@@ -9,7 +9,7 @@ Button state :
 
 */
 
-BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, int menu, int srcsizew, int srcsizeh){
+BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh){
     BUTTON *new = malloc(sizeof(BUTTON));
     new->button_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
     SDL_Rect dstrect = {x, y, w, h};
