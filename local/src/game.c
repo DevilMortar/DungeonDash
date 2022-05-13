@@ -167,7 +167,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
             if (temp != NULL)
                 temp = temp->next;
         } while (temp != NULL);
-        if ((double)game->loop >= 100 * exp((-(float)game->score) / 40) && game->status == 0 && game->score > 0)
+        if ((double)game->loop >= DIFFICULTY_K * exp((-(float)game->score) / DIFFICULTY_T) && game->status == 0 && game->score > 0)
         {
             newObstacle(&fireball);
             SL_playSong("warn", 80);
