@@ -14,6 +14,7 @@ BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, i
     new->button_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
     SDL_Rect dstrect = {x, y, w, h};
     new->button_sprite.dstrect=dstrect;
+    new->state=normal;
     new->function=function;
     new->menu=menu;
     new->next=NULL;

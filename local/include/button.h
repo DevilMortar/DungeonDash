@@ -12,7 +12,7 @@ typedef enum functions functions;
 enum functions {play, skin, leave, confirm, right, left, locker, backToMenu, reset, sound, none};
 
 typedef enum button_state button_state;
-enum button_state {locked, unlocked};
+enum button_state {normal = 0, hover = 1, click = 2};
 
 typedef struct BUTTON BUTTON;
 struct BUTTON{
