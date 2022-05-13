@@ -1,14 +1,11 @@
-#include "../include/header.h"
+#include "../include/menu.h"
 
-int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Renderer *renderer, GAME *game, int *playerSkin){
+int startMenu(BUTTON * buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Renderer *renderer, GAME *game) {
     game->loop = 0;
-    for (int i=1; i<*playerSkin; i++){
-        skinList = skinList->next;
-    }
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = none;
-    game->menu = mainMenu; 
-    SKIN *skinListTMP=skinList;
+    game->menu = mainMenu;
+    SKIN skinOnDisplay = resetSkinSize(player->skin);
     Uint32 frameStart;
     unsigned int frameTime;
 
@@ -18,6 +15,7 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
         frameStart = SDL_GetTicks();
         SDL_RenderCopy(renderer, game->background.texture, NULL, &game->background.dstrect);
         SDL_RenderCopy(renderer, game->map.texture, NULL, &game->map.dstrect);
+        SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -45,57 +43,68 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
                 break;
             }
         }
-        switch(options){
+
+        switch (options) {
             case play:
-                *playerSkin = 1;
-                while(firstSkin!=skinList){
-                    firstSkin=firstSkin->next;
-                    *playerSkin+=1;
-                }
-                SL_playSong("play", 80);
-                return *playerSkin;
+                setPlayerSprite(player, skinOnDisplay);
+                SL_playSong("play",50);
+                return 2;
             case left:
-                SL_playSong("left", 80);
-                skinListTMP = browseSkin(skinListTMP, -1, game->best);
+                if (skinOnDisplay.previous == NULL) {
+                    skinOnDisplay = *skinList->last;
+                }
+                else {
+                    skinOnDisplay = *skinOnDisplay.previous;
+                }
+                SL_playSong("left",50);
                 break;
             case right:
-                SL_playSong("right", 80);
-                skinListTMP = browseSkin(skinListTMP, 1, game->best);
+                if (skinOnDisplay.next == NULL) {
+                    skinOnDisplay = *skinList->first;
+                }
+                else {
+                    skinOnDisplay = *skinOnDisplay.next;
+                }
+                SL_playSong("right",50);
                 break;
             case confirm:
-                if(skinListTMP->state==1){
-                    skinList=skinListTMP;
-                    game->menu=mainMenu;
-                    SL_playSong("drum", 80);
+                if (skinOnDisplay.state == -1) {
+                    skinOnDisplay.state = 1;
+                    game->menu = mainMenu;
                 }
+                SL_playSong("drum",50);
                 break;
             case locker:
-                if(skinListTMP->state==0 && skinListTMP->price > 0 && skinListTMP->price <= game->money){
-                    game->money=game->money-skinListTMP->price;
-                    skinListTMP->state=-1;
+                if (skinOnDisplay.state == 0) {
+                    if (skinOnDisplay.price > 0 && skinOnDisplay.price <= game->money) {
+                        game->money = game->money - skinOnDisplay.price;
+                        skinOnDisplay.state = -1;
+                    }
                 }
                 break;
             case reset:
-                resetData(firstSkin, game);
-                SL_playSong("reset", 80);
+                resetData(skinList, game);
+                skinOnDisplay = *skinList->first;
+                SL_playSong("reset", 50);
                 break;
             case leave:
                 return -6;
+                SL_playSong("back", 50);
             case backToMenu:
-                game->menu=mainMenu;
+                game->menu = mainMenu;
                 break;
             case skin:
-                game->menu=skinMenu;
-                SL_playSong("next", 80);
+                game->menu = skinMenu;
+                SL_playSong("next", 50);
                 break;
             case sound:
                 if(SL_isPlaying()) {
-                    SL_playSong("next", 80);
+                    SL_playSong("next", 50);
                     SL_mute();
                 }
                 else {
                     SL_unmute();
-                    SL_playSong("next", 80);
+                    SL_playSong("next", 50);
                 }
                 break;
             case none:
@@ -103,30 +112,32 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
             default:
                 break;
         }
-        options=none;
+
+        options = none;
+
         switch (game->menu)
         {
             case mainMenu:
-                displayMainMenu(buttonList, skinListTMP, renderer, game);
+                displayMainMenu(buttonList, &skinOnDisplay, renderer, game);
                 break;
             case skinMenu:
-                displaySkinMenu(buttonList, skinListTMP, renderer, game);
+                displaySkinMenu(buttonList, &skinOnDisplay, renderer, game);
                 break;
             default:
                 break;
         }
+
         SDL_RenderCopy(renderer, buttonList->button_sprite.texture, &buttonList->button_sprite.srcrect, &buttonList->button_sprite.dstrect);
         SDL_RenderPresent(renderer);
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
-        if (game->loop >= 10000)
-        {
+
+        if (game->loop >= 10000) {
             game->loop = 0;
-        }
-        else
-        {
+        } else {
             game->loop++;
         }
+
         if (SDL_RenderClear(renderer) != 0)
         {
             SDL_ExitWithError("SDL | Failed to clear renderer");
@@ -136,7 +147,6 @@ int startMenu(BUTTON * buttonList, SKIN * skinList, SKIN * firstSkin, SDL_Render
 }
 
 void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer, GAME *game){
-    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
     //Display Record
     SDL_Rect recordRect = {WINDOW_WIDTH / 2 - 130, WINDOW_HEIGHT / 2 + 150, 0, 0};
     displayTextAndNumber(renderer, "Best Score   ", game->best, NULL, 20, &recordRect);
@@ -157,47 +167,31 @@ void displayMainMenu(BUTTON *buttonList, SKIN *skinList, SDL_Renderer *renderer,
     updateSpriteIfNeeded(renderer, skinList->skin_sprite, 0, skinPosition, &skinList->skin_sprite.frame, game->loop);
 }
 
-void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *renderer, GAME *game){
-    SDL_RenderCopy(renderer, game->titleSkin.texture, NULL, &game->titleSkin.dstrect);
+void displaySkinMenu(BUTTON *buttonList, SKIN *skinOnDisplay, SDL_Renderer *renderer, GAME *game){
     // Display Money
     SDL_Rect moneyRect = {WINDOW_WIDTH / 2 + 5, 10, 0, 0};
     displayNumber(renderer, game->money, NULL, MONEY_SIZE, &moneyRect);
     POSITION coinPosition = {WINDOW_WIDTH / 2 - 15 - numberOfDigit(game->money) * (MONEY_SIZE)/2, 8, 0};
     updateSpriteIfNeeded(renderer, game->scoreCoin, 0, coinPosition, &game->scoreCoin.frame, game->loop);
     // Display Skin
-    skinListTMP->skin_sprite.srcrect.x=0;
-    POSITION skinPosition = {skinListTMP->skin_sprite.dstrect.x, skinListTMP->skin_sprite.dstrect.y, 0};
+    skinOnDisplay->skin_sprite.srcrect.x=0;
+    POSITION skinPosition = {skinOnDisplay->skin_sprite.dstrect.x, skinOnDisplay->skin_sprite.dstrect.y, 0};
     // Display Skin
-    updateSpriteIfNeeded(renderer, skinListTMP->skin_sprite, 0, skinPosition, &skinListTMP->skin_sprite.frame, game->loop);
+    updateSpriteIfNeeded(renderer, skinOnDisplay->skin_sprite, 0, skinPosition, &skinOnDisplay->skin_sprite.frame, game->loop);
 
     // PATCH THIS FK SHIT
-    BUTTON *tmp=buttonList;
+    BUTTON *tmp = buttonList;
 
-    while(tmp!=NULL){
-        if(tmp->menu==skin){
-            tmp->button_sprite.srcrect.x= tmp->button_sprite.srcsizew*tmp->state;
-            if(tmp->function==left){
-                if (skinListTMP->previous==NULL)
-                {
-                    tmp->state=0;
-                }
-
+    while (tmp != NULL){
+        if (tmp->menu == skin){
+            tmp->button_sprite.srcrect.x = tmp->button_sprite.srcsizew * tmp->state;
+            if(tmp->function == locker && skinOnDisplay->state != 0){
+                 tmp->button_sprite.srcrect.x = tmp->button_sprite.srcsizew * 5;
             }
-            else if(tmp->function==right){
-                if (skinListTMP->next==NULL)
-                {
-                    tmp->state=0;
-                }
+            else if (tmp->function == locker && skinOnDisplay->state == 0){
+                 tmp->button_sprite.srcrect.x = 0;
             }
-            if(tmp->function==locker && skinListTMP->state==1){
-                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*5;
-            }
-            if(tmp->function==locker && skinListTMP->state<0){
-                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*(-skinListTMP->state+1);
-                 skinListTMP->state=skinListTMP->state-1;
-                 if(skinListTMP->state==-4){skinListTMP->state=1;}
-            }
-            if(tmp->function==confirm && skinListTMP->state==0){
+            if(tmp->function == confirm && skinOnDisplay->state == 0){
                 tmp->button_sprite.srcrect.x=tmp->button_sprite.srcsizew*2;
             }
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
@@ -206,67 +200,75 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinListTMP, SDL_Renderer *render
     }
 
     // Display price if skin is locked
-    if(skinListTMP->state==0){
-        if (skinListTMP->price<0) {
-            SDL_Rect unlockCondition = {WINDOW_WIDTH / 2 - 274, WINDOW_HEIGHT / 2 - 125, 0, 0};
-            displayText(renderer, "Unlock this skin with your highscore", NULL, 17, &unlockCondition);
+    if(skinOnDisplay->state != 1 && skinOnDisplay->state != -1){
+        if (skinOnDisplay->price <= 0) {
+            if (game->best >= abs(skinOnDisplay->price)) {
+                skinOnDisplay->state = -1;
+            }
+            else {
+                SDL_Rect unlockCondition = {WINDOW_WIDTH / 2 - 274, WINDOW_HEIGHT / 2 - 125, 0, 0};
+                displayText(renderer, "Unlock this skin with your highscore", NULL, 17, &unlockCondition);
+            }
         }
         SDL_Rect priceRect = {WINDOW_WIDTH / 2 - 7, WINDOW_HEIGHT / 2 + 110, 0, 0};
-        displayNumber(renderer, abs(skinListTMP->price), NULL, MONEY_SIZE, &priceRect);
+        displayNumber(renderer, abs(skinOnDisplay->price), NULL, MONEY_SIZE, &priceRect);
+    }
+    else if (skinOnDisplay->state == 1) {
+        skinOnDisplay->state = -1;
     }
 }
 
-SKIN * createSkin(SDL_Renderer *renderer, char *link, SKIN * skinList, int w, int h, int x, int y, int state, int price, int srcsizew, int srcsizeh){
+LIST_SKIN *createSkin(SDL_Renderer *renderer, char *link, LIST_SKIN *skinList, int state, int price, int srcsizew, int srcsizeh) {
     SKIN *new;
-    new=malloc(sizeof(SKIN));
-    new->skin_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
-    new->skin_sprite.dstrect.w=w;
-    new->skin_sprite.dstrect.h=h;
-    new->skin_sprite.dstrect.x=x;
-    new->skin_sprite.dstrect.y=y;
-    new->state=state;
-    new->price=price;
-    new->previous=NULL;
-    new->next=NULL;
+    new = malloc(sizeof(SKIN));
+    new->skin_sprite = newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
+    new->skin_sprite.dstrect.w = SKIN_W_H;
+    new->skin_sprite.dstrect.h = SKIN_W_H;
+    new->skin_sprite.dstrect.x = CASE_OFFSET_X + 2 * CASE_SIZE - 20;
+    new->skin_sprite.dstrect.y = CASE_OFFSET_Y + 2 * CASE_SIZE - 20;
+    new->state = state;
+    new->price = price;
+    new->previous = NULL;
+    new->next = NULL;
     return addSkinInList(skinList, new);
 }
 
-SKIN * addSkinInList(SKIN *skinList, SKIN *newSkin){
-    if(skinList != NULL){
-        newSkin->next=skinList;
-        skinList->previous=newSkin;
-        skinList=newSkin;
+LIST_SKIN *addSkinInList(LIST_SKIN *skinList, SKIN *newSkin) {
+    if(skinList->first != NULL) {
+        newSkin->next = skinList->first;
+        skinList->first->previous = newSkin;
+        skinList->first = newSkin;
     }
     else{
-        skinList=newSkin;
+        skinList->first = newSkin;
+        skinList->last = newSkin;
     }
     return skinList;
 }
 
-SKIN * browseSkin(SKIN * tmp, int direction, int best){
-    if (tmp!=NULL){
-        if(direction<0){
-            if (tmp->previous!=NULL){
-                tmp=tmp->previous;
+SKIN *browseSkin(SKIN * tmp, int direction, int best) {
+    if (tmp != NULL){
+        if (direction < 0) {
+            if (tmp->previous != NULL){
+                tmp = tmp->previous;
             }
-        }
-        else{
-            if (tmp->next!=NULL){
-                tmp=tmp->next;
+        } else {
+            if (tmp->next != NULL){
+                tmp = tmp->next;
             }
         }
     }
-    if(tmp->price<0 && best>=abs(tmp->price))
-        tmp->state=1;
+    if(tmp->price < 0 && best >= abs(tmp->price))
+        tmp->state = 1;
     return tmp;
 }
 
-void freeSkinList(SKIN *skinList){
-    SKIN *tmp;
-    while(skinList!=NULL){
-        tmp=skinList;
-        skinList=skinList->next;
+void freeSkinList(LIST_SKIN *skinList) {
+    SKIN *tmp = skinList->first;
+    while(tmp != NULL){
+        SKIN *tmp2 = tmp->next;
         free(tmp);
+        tmp = tmp->next;
     }
 }
 

@@ -1,4 +1,4 @@
-#include "../include/header.h"
+#include "../include/game.h"
 
 int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *player, LIST_OBSTACLE fireball, int Hole[5][5], COIN *coin, BUTTON *buttonList)
 {
@@ -11,6 +11,9 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
     // FrameLimiter
     Uint32 frameStart;
     unsigned int frameTime;
+
+    // Play song
+    SL_playSong("play", 50);
 
     // Game Loop
     while (game->game_launched)
@@ -52,21 +55,9 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 case SDLK_d:
                     player->directionPressed = 2;
                     continue;
-                case SDLK_UP:
-                    player->directionPressed = 1;
-                    continue;
-                case SDLK_DOWN:
-                    player->directionPressed = 3;
-                    continue;
-                case SDLK_LEFT:
-                    player->directionPressed = 4;
-                    continue;
-                case SDLK_RIGHT:
-                    player->directionPressed = 2;
-                    continue;
                 case SDLK_f:
                     printf("Admin | You spawned a fireball\n");
-                    fireball = newObstacle(fireball);
+                    newObstacle(&fireball);
                     continue;
                 case SDLK_r:
                     printf("Admin | Restart completed ! \n");
@@ -101,22 +92,6 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                         player->directionPressed = 0;
                     continue;
                 case SDLK_d:
-                    if (player->directionPressed == 2)
-                        player->directionPressed = 0;
-                    continue;
-                case SDLK_UP:
-                    if (player->directionPressed == 1)
-                        player->directionPressed = 0;
-                    continue;
-                case SDLK_DOWN:
-                    if (player->directionPressed == 3)
-                        player->directionPressed = 0;
-                    continue;       
-                case SDLK_LEFT: 
-                    if (player->directionPressed == 4)
-                        player->directionPressed = 0;
-                    continue;
-                case SDLK_RIGHT:
                     if (player->directionPressed == 2)
                         player->directionPressed = 0;
                     continue;
@@ -173,7 +148,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     int output = updateFireball(temp);
                     if (output == 1)
                     {
-                        fireball = deleteFromQueue(fireball);
+                        deleteFromQueue(&fireball);
                     }
                     else if (output == 2)
                     {
@@ -194,7 +169,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         } while (temp != NULL);
         if ((double)game->loop >= 100 * exp((-(float)game->score) / 40) && game->status == 0 && game->score > 0)
         {
-            fireball = newObstacle(fireball);
+            newObstacle(&fireball);
             SL_playSong("warn", 80);
             game->loop = 0;
         }
@@ -227,7 +202,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
     }
     while (fireball.first != NULL)
     {
-        fireball = deleteFromQueue(fireball);
+        deleteFromQueue(&fireball);
     }
 }
 
@@ -249,7 +224,7 @@ int displayGame(SDL_Renderer *renderer, PLAYER *player, LIST_OBSTACLE fireball, 
     if (game->status == 0)
     {
         POSITION scorecoin = {WINDOW_WIDTH / 2 - 15 - numberOfDigit(game->score) * (MONEY_SIZE)/2, 10, 0};
-        updateSpriteIfNeeded(renderer, player->sprite, player->position.direction, player->position, &player->sprite.frame, game->loop);
+        updateSpriteIfNeeded(renderer, player->skin.skin_sprite, player->position.direction, player->position, &player->skin.skin_sprite.frame, game->loop);
         updateSpriteIfNeeded(renderer, coin->sprite, coin->position.direction, coin->position, &coin->sprite.frame, game->loop);
         updateSpriteIfNeeded(renderer, game->scoreCoin, 0, scorecoin, &game->scoreCoin.frame, game->loop);
         SDL_Rect coinrect = {WINDOW_WIDTH / 2 + 5,8,0,0};

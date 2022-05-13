@@ -1,11 +1,4 @@
-#include "../include/header.h"
-
-void SDL_ExitWithError(const char *message)
-{
-    SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
-    SDL_Quit();
-    exit(EXIT_FAILURE);
-}
+#include "../include/engine.h"
 
 void initGame(SDL_Renderer *renderer, GAME *game)
 {
@@ -38,9 +31,9 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     // Initialisation des boules de feu
     while (fireball->first != NULL)
     {
-        *fireball = deleteFromQueue(*fireball);
+        deleteFromQueue(fireball);
     }
-    *fireball = setListObstacle(*fireball);
+    setListObstacle(fireball);
 
     // Initialisation des trous
     for (int i = 0; i < 25; i++)
@@ -65,25 +58,23 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     return 0;
 }
 
-PLAYER *setPlayer(int skin)
+void setPlayer(PLAYER *player, SKIN skin)
 {
-    PLAYER *player = malloc(sizeof(PLAYER));
     player->position.x = CASE_OFFSET_X + 2 * CASE_SIZE;
     player->position.y = CASE_OFFSET_Y + 2 * CASE_SIZE;
     player->move = 0;
     player->skin = skin;
-    return player;
 }
 
-void setPlayerSprite(SDL_Renderer *renderer, PLAYER *player, SKIN *skinList)
+void setPlayerSprite(PLAYER *player, SKIN skin)
 {
-    SKIN *skin = skinList;
-    for (int i = 0; i < player->skin - 1; i++)
-    {
-        skin = skin->next;
-    }
-    player->sprite = skin->skin_sprite;
-    player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE;
+    player->skin = skin;
+    player->skin.skin_sprite.dstrect.w = player->skin.skin_sprite.dstrect.h = SPRITE_SIZE;
+}
+
+SKIN resetSkinSize(SKIN skin) {
+    skin.skin_sprite.dstrect.w = skin.skin_sprite.dstrect.h = SKIN_W_H;
+    return skin;
 }
 
 bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5])
@@ -138,19 +129,18 @@ void movePlayer(PLAYER *player, int direction, int Hole[5][5])
     }
     if (player->move > 0)
     {
-        player->sprite.dstrect.w = player->sprite.dstrect.h = SPRITE_SIZE + player->move;
+        player->skin.skin_sprite.dstrect.w = player->skin.skin_sprite.dstrect.h = SPRITE_SIZE + player->move;
     }
     player->move -= 1;
 }
 
-LIST_OBSTACLE setListObstacle(LIST_OBSTACLE list)
+void setListObstacle(LIST_OBSTACLE *list)
 {
-    list.first = NULL;
-    list.last = NULL;
-    return list;
+    list->first = NULL;
+    list->last = NULL;
 }
 
-LIST_OBSTACLE newObstacle(LIST_OBSTACLE list)
+void newObstacle(LIST_OBSTACLE *list)
 {
     OBSTACLE *new = malloc(sizeof(OBSTACLE));
     int direction = rand() % 4 + 1;
@@ -176,44 +166,36 @@ LIST_OBSTACLE newObstacle(LIST_OBSTACLE list)
         new->position.y = rand() % 5 * CASE_SIZE + CASE_OFFSET_Y;
         break;
     }
-    return addToQueue(list, new);
+    addToQueue(list, new);
 }
 
-LIST_OBSTACLE addToQueue(LIST_OBSTACLE list, OBSTACLE *new)
+void addToQueue(LIST_OBSTACLE *list, OBSTACLE *new)
 {
-    if (list.first == NULL)
-    {
-        list.first = new;
-        list.last = new;
+    if (list->first == NULL) {
+        list->first = new;
+        list->last = new;
         new->previous = NULL;
         new->next = NULL;
-    }
-    else
-    {
-        list.first->previous = new;
-        new->next = list.first;
+    } else {
+        list->first->previous = new;
+        new->next = list->first;
         new->previous = NULL;
-        list.first = new;
+        list->first = new;
     }
-    return list;
 }
 
-LIST_OBSTACLE deleteFromQueue(LIST_OBSTACLE list)
+void deleteFromQueue(LIST_OBSTACLE *list)
 {
-    if (list.first == list.last)
-    {
-        free(list.first);
-        list.first = NULL;
-        list.last = NULL;
-    }
-    else
-    {
-        OBSTACLE *temp = list.last->previous;
-        free(list.last);
-        list.last = temp;
+    if (list->first == list->last) {
+        free(list->first);
+        list->first = NULL;
+        list->last = NULL;
+    } else {
+        OBSTACLE *temp = list->last->previous;
+        free(list->last);
+        list->last = temp;
         temp->next = NULL;
     }
-    return list;
 }
 
 int updateFireball(OBSTACLE *obstacle)
@@ -226,7 +208,7 @@ int updateFireball(OBSTACLE *obstacle)
     else if (obstacle->warning == 1)
     {
         obstacle->warning -= 1;
-        return rand() % 3 + 2;
+        return rand() % 2 + 2;
     }
     else
     {

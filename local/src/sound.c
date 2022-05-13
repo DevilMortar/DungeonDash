@@ -1,5 +1,4 @@
 #include "../include/sound.h"
-#include <dirent.h>
 
 static int numberOfSounds = 0;
 static bool isPlaying = true;

@@ -25,13 +25,16 @@ int main(int argc, char *argv[])
     buttonList = createButton(renderer, "../asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32);
     buttonList = createButton(renderer, "../asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH-80, 0, sound, mainMenu, 32, 32);
 
-    SKIN *skinList = NULL;
-    skinList = createSkin(renderer, "../asset/texture/player/6.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
-    skinList = createSkin(renderer, "../asset/texture/player/5.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 32, 32);
-    skinList = createSkin(renderer, "../asset/texture/player/4.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 50, 64, 64);
-    skinList = createSkin(renderer, "../asset/texture/player/3.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, 30, 64, 64);
-    skinList = createSkin(renderer, "../asset/texture/player/2.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 0, -2, 64, 64);
-    skinList = createSkin(renderer, "../asset/texture/player/1.png", skinList, 120, 120, WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 60, 1, 0, 32, 32);
+    LIST_SKIN *skinList = NULL;
+    skinList = malloc(sizeof (LIST_SKIN));
+    skinList->first = NULL;
+    skinList->last = NULL;
+    skinList = createSkin(renderer, "../asset/texture/player/6.png", skinList, 0, 50, 32, 32);
+    skinList = createSkin(renderer, "../asset/texture/player/5.png", skinList, 0, 50, 32, 32);
+    skinList = createSkin(renderer, "../asset/texture/player/4.png", skinList, 0, 50, 64, 64);
+    skinList = createSkin(renderer, "../asset/texture/player/3.png", skinList, 0, 30, 64, 64);
+    skinList = createSkin(renderer, "../asset/texture/player/2.png", skinList, 0, -2, 64, 64);
+    skinList = createSkin(renderer, "../asset/texture/player/1.png", skinList, 1, 0, 32, 32);
     SKIN *firstSkin = skinList;
 
     //  Initialisation Game et Score
@@ -42,14 +45,14 @@ int main(int argc, char *argv[])
     recupData(firstSkin, game);
 
     // Initialisation Player
-    PLAYER *player;
-    player = setPlayer(1);
+    PLAYER *player = malloc(sizeof(PLAYER));
+    setPlayer(player, *skinList->first);
 
     // Initialisation Fireball
     LIST_OBSTACLE fireball;
     fireball.sprite = newSprite(renderer, "../asset/texture/fireball.png", 3, 74, 74, SPRITE_SIZE);
     fireball.warning = newSprite(renderer, "../asset/texture/warning.png", 3, 32, 32, SPRITE_SIZE);
-    fireball = setListObstacle(fireball);
+    setListObstacle(&fireball);
 
     // Initialisation Hole
     int Hole[5][5] = {{0}};
@@ -100,7 +103,7 @@ int main(int argc, char *argv[])
         SDL_SetTextureAlphaMod(game->title.texture, i);
         SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
         SDL_RenderPresent(renderer);
-        SDL_Delay(16.67);
+        SDL_Delay(10);
         SDL_RenderClear(renderer);
     }
     game->title.dstrect.y = 100;
@@ -112,25 +115,20 @@ int main(int argc, char *argv[])
     /* --------------------------------------- */
     while (game->program_launched)
     {
-        if (SL_isPlaying())
+         if (SL_isPlaying())
         {
             Mix_PlayMusic(musique, -1);
         }
-        if(startMenu(buttonList, skinList, firstSkin, renderer, game, &player->skin)>0)
-        {
-            setPlayer(player->skin);
-            setPlayerSprite(renderer, player, skinList);
+        if(startMenu(buttonList, skinList, player, renderer, game) > 0) {
             startGame(window, renderer, game, player, fireball, Hole, coin, buttonList);
-        }
-        else
-        {
+        } else {
             game->program_launched = SDL_FALSE;
         }
     }
     printf("Game statut | Game is shutting down !\n");
     // DATA
     printf("Game statut | Prepare to save data...\n");
-    saveData(firstSkin, game);
+    saveData(skinList, game);
     printf("Game statut | Data saved !\n");
     // Free sound
     printf("Game statut | Preparing to free memory...\n");

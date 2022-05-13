@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 #define FPS_DELAY 17
@@ -15,3 +18,7 @@
 #define SCORE_SIZE 25
 #define MONEY_SIZE 20
 #define PLAYER_MOVE 10
+#define SKIN_W_H 120
+#define FONT "../asset/police/arcade.ttf"
+
+#endif

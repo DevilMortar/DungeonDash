@@ -1,5 +1,6 @@
 flags = -lm $(shell pkg-config --cflags --libs sdl2) -lSDL2_ttf -lSDL2_image -lSDL2_mixer -Og
 S = ./src
+I = ./include
 B = ./build
 
 
@@ -17,34 +18,30 @@ main: main.o engine.o display.o
 main.o : engine.o engine.o display.o game.o menu.o buttons.o file.o sound.o
 	gcc -g -Wall -c $(S)/main.c $(flags)
 
-menu.o : buttons.o
+menu.o : $(S)/menu.c $(I)/menu.h $(I)/button.h $(I)/display.h $(I)/engine.h $(I)/file.h $(I)/sound.h
 	gcc -g -Wall -c $(S)/menu.c $(flags)
 
-buttons.o : game.o
+buttons.o : $(S)/buttons.c $(I)/button.h $(I)/config.h $(I)/display.h $(I)/engine.h
 	gcc -g -Wall -c $(S)/buttons.c $(flags)
 
-game.o : display.o
+game.o : $(S)/game.c $(I)/game.h $(I)/button.h $(I)/config.h $(I)/engine.h $(I)/sound.h
 	gcc -g -Wall -c $(S)/game.c $(flags)
 
-display.o : engine.o
-	gcc -g -Wall -c $(S)/display.c $(flags)
-
-engine.o : file.o
+engine.o : $(S)/engine.c $(I)/config.h $(I)/display.h
 	gcc -g -Wall -c $(S)/engine.c $(flags)
 
-file.o : sound.o
+file.o : $(S)/file.c $(I)/file.h $(I)/engine.h
 	gcc -g -Wall -c $(S)/file.c $(flags)
 
-sound.o : 
+display.o : $(S)/display.c $(I)/display.h $(I)/config.h
+	gcc -g -Wall -c $(S)/display.c $(flags)
+
+sound.o : $(S)/sound.c $(I)/sound.h
 	gcc -g -Wall -c $(S)/sound.c $(flags)
 	
 deepclean :
 	rm -f *.o
-	rm -f $(B)/main
+	rm -f main
 	rm -f $(B)/*
-	rm -f $(B)/*
-	rm -f $(B)/*.o
-	rm -f $(B)/*.o
-	rm -f $(B)/*.o
 	rm -f $(B)/*.o
 
