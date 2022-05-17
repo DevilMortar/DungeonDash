@@ -184,7 +184,6 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 SL_playSong("coin", 20);
                 coin->position = randomTeleport(coin->position, Hole);
                 game->score += 1;
-                printf("Game statut | Score : %d\n", game->score);
             }
         }
 

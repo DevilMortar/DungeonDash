@@ -54,7 +54,7 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     // Initialisation de la pièce
     coin->position = randomTeleport(coin->position, Hole);
 
-    printf("\nGame statut | Game started !\n");
+    printf("\nGame status | Game started !\n");
     return 0;
 }
 

@@ -17,10 +17,8 @@ SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, 
     }
     new.dstrect.w = dstsize;
     new.dstrect.h = dstsize;
-    printf("Done with dstrect w and h\n");
     new.dstrect.x = (WINDOW_WIDTH - new.dstrect.w) / 2;
     new.dstrect.y = (WINDOW_HEIGHT - new.dstrect.h) / 2;
-    printf("Done with dstrect x and y\n");
     return new;
 }
 

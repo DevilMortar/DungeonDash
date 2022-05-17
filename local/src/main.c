@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     Mix_Music *musique = Mix_LoadMUS("../asset/sound/music.mp3");
     Mix_VolumeMusic(MIX_MAX_VOLUME * 90/100);
 
-    printf("\nGame statut | Game Initialized !\n");
+    printf("\nInitializing | Game Initialized !\n");
     printf("\n------------------------------------------------------\n");
 
     // Intro
@@ -124,13 +124,13 @@ int main(int argc, char *argv[])
             game->program_launched = SDL_FALSE;
         }
     }
-    printf("Game statut | Game is shutting down !\n");
+    printf("\nGame status | Game is shutting down !\n");
     // DATA
-    printf("Game statut | Prepare to save data...\n");
+    printf("Exit | Prepare to save data...\n");
     saveData(skinList, game);
-    printf("Game statut | Data saved !\n");
+    printf("Exit | Data saved !\n");
     // Free sound
-    printf("Game statut | Preparing to free memory...\n");
+    printf("Exit | Preparing to free memory...\n");
     SL_freeSoundLib();
     freeButtons(buttonList);
     freeSkinList(skinList);
@@ -143,12 +143,12 @@ int main(int argc, char *argv[])
     free(game);
     free(player);
     free(coin);
-    printf("Game statut | Memory has been freed with success !\n");
+    printf("Exit | Memory has been freed with success !\n");
     // SDL QUIT
-    printf("Game statut | Preparing to quit...\n");
+    printf("Exit | Preparing to quit...\n");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     Mix_Quit();
-    printf("Game statut | Game is now closed !\n");
+    printf("Exit | Game is now closed !\n");
 }

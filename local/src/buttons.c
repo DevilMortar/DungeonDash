@@ -71,7 +71,6 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if (tmp->menu == menu){
-            printf("%d Affichage\n", tmp->function);
             displayButton(renderer, tmp);
         }
         tmp=tmp->next;

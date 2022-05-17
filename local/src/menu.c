@@ -8,6 +8,7 @@ int startMenu(BUTTON * buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rend
     SKIN skinOnDisplay = resetSkinSize(player->skin);
     Uint32 frameStart;
     unsigned int frameTime;
+    printf("\nGame status | Menu Launched\n");
 
     while (menu_active)
     {
