@@ -1,6 +1,6 @@
 #include "../include/display.h"
 
-SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize)
+SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsizew, int dstsizeh)
 {
     SPRITE new;
     new.srcsizew = srcsizew;
@@ -9,14 +9,16 @@ SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, 
     new.max = max;
     new.srcrect.w = srcsizew;
     new.srcrect.h = srcsizeh;
+    new.srcrect.x = 0;
+    new.srcrect.y = 0;
     new.texture = IMG_LoadTexture(renderer, link);
     if (new.texture == NULL) {
         SDL_ExitWithError("NewSprite | Failed to create texture");
     } else {
         printf("NewSprite | Sprite from %s successfully loaded !\n", link);
     }
-    new.dstrect.w = dstsize;
-    new.dstrect.h = dstsize;
+    new.dstrect.w = dstsizew;
+    new.dstrect.h = dstsizeh;
     new.dstrect.x = (WINDOW_WIDTH - new.dstrect.w) / 2;
     new.dstrect.y = (WINDOW_HEIGHT - new.dstrect.h) / 2;
     return new;

@@ -36,7 +36,7 @@ struct SPRITE
 };
 
 // Display
-SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsize);
+SPRITE newSprite(SDL_Renderer *renderer, char link[255], int max, int srcsizew, int srcsizeh, int dstsizew, int dstsizeh);
 TEXTURE newTexture(SDL_Renderer *renderer, char link[255], int w, int h); // Renvoie une texture initialisée
 void updateSprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame); // Affiche un sprite et modifie sa frame
 void displaySprite(SDL_Renderer *renderer, SPRITE sprite, int direction, POSITION position, int *frame); // Affiche un sprite

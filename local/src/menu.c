@@ -222,9 +222,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinOnDisplay, SDL_Renderer *rend
 LIST_SKIN *createSkin(SDL_Renderer *renderer, char *link, LIST_SKIN *skinList, int state, int price, int srcsizew, int srcsizeh) {
     SKIN *new;
     new = malloc(sizeof(SKIN));
-    new->skin_sprite = newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
-    new->skin_sprite.dstrect.w = SKIN_W_H;
-    new->skin_sprite.dstrect.h = SKIN_W_H;
+    new->skin_sprite = newSprite(renderer, link, 3, srcsizew, srcsizeh, SKIN_W_H, SKIN_W_H);
     new->skin_sprite.dstrect.x = CASE_OFFSET_X + 2 * CASE_SIZE - 20;
     new->skin_sprite.dstrect.y = CASE_OFFSET_Y + 2 * CASE_SIZE - 20;
     new->state = state;
