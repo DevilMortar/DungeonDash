@@ -66,14 +66,14 @@ void setPlayer(PLAYER *player, SKIN skin)
     player->skin = skin;
 }
 
-void setPlayerSprite(PLAYER *player, SKIN skin)
+void setPlayerSprite(PLAYER *player, SKIN * skin)
 {
-    player->skin = skin;
+    player->skin = *skin;
     player->skin.skin_sprite.dstrect.w = player->skin.skin_sprite.dstrect.h = SPRITE_SIZE;
 }
 
-SKIN resetSkinSize(SKIN skin) {
-    skin.skin_sprite.dstrect.w = skin.skin_sprite.dstrect.h = SKIN_W_H;
+SKIN * resetSkinSize(SKIN * skin) {
+    skin->skin_sprite.dstrect.w = skin->skin_sprite.dstrect.h = SKIN_W_H;
     return skin;
 }
 

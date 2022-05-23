@@ -6,7 +6,7 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
     SDL_bool menu_active = SDL_TRUE;
     enum functions options = none;
     game->menu = mainMenu;
-    SKIN skinOnDisplay = resetSkinSize(player->skin);
+    SKIN * skinOnDisplay = resetSkinSize(&player->skin);
     Uint32 frameStart;
     unsigned int frameTime;
     printf("\nGame status | Menu Launched\n");
@@ -53,48 +53,48 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
             SL_playSong("play", 50);
             return 2;
         case left:
-            if (skinOnDisplay.previous == NULL)
+            if (skinOnDisplay->previous == NULL)
             {
-                skinOnDisplay = *skinList->last;
+                skinOnDisplay = skinList->last;
             }
             else
             {
-                skinOnDisplay = *skinOnDisplay.previous;
+                skinOnDisplay = skinOnDisplay->previous;
             }
             SL_playSong("left", 50);
             break;
         case right:
-            if (skinOnDisplay.next == NULL)
+            if (skinOnDisplay->next == NULL)
             {
-                skinOnDisplay = *skinList->first;
+                skinOnDisplay = skinList->first;
             }
             else
             {
-                skinOnDisplay = *skinOnDisplay.next;
+                skinOnDisplay = skinOnDisplay->next;
             }
             SL_playSong("right", 50);
             break;
         case confirm:
-            if (skinOnDisplay.state == -1)
+            if (skinOnDisplay->state == -1)
             {
-                skinOnDisplay.state = 1;
+                skinOnDisplay->state = 1;
                 game->menu = mainMenu;
             }
             SL_playSong("drum", 50);
             break;
         case locker:
-            if (skinOnDisplay.state == 0)
+            if (skinOnDisplay->state == 0)
             {
-                if (skinOnDisplay.price > 0 && skinOnDisplay.price <= game->money)
+                if (skinOnDisplay->price > 0 && skinOnDisplay->price <= game->money)
                 {
-                    game->money = game->money - skinOnDisplay.price;
-                    skinOnDisplay.state = -1;
+                    game->money = game->money - skinOnDisplay->price;
+                    skinOnDisplay->state = -1;
                 }
             }
             break;
         case reset:
             resetData(skinList, game);
-            skinOnDisplay = *skinList->first;
+            skinOnDisplay = skinList->first;
             SL_playSong("reset", 50);
             break;
         case leave:
@@ -130,10 +130,10 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
         switch (game->menu)
         {
         case mainMenu:
-            displayMainMenu(buttonList, &skinOnDisplay, renderer, game);
+            displayMainMenu(buttonList, skinOnDisplay, renderer, game);
             break;
         case skinMenu:
-            displaySkinMenu(buttonList, &skinOnDisplay, renderer, game);
+            displaySkinMenu(buttonList, skinOnDisplay, renderer, game);
             break;
         default:
             break;

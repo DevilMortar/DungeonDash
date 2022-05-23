@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
     game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
     game->title.dstrect.y = 100;
 
+    game->money = 10000000;
+
     // Création des sons
     SL_initSoundLib("../asset/sound/", 50, false);
     Mix_Music *musique = Mix_LoadMUS("../asset/sound/music.mp3");

@@ -93,7 +93,7 @@ struct COIN
 void initGame(SDL_Renderer * renderer, GAME *game);
 int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME * game); // Initialisation des différents objets
 void setPlayer(PLAYER * player, SKIN skin); // Set le player
-SKIN resetSkinSize(SKIN skin); // Redéfinis les dimensions du skin à la taille d'origine
+SKIN * resetSkinSize(SKIN * skin); // Redéfinis les dimensions du skin à la taille d'origine
 POSITION randomTeleport(POSITION position, int Hole[5][5]); // Renvoie une position aléatoire où il n'y a pas de trous
 bool checkMovePlayer(PLAYER *player, int direction, int Hole[5][5]);
 void movePlayer(PLAYER *player, int direction, int Hole[5][5]); // Déplace le joueur dans la direction "direction", s'il n'y a pas de trous
@@ -104,6 +104,6 @@ void deleteFromQueue(LIST_OBSTACLE *list); // Supprime un obstacle d'une file
 int updateFireball(OBSTACLE *obstacle); // Déplace les boules de feu actives
 int distance(POSITION pos1, POSITION pos2); // Renvoie la distance entre deux positions
 bool detectColision(POSITION pos1, POSITION pos2); // Détecte la collision
-void setPlayerSprite(PLAYER *player, SKIN skin); // Set le sprite du joueur
+void setPlayerSprite(PLAYER *player, SKIN * skin); // Set le sprite du joueur
 
 #endif
