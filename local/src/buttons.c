@@ -9,7 +9,7 @@ Button state :
 
 */
 
-BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh, int numberOfSprite){
+BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh, int numberOfSprite, bool enabled){
     BUTTON *new = malloc(sizeof(BUTTON));
     new->button_sprite=newSprite(renderer, link, 0, srcsizew, srcsizeh, w, h);
     new->button_sprite.dstrect.x=x;
@@ -17,6 +17,7 @@ BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, i
     new->state=normal;
     new->function=function;
     new->menu=menu;
+    new->enabled=true;
     new->next=NULL;
     return addButtonInList(buttonList, new);
 }
@@ -34,7 +35,7 @@ BUTTON *addButtonInList(BUTTON *buttonList, BUTTON * newButton){
 BUTTON * checkClickButtons(BUTTON * buttonList, enum functions *options, int menu, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if (tmp->menu==menu){
+        if (tmp->menu==menu && tmp->enabled){
             SDL_Point mouse = {x, y};
             if(SDL_PointInRect(&mouse, &tmp->button_sprite.dstrect)){
                 *options = tmp->function;
@@ -49,7 +50,7 @@ BUTTON * checkClickButtons(BUTTON * buttonList, enum functions *options, int men
 void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if (tmp->menu==menu){
+        if (tmp->menu==menu && tmp->enabled){
             SDL_Point mouse = {x, y};
             if(SDL_PointInRect(&mouse, &tmp->button_sprite.dstrect)){
                 buttonChangeState(tmp, 1);
@@ -70,7 +71,7 @@ void resetButtonState(BUTTON * buttonList){
 void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
-        if (tmp->menu == menu){
+        if (tmp->menu == menu && tmp->enabled){
             SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
         }
         tmp=tmp->next;
