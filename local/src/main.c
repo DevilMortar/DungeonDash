@@ -14,16 +14,16 @@ int main(int argc, char *argv[])
 
     // Initialisation du menu
     BUTTON *buttonList = NULL;
-    buttonList = createButton(renderer, "../asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, mainMenu, 52, 15);
-    buttonList = createButton(renderer, "../asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, mainMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, mainMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, skinMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, skinMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, skinMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/locker.png", buttonList, 70, 70, WINDOW_WIDTH / 2 - 35, WINDOW_HEIGHT / 2 - 7, locker, skinMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2 * WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH - 80, 0, sound, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "../asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, mainMenu, 52, 15, 2);
+    buttonList = createButton(renderer, "../asset/texture/button/skin_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 + 190, skin, mainMenu, 32, 32,2);
+    buttonList = createButton(renderer, "../asset/texture/button/leave_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 150, WINDOW_HEIGHT / 2 + 190, leave, mainMenu, 32, 32,2);
+    buttonList = createButton(renderer, "../asset/texture/button/confirm_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 + 70, confirm, skinMenu, 32, 32,2);
+    buttonList = createButton(renderer, "../asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, skinMenu, 32, 32,2);
+    buttonList = createButton(renderer, "../asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, skinMenu, 32, 32, 2);
+    buttonList = createButton(renderer, "../asset/texture/button/locker.png", buttonList, 70, 70, WINDOW_WIDTH / 2 - 35, WINDOW_HEIGHT / 2 - 7, locker, skinMenu, 32, 32, 5);
+    buttonList = createButton(renderer, "../asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2 * WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32, 2);
+    buttonList = createButton(renderer, "../asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32, 2);
+    buttonList = createButton(renderer, "../asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH - 80, 0, sound, mainMenu, 32, 32, 5);
 
     LIST_SKIN *skinList = NULL;
     skinList = malloc(sizeof(LIST_SKIN));
@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
 
     // Initialisation Fireball
     LIST_OBSTACLE fireball;
-    fireball.sprite = newSprite(renderer, "../asset/texture/fireball.png", 3, 74, 74, SPRITE_SIZE);
-    fireball.warning = newSprite(renderer, "../asset/texture/warning.png", 3, 32, 32, SPRITE_SIZE);
+    fireball.sprite = newSprite(renderer, "../asset/texture/fireball.png", 3, 74, 74, SPRITE_SIZE, SPRITE_SIZE);
+    fireball.warning = newSprite(renderer, "../asset/texture/warning.png", 3, 32, 32, SPRITE_SIZE, SPRITE_SIZE);
     setListObstacle(&fireball);
 
     // Initialisation Hole
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     // Initialisation Coin
     COIN *coin = malloc(sizeof(COIN));
-    coin->sprite = newSprite(renderer, "../asset/texture/coin.png", 16, 32, 32, SPRITE_SIZE);
+    coin->sprite = newSprite(renderer, "../asset/texture/coin.png", 16, 32, 32, SPRITE_SIZE, SPRITE_SIZE);
     coin->position.direction = 0;
 
     // Création de la texture de la grille et des trous

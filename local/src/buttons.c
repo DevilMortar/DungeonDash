@@ -9,11 +9,11 @@ Button state :
 
 */
 
-BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh){
+BUTTON * createButton(SDL_Renderer *renderer, char *link, BUTTON * buttonList, int w, int h, int x, int y, functions function, menu menu, int srcsizew, int srcsizeh, int numberOfSprite){
     BUTTON *new = malloc(sizeof(BUTTON));
-    new->button_sprite=newSprite(renderer, link, 3, srcsizew, srcsizeh, 0);
-    SDL_Rect dstrect = {x, y, w, h};
-    new->button_sprite.dstrect=dstrect;
+    new->button_sprite=newSprite(renderer, link, 0, srcsizew, srcsizeh, w, h);
+    new->button_sprite.dstrect.x=x;
+    new->button_sprite.dstrect.y=y;
     new->state=normal;
     new->function=function;
     new->menu=menu;
@@ -71,14 +71,10 @@ void displayButtonList(SDL_Renderer *renderer, BUTTON * buttonList, int menu){
     BUTTON * tmp=buttonList;
     while(tmp!=NULL){
         if (tmp->menu == menu){
-            displayButton(renderer, tmp);
+            SDL_RenderCopy(renderer, tmp->button_sprite.texture, &tmp->button_sprite.srcrect, &tmp->button_sprite.dstrect);
         }
         tmp=tmp->next;
     }
-}
-
-void displayButton(SDL_Renderer *renderer, BUTTON * button){
-    SDL_RenderCopy(renderer, button->button_sprite.texture, &button->button_sprite.srcrect, &button->button_sprite.dstrect);
 }
 
 void buttonChangeState(BUTTON * button, int state){
