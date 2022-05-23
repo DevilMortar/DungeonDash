@@ -63,7 +63,7 @@ void SL_loadSongInQueue(char *path, char *name, int channel)
     }
 }
 
-void SL_playSong(char *name, int volume)
+void SL_playSong(char *name, int volume, int repeat)
 {
     int channel = -1;
     if (SL_isPlaying())
@@ -75,7 +75,7 @@ void SL_playSong(char *name, int volume)
         }
         if (song != NULL)
         {
-            channel = Mix_PlayChannel(-1, song->chunk, 0);
+            channel = Mix_PlayChannel(-1, song->chunk, repeat);
             if (volume > 0)
             {
                 Mix_Volume(channel, (int)MIX_MAX_VOLUME * volume / 100);
@@ -116,10 +116,17 @@ void SL_mute()
 {
     isPlaying = false;
     Mix_PauseMusic();
+    for (int i = 0; i<=numberOfSounds; i++) {
+        Mix_Pause(i);
+    }
+
 }
 
 void SL_unmute()
 {
     isPlaying = true;
     Mix_ResumeMusic();
+    for (int i = 0; i<=numberOfSounds; i++) {
+        Mix_Resume(i);
+    }
 }
