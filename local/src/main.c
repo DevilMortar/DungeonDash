@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     SDL_initGameView(&window, &renderer);
-    
+
     // Initialisation du menu
     BUTTON *buttonList = NULL;
     buttonList = createButton(renderer, "../asset/texture/button/play_button.png", buttonList, 300, 100, WINDOW_WIDTH / 2 - 150, WINDOW_HEIGHT / 2 + 190, play, mainMenu, 52, 15);
@@ -21,12 +21,12 @@ int main(int argc, char *argv[])
     buttonList = createButton(renderer, "../asset/texture/button/left_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 170, WINDOW_HEIGHT / 2 - 50, left, skinMenu, 32, 32);
     buttonList = createButton(renderer, "../asset/texture/button/right_button.png", buttonList, 100, 100, WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT / 2 - 50, right, skinMenu, 32, 32);
     buttonList = createButton(renderer, "../asset/texture/button/locker.png", buttonList, 70, 70, WINDOW_WIDTH / 2 - 35, WINDOW_HEIGHT / 2 - 7, locker, skinMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2*WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32);
+    buttonList = createButton(renderer, "../asset/texture/button/back_menu.png", buttonList, 100, 100, WINDOW_WIDTH / 2 - 50, 2 * WINDOW_HEIGHT / 3, backToMenu, gameOverMenu, 32, 32);
     buttonList = createButton(renderer, "../asset/texture/button/back_button.png", buttonList, 80, 80, 0, 0, reset, mainMenu, 32, 32);
-    buttonList = createButton(renderer, "../asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH-80, 0, sound, mainMenu, 32, 32);
+    buttonList = createButton(renderer, "../asset/texture/button/sound_button.png", buttonList, 80, 80, WINDOW_WIDTH - 80, 0, sound, mainMenu, 32, 32);
 
     LIST_SKIN *skinList = NULL;
-    skinList = malloc(sizeof (LIST_SKIN));
+    skinList = malloc(sizeof(LIST_SKIN));
     skinList->first = NULL;
     skinList->last = NULL;
     skinList = createSkin(renderer, "../asset/texture/player/6.png", skinList, 0, 50, 32, 32);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     GAME *game = malloc(sizeof(GAME));
     initGame(renderer, game);
 
-    //Récupération de la sauvegarde
+    // Récupération de la sauvegarde
     recupData(skinList, game);
 
     // Initialisation Player
@@ -72,55 +72,60 @@ int main(int argc, char *argv[])
 
     game->background.dstrect.y = 0;
     game->background.dstrect.x = 0;
-    
+
     game->titleSkin.dstrect.y = WINDOW_HEIGHT / 2 - 330;
     game->title.dstrect.y = 100;
 
     // Création des sons
     SL_initSoundLib("../asset/sound/", 50, false);
     Mix_Music *musique = Mix_LoadMUS("../asset/sound/music.mp3");
-    Mix_VolumeMusic(MIX_MAX_VOLUME * 90/100);
+    Mix_VolumeMusic(MIX_MAX_VOLUME * 90 / 100);
 
     printf("\nInitializing | Game Initialized !\n");
     printf("\n------------------------------------------------------\n");
 
     // Intro
-    SDL_RenderClear(renderer);
-    SL_playSong("intro", 100);
-    SL_playSong("intro_2", 100);
-    SL_playSong("intro_drum", 100);
-    SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
-    SDL_RenderPresent(renderer);
-    game->title.dstrect.y = WINDOW_HEIGHT / 2 - game->title.dstrect.h / 2;
-    for (int i = 0; i < 51; i++) {
-        SDL_SetTextureAlphaMod(game->title.texture, i*5);
+    if (INTRO)
+    {
+        SDL_RenderClear(renderer);
+        SL_playSong("intro", 100);
+        SL_playSong("intro_2", 100);
+        SL_playSong("intro_drum", 100);
         SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
         SDL_RenderPresent(renderer);
-        SDL_RenderClear(renderer);
+        game->title.dstrect.y = WINDOW_HEIGHT / 2 - game->title.dstrect.h / 2;
+        for (int i = 0; i < 51; i++)
+        {
+            SDL_SetTextureAlphaMod(game->title.texture, i * 5);
+            SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+            SDL_RenderPresent(renderer);
+            SDL_RenderClear(renderer);
+        }
+        for (int i = 255; i > 0; i--)
+        {
+            SDL_SetTextureAlphaMod(game->title.texture, i);
+            SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(10);
+            SDL_RenderClear(renderer);
+        }
+        game->title.dstrect.y = 100;
+        SDL_SetTextureAlphaMod(game->title.texture, 255);
     }
-    for (int i = 255; i > 0; i--) {
-        SDL_SetTextureAlphaMod(game->title.texture, i);
-        SDL_RenderCopy(renderer, game->title.texture, NULL, &game->title.dstrect);
-        SDL_RenderPresent(renderer);
-        SDL_Delay(10);
-        SDL_RenderClear(renderer);
-    }
-    game->title.dstrect.y = 100;
-    SDL_SetTextureAlphaMod(game->title.texture, 255);
-
-
-
 
     /* --------------------------------------- */
     while (game->program_launched)
     {
-         if (SL_isPlaying())
+        if (SL_isPlaying())
         {
             Mix_PlayMusic(musique, -1);
         }
-        if(startMenu(buttonList, skinList, player, renderer, game) > 0) {
+        if (startMenu(buttonList, skinList, player, renderer, game) > 0)
+        {
             startGame(window, renderer, game, player, fireball, Hole, coin, buttonList);
-        } else {
+        }
+        else
+        {
             game->program_launched = SDL_FALSE;
         }
     }
