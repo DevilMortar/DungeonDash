@@ -18,5 +18,6 @@ LIST_SKIN *createSkin(SDL_Renderer *renderer, char *link, LIST_SKIN *skinList, i
 LIST_SKIN *addSkinInList(LIST_SKIN *skinList, SKIN *newSkin); //Ajoute un skin à la liste
 SKIN *browseSkin(SKIN *tmp, int direction, int best); //Parcours la liste de skin
 void freeSkinList(LIST_SKIN *skinList); //Libère la liste de skin
+void playIntro(SDL_Renderer *renderer, GAME *game);
 
 #endif
