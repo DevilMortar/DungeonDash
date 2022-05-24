@@ -19,13 +19,55 @@ struct SL_SOUND
     SL_SOUND *next;
 };
 
-void SL_initSoundLib(char folder[], int nbChannels, bool allowDevelopment); // Initialize SDL_mixer
-void SL_loadSongInQueue(char *path, char *name, int channel);               // Charge une musique dans la file
-void SL_playSong(char *name, int volume, int repeat);                                   // Joue la musique
-void SL_freeSoundLib();                                                     // Libère la mémoire
-int SL_getNumberOfSounds();                                                // Renvoie le nombre de musiques
-bool SL_isPlaying();                                                        // Renvoie si la lecture est possible
-void SL_mute();                                                             // Empêche les musiques de jouer
-void SL_unmute();                                                           // Autorise les musiques à jouer
+/**
+ * @brief Initialize SDL_Mixer
+ * @param folder
+ * @param nbChannels
+ * @param allowDevelopment
+ */
+void SL_initSoundLib(char folder[], int nbChannels, bool allowDevelopment);
+
+/**
+ * @brief Loading a music from the queue
+ * @param path
+ * @param name
+ * @param channel
+ */
+void SL_loadSongInQueue(char *path, char *name, int channel);
+
+/**
+ * @brief Play a specific music
+ * @param name
+ * @param volume
+ * @param repeat
+ */
+void SL_playSong(char *name, int volume, int repeat);
+
+/**
+ * @brief Freeing memory
+ */
+void SL_freeSoundLib();
+
+/**
+ * @brief Returning the number of musics in the queue
+ * @return int
+ */
+int SL_getNumberOfSounds();
+
+/**
+ * @brief Tell if it is possible to play a music or not
+ * @return bool
+ */
+bool SL_isPlaying();
+
+/**
+ * @brief Mute a music
+ */
+void SL_mute();
+
+/**
+ * @brief Unmute a music
+ */
+void SL_unmute();
 
 #endif
