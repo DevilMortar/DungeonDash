@@ -49,7 +49,7 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
         {
         case play:
             setPlayerSprite(player, skinOnDisplay);
-            SL_playSong("play", 50, 0);
+            SL_playSong("play", VOLUME_BUTTON, 0);
             return 2;
         case left:
             if (skinOnDisplay->previous == NULL)
@@ -60,7 +60,7 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
             {
                 skinOnDisplay = skinOnDisplay->previous;
             }
-            SL_playSong("left", 50, 0);
+            SL_playSong("left", VOLUME_BUTTON, 0);
             break;
         case right:
             if (skinOnDisplay->next == NULL)
@@ -71,7 +71,7 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
             {
                 skinOnDisplay = skinOnDisplay->next;
             }
-            SL_playSong("right", 50, 0);
+            SL_playSong("right", VOLUME_BUTTON, 0);
             break;
         case confirm:
             if (skinOnDisplay->state == -1)
@@ -79,7 +79,7 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
                 skinOnDisplay->state = 1;
                 game->menu = mainMenu;
             }
-            SL_playSong("drum", 50, 0);
+            SL_playSong("drum", VOLUME_BUTTON, 0);
             break;
         case locker:
             if (skinOnDisplay->state == 0)
@@ -95,29 +95,29 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
         case reset:
             resetData(skinList, game);
             skinOnDisplay = skinList->first;
-            SL_playSong("reset", 50, 0);
+            SL_playSong("reset", VOLUME_BUTTON, 0);
             playIntro(renderer, game);
             break;
         case leave:
             return -6;
-            SL_playSong("back", 50, 0);
+            SL_playSong("back", VOLUME_BUTTON, 0);
         case backToMenu:
             game->menu = mainMenu;
             break;
         case skin:
             game->menu = skinMenu;
-            SL_playSong("next", 50, 0);
+            SL_playSong("next", VOLUME_BUTTON, 0);
             break;
         case sound:
             if (SL_isPlaying())
             {
-                SL_playSong("next", 50, 0);
+                SL_playSong("next", VOLUME_BUTTON, 0);
                 SL_mute();
             }
             else
             {
                 SL_unmute();
-                SL_playSong("next", 50, 0);
+                SL_playSong("next", VOLUME_BUTTON, 0);
             }
             break;
         case none:
@@ -140,7 +140,6 @@ int startMenu(BUTTON *buttonList, LIST_SKIN *skinList, PLAYER *player, SDL_Rende
             break;
         }
 
-        SDL_RenderCopy(renderer, buttonList->button_sprite.texture, &buttonList->button_sprite.srcrect, &buttonList->button_sprite.dstrect);
         SDL_RenderPresent(renderer);
         frameTime = SDL_GetTicks() - frameStart;
         SDL_LimitFPS(frameTime);
@@ -243,7 +242,7 @@ void displaySkinMenu(BUTTON *buttonList, SKIN *skinOnDisplay, SDL_Renderer *rend
             if (game->best >= abs(skinOnDisplay->price))
             {
                 skinOnDisplay->state = -1;
-                SL_playSong("unlock", 100, 0);
+                SL_playSong("unlock", VOLUME_BUTTON, 0);
             }
             else
             {

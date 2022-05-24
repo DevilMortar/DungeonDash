@@ -13,7 +13,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
     unsigned int frameTime;
 
     // Play song
-    SL_playSong("play", 50, 0);
+    SL_playSong("play", VOLUME_BUTTON, 0);
 
     // Game Loop
     while (game->game_launched)
@@ -115,7 +115,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                 player->move = PLAYER_MOVE;
                 player->position.direction = player->directionPressed;
                 // Play sound jump
-                SL_playSong("step", 80, 0);
+                SL_playSong("step", VOLUME_STEP, 0);
             }
         }
         if (player->move > 0)
@@ -142,7 +142,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                             game->money += game->score;
                             game->status = 1;
                             game->menu = gameOverMenu;
-                            SL_playSong("death", 80, 0);
+                            SL_playSong("death", VOLUME_STEP, 0);
                         }
                     }
                     int output = updateFireball(temp);
@@ -152,15 +152,15 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     }
                     else if (output == 2)
                     {
-                        SL_playSong("fire", 20, 0);
+                        SL_playSong("fire", VOLUME_FIREBALL, 0);
                     }
                     else if (output == 3)
                     {
-                        SL_playSong("fire_2", 20, 0);
+                        SL_playSong("fire_2", VOLUME_FIREBALL, 0);
                     }
                     else if (output == 4)
                     {
-                        SL_playSong("fire_3", 20, 0);
+                        SL_playSong("fire_3", VOLUME_FIREBALL, 0);
                     }
                 }
             }
@@ -170,7 +170,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         if ((double)game->loop >= DIFFICULTY_K * exp((-(float)game->score) / DIFFICULTY_T) && game->status == 0 && game->score > 0)
         {
             newObstacle(&fireball);
-            SL_playSong("warn", 80, 0);
+            SL_playSong("warn", VOLUME_STEP, 0);
             game->loop = 0;
         }
         else
@@ -181,7 +181,7 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
         {
             if (detectColision(player->position, coin->position))
             {
-                SL_playSong("coin", 20, 0);
+                SL_playSong("coin", VOLUME_COIN, 0);
                 coin->position = randomTeleport(coin->position, Hole);
                 game->score += 1;
             }

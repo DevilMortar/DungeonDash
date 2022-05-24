@@ -99,8 +99,9 @@ int main(int argc, char *argv[])
         if (SL_isPlaying())
         {
             Mix_PlayMusic(musique, -1);
+            Mix_VolumeMusic(VOLUME_MUSIC);
         }
-        SL_playSong("sea", 50, -1);
+        SL_playSong("sea", VOLUME_BACKGROUND, -1);
         if (startMenu(buttonList, skinList, player, renderer, game) > 0)
         {
             startGame(window, renderer, game, player, fireball, Hole, coin, buttonList);
