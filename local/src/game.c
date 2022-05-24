@@ -69,6 +69,18 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                     game->program_launched = SDL_FALSE;
                     return -1;
                     break;
+                case SDLK_UP:
+                    player->directionPressed = 1;
+                    continue;
+                case SDLK_DOWN:
+                    player->directionPressed = 3;
+                    continue;
+                case SDLK_LEFT:
+                    player->directionPressed = 4;
+                    continue;
+                case SDLK_RIGHT:
+                    player->directionPressed = 2;
+                    continue;
                 case SDLK_ESCAPE:
                     game->game_launched = SDL_FALSE;
                     game->program_launched = SDL_FALSE;
@@ -92,6 +104,22 @@ int startGame(SDL_Window *window, SDL_Renderer *renderer, GAME *game, PLAYER *pl
                         player->directionPressed = 0;
                     continue;
                 case SDLK_d:
+                    if (player->directionPressed == 2)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_UP:
+                    if (player->directionPressed == 1)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_DOWN:
+                    if (player->directionPressed == 3)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_LEFT:
+                    if (player->directionPressed == 4)
+                        player->directionPressed = 0;
+                    continue;
+                case SDLK_RIGHT:
                     if (player->directionPressed == 2)
                         player->directionPressed = 0;
                     continue;
