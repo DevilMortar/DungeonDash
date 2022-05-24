@@ -54,6 +54,9 @@ void checkOverButtons(BUTTON * buttonList, int options, int menu, int x, int y){
             SDL_Point mouse = {x, y};
             if(SDL_PointInRect(&mouse, &tmp->button_sprite.dstrect)){
                 buttonChangeState(tmp, 1);
+                if (tmp->function == locker) {
+                    SDL_SetTextureAlphaMod(tmp->button_sprite.texture,255);
+                }
             }
         }
         tmp=tmp->next;

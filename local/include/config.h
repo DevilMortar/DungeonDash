@@ -17,7 +17,7 @@
 // Difficulty : DIFFICULTY_K * exp((-(float)game->score) / DIFFICULTY_T)
 #define FIREBALL_MOVELOOP 1 // Number of loop to move fireball (Don't change)
 #define FIREBALL_SPEED 7   // Speed of fireball
-#define OBSTACLE_WARNING 35 // Number of loop to show warning
+#define OBSTACLE_WARNING 45 // Number of loop to show warning
 #define DIFFICULTY_K 100    // K value of difficulty
 #define DIFFICULTY_T 40     // T value of difficulty
 
