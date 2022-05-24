@@ -19,8 +19,9 @@ Ce jeu fonctionne avec la librairie SDL2. Tous les autres développements ont é
 
 ## ➜ Installation du jeu et lancement
 Pour installer le jeu:
-1) Clonez le repo `git clone https://github.com/DevilMortar/DungeonDash.git`
-2) Ouvrez un terminal et rendez-vous dans le dossier `local`
+1) Installer `MinGW-32` qui est requis pour la compilation sous Windows
+2) Clonez le repo `git clone https://github.com/DevilMortar/DungeonDash.git`
+3) Ouvrez un terminal et rendez-vous dans le dossier `local`
    * Si vous êtes sur Linux, exécutez la commande `make`
    * Si vous êtes sur Windows, ouvrez le fichier `gcc.txt` et exécutez la commande présente
-3) Retournez à la racine du projet et utilisez les raccourcis prévus dans les dossiers `linux` et `windows`, en fonction de votre OS, afin de pouvoir lancer le jeu.
+4) Retournez à la racine du projet et utilisez les raccourcis prévus dans les dossiers `linux` et `windows`, en fonction de votre OS, afin de pouvoir lancer le jeu.
