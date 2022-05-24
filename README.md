@@ -11,7 +11,7 @@ Il a été réalisé par:
 
 ## ➜ But du jeu
 
-Plongez dans le monde de la piraterie. Sauvez-vous des boules de feux que vos ennemis n'hésiteront pas à lancer, tout en récoltant un maximum de pièces.
+Plongez dans le monde de la piraterie. Incarnez un pirate explorant une épave à la recherche de pièce d’or, évitant les tirs de canon d'une flotte de corsaires enragées !
 
 ## ➜ Librairie utilisée
 
