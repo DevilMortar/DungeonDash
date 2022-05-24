@@ -14,7 +14,7 @@ void initGame(SDL_Renderer *renderer, GAME *game)
     game->coinrect.y = 8;
 }
 
-int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME *game)
+void init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Renderer *renderer, GAME *game)
 {
     // Initialisation du jeu
     game->status = 0;
@@ -55,7 +55,6 @@ int init(PLAYER *player, LIST_OBSTACLE *fireball, int *Hole, COIN *coin, SDL_Ren
     coin->position = randomTeleport(coin->position, Hole);
 
     printf("\nGame status | Game started !\n");
-    return 0;
 }
 
 void setPlayer(PLAYER *player, SKIN skin)

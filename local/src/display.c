@@ -101,44 +101,48 @@ TEXTURE updateTexture(SDL_Renderer *renderer, TEXTURE texture, POSITION position
 
 SDL_Texture *renderWidgetText(char *message, SDL_Color* color, int fontSize, SDL_Renderer *renderer, SDL_Rect *dstrect)
 {
-    // Color
-    if (color == NULL)
-    {
-        color = malloc(sizeof(SDL_Color));
-        color->r = 255;
-        color->g = 255;
-        color->b = 255;
-    }
-    color->a = 255;
-    // Open the font
-    TTF_Font *font = TTF_OpenFont(FONT, fontSize); // Open the font you want
-    if (font == NULL)
-    {
-        SDL_ExitWithError("SDL || TTF_OpenFont");
-        return NULL;
-    }
-    // Render the text to a surface
-    SDL_Surface *surf = TTF_RenderText_Solid(font, message, *color);
-    if (surf == NULL)
-    {
+    if (strlen(message) > 0) {
+        // Color
+        if (color == NULL)
+        {
+            color = malloc(sizeof(SDL_Color));
+            color->r = 255;
+            color->g = 255;
+            color->b = 255;
+        }
+        color->a = 255;
+        // Open the font
+        TTF_Font *font = TTF_OpenFont(FONT, fontSize); // Open the font you want
+        if (font == NULL)
+        {
+            SDL_ExitWithError("SDL || TTF_OpenFont");
+            return NULL;
+        }
+        // Render the text to a surface
+        SDL_Surface *surf = TTF_RenderText_Solid(font, message, *color);
+        if (surf == NULL)
+        {
+            TTF_CloseFont(font);
+            SDL_ExitWithError("SDL || TTF_RenderText");
+            return NULL;
+        }
+        // Create a texture from the surface
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
+        if (texture == NULL)
+        {
+            SDL_ExitWithError("SDL || CreateTexture");
+        }
+        // Take the size
+        dstrect->w = surf->w;
+        dstrect->h = surf->h;
+        // Clean up the surface and font
+        SDL_FreeSurface(surf);
         TTF_CloseFont(font);
-        SDL_ExitWithError("SDL || TTF_RenderText");
+        // Return the texture
+        return texture;
+    } else {
         return NULL;
     }
-    // Create a texture from the surface
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
-    if (texture == NULL)
-    {
-        SDL_ExitWithError("SDL || CreateTexture");
-    }
-    // Take the size
-    dstrect->w = surf->w;
-    dstrect->h = surf->h;
-    // Clean up the surface and font
-    SDL_FreeSurface(surf);
-    TTF_CloseFont(font);
-    // Return the texture
-    return texture;
 }
 
 void displayNumber(SDL_Renderer *renderer, int number, SDL_Color* color, int fontSize, SDL_Rect *dstrect)
