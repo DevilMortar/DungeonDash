@@ -32,14 +32,14 @@ void SL_initSoundLib(char folder[], int nbChannels, bool allowDevelopment)
                 char path[100];
                 strcpy(path, folder);
                 strcat(path, file->d_name);
-                SL_loadSongInQueue(path, file->d_name, numberOfSounds);
+                SL_loadSongInQueue(path, file->d_name);
             }
         }
         (void)closedir(rep);
     }
 }
 
-void SL_loadSongInQueue(char *path, char *name, int channel)
+void SL_loadSongInQueue(char *path, char *name)
 {
     SL_SOUND *song = malloc(sizeof(SL_SOUND));
     char *songToken = strtok(name, ".");
