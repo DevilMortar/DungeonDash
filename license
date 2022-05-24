@@ -1,0 +1,22 @@
+Licence d’utilisation : 
+
+Présentation : 
+
+La présente licence d’utilisation concerne le développement d’un jeu vidéo écrit en langage C. 
+Le développement a été réalisé par Mathias CITRINI, 
+Julien HUGUES, Corentin THIBAUD et Rémi VASSOILLE dans le cadre d’un projet 
+d’algorithmie au sein d’YNCREA Méditerranée. 
+
+Extensions à la licence d’utilisation actuelle : 
+
+En plus des conditions décrites ci-dessous, la licence d’utilisation 
+est également complétée par la charte informatique de YNCREA Méditerranée, 
+en particulier l’article 3.9, et la licence d’utilisation de SDL2, 
+librairie utilisée pour l’affichage du jeu vidéo. 
+
+Les conditions d’utilisation de SDL2 sont décrites ici : https://www.libsdl.org/license.php 
+
+La charte informatique de YNCREA Méditerranée est disponible sur le 
+répertoire GitHub du projet (https://github.com/DevilMortar/DungeonDash) 
+
+ 
