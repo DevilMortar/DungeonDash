@@ -30,7 +30,7 @@
 #define SKIN_W_H 120
 #define SKIN_X_Y WINDOW_WIDTH / 2 - 60
 #define FONT "../asset/police/arcade.ttf"
-#define INTRO false
+#define INTRO true
 
 // Volume
 #define VOLUME_MUSIC 75
