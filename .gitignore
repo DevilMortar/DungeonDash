@@ -1,4 +1,4 @@
-/build/
-/*.o
-/main
-/.vscode/
+*.o
+*.exe
+*.bin
+.vscode
