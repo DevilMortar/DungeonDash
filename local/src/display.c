@@ -230,14 +230,14 @@ void SDL_initGameView(SDL_Window ** window, SDL_Renderer ** renderer) {
         SDL_ExitWithError("SDL | TTF: Failed to initialize");
     }
 
-    *window = SDL_CreateWindow("Dungeon Dash", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    *window = SDL_CreateWindow("Pirate Curse", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (*window == NULL)
     {
         SDL_ExitWithError("SDL | Failed to create a window");
     }
 
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_SOFTWARE);
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
 
     if (*renderer == NULL)
     {
